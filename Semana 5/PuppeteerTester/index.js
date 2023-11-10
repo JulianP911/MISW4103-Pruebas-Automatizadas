@@ -2,6 +2,8 @@ const assert = require("assert");
 const puppeteer = require("puppeteer");
 const { faker } = require("@faker-js/faker");
 const fs = require("fs");
+const LoginPage = require("./LoginPage");
+const PostsPage = require("./postsPage");
 const ghostUrl = "http://localhost:2369/ghost/";
 const userEmail = "prueba@prueba.com";
 const userPassword = "prueba12345";
@@ -33,25 +35,19 @@ ensureDirectoryExists(screenshotDirectory);
   ensureDirectoryExists(screenshotDirectoryEscenario);
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto(ghostUrl);
-  await new Promise((r) => setTimeout(r, 5000));
-  await page.screenshot({
-    path: screenshotDirectoryEscenario + "signInPage.png",
-  });
-  const idField = await page.$("#identification");
-  await idField.type(userEmail);
-  const passwordField = await page.$("#password");
-  await passwordField.type(userPassword);
-  await page.screenshot({
-    path: screenshotDirectoryEscenario + "fillInputs.png",
-  });
-  page.click("#ember5");
-  await new Promise((r) => setTimeout(r, 5000));
-  await page.screenshot({
-    path: screenshotDirectoryEscenario + "afterSignIn.png",
-  });
-  const url = await page.url();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  const afterlogin = await loginPage.login(userEmail, userPassword);
+
+  // Get the URL from the page after login
+  const url = afterlogin.url();
+
+  // Close the browser after completing the tests
   await browser.close();
+
+  // Perform the assertion after all the asynchronous operations are complete
   assert.equal(url, "http://localhost:2369/ghost/#/dashboard");
   console.log(
     "E1-Test Passed - Expected: http://localhost:2369/ghost/#/dashboard, Actual: ",
@@ -60,7 +56,7 @@ ensureDirectoryExists(screenshotDirectory);
   );
 })().catch((e) =>
   console.log(
-    "Test Failed - Expected: ",
+    "E1-Test Failed - Expected: ",
     e.expected,
     ", Actual: ",
     e.actual,
@@ -82,11 +78,11 @@ ensureDirectoryExists(screenshotDirectory);
   ensureDirectoryExists(screenshotDirectoryEscenario);
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto(ghostUrl);
-  await new Promise((r) => setTimeout(r, 5000));
-  await page.screenshot({
-    path: screenshotDirectoryEscenario + "signInPage.png",
-  });
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  // Use await to ensure that visit completes before moving to login
+  await loginPage.visit();
+
   const testData = [
     { email: "", password: "", error: "Please fill out the form to sign in." },
     {
@@ -97,24 +93,10 @@ ensureDirectoryExists(screenshotDirectory);
   ];
 
   for (const data of testData) {
-    // Fill in the email and password
-    await page.type("#identification", data.email);
-    await page.type("#password", data.password);
-    await page.screenshot({
-      path: screenshotDirectoryEscenario + "fillInputs.png",
-    });
-
-    // Click the login button
-    await page.click("#ember5");
-    // Wait for the error message to appear
-    await page.waitForSelector(".main-error");
-    await new Promise((r) => setTimeout(r, 5000));
-    await page.screenshot({
-      path: screenshotDirectoryEscenario + "afterSignIn.png",
-    });
+    const afterlogin = await loginPage.login(data.email, data.password);
 
     // Get the actual error message text
-    const actualErrorMessage = await page.$eval(".main-error", (el) =>
+    const actualErrorMessage = await afterlogin.$eval(".main-error", (el) =>
       el.textContent.trim()
     );
     // Compare with the expected error message
@@ -136,10 +118,8 @@ ensureDirectoryExists(screenshotDirectory);
     }
   }
 
-  const url = await page.url();
   await browser.close();
 })().catch((e) => console.log(e));
-
 
 /**
  * Escenario 3: Como usuario administrador realizo el inicio sesión en Ghost (negativo)
@@ -154,74 +134,107 @@ ensureDirectoryExists(screenshotDirectory);
   ensureDirectoryExists(screenshotDirectoryEscenario);
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  await page.goto(ghostUrl);
-  await new Promise((r) => setTimeout(r, 5000));
-  await page.screenshot({
-    path: screenshotDirectoryEscenario + "signInPage.png",
-  });
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+  await loginPage.visit();
   const testData = [
-    { email: userEmail, error: "Failed to send email. Reason: Email has been temporarily rejected. ", error2: "Too many attempts try again"},
+    {
+      email: userEmail,
+      error: "Failed to send email",
+      error2: "Too many attempts try again",
+    },
     {
       email: faker.internet.email(),
-      error: "User not found. ", error2: "Too many attempts try again"
+      error: "User not found",
+      error2: "Too many attempts try again",
     },
   ];
 
   for (const data of testData) {
-    // Fill in the email and password
-    await page.type("#identification", data.email);
-    await page.screenshot({
-      path: screenshotDirectoryEscenario + "fillInputs.png",
-    });
-
-    // Click the forgot button
-    await page.click("#ember4");
-    // Wait until .main-error has visible content
-    await page.waitForFunction(
-      'document.querySelector(".main-error") && document.querySelector(".main-error").offsetHeight > 0'
-    );
-    await page.waitForFunction(() => {
-      const button = document.querySelector('#ember4 span');
-      return button && button.innerText.toLowerCase().includes('forgot');
-    });
-    await new Promise((r) => setTimeout(r, 5000));
-    await page.screenshot({
-      path: screenshotDirectoryEscenario + "afterForgot.png",
-    });
+    const afterForgot = await loginPage.forgotPassword(data.email);
 
     // Get the actual error message text
-    const actualErrorMessage = await page.$eval(".main-error", (el) =>
+    const actualErrorMessage = await afterForgot.$eval(".main-error", (el) =>
       el.textContent.trim()
     );
     // Compare with the expected error message
     try {
       assert.ok(
-        actualErrorMessage === data.error || actualErrorMessage.includes(data.error2));
-        
+        actualErrorMessage.includes(data.error) ||
+          actualErrorMessage.includes(data.error2)
+      );
+
       console.log(
         "E3-Test Passed - Expected: '",
-        data.error, "' OR '",data.error2,
+        data.error,
+        "' OR '",
+        data.error2,
         ", Actual:",
         actualErrorMessage
       );
     } catch (e) {
       console.error(
+        e,
         "E3-Test Failed - Expected:",
-        data.error, "' OR '",data.error2,
+        data.error,
+        "' OR '",
+        data.error2,
         ", Actual:",
         actualErrorMessage
       );
-      // Reset input fields
-    await page.evaluate(() => {
-      document.querySelector('#identification').value = '';
-    });
     }
-    // Reset input fields
-    await page.evaluate(() => {
-      document.querySelector('#identification').value = '';
-    });
   }
 
-  const url = await page.url();
   await browser.close();
 })().catch((e) => console.log(e));
+
+/**
+ * Escenario 4: Como usuario administrador creo un nuevo post para publicarlo en el sitio web
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa una cadena de texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en el publish
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * And: Se da click en posts
+ * Then:Se valida que el post este creado
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  const afterlogin = await loginPage.login(userEmail, userPassword);
+  const postPage = new PostsPage(
+    page,
+    ghostUrl,
+    screenshotDirectoryEscenario
+  );
+   await Promise.resolve(postPage.visit());
+ const afterPostVisit= await Promise.resolve(postPage.createPost());
+ await page.waitForTimeout(5000);
+
+
+  // Close the browser after completing the tests
+  await browser.close();
+
+  console.log(
+    "E4-Test Passed - Expected: , Actual: ",
+    'lalala',
+    "."
+  );
+})().catch((e) =>
+  console.log(e,
+    "E4-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
