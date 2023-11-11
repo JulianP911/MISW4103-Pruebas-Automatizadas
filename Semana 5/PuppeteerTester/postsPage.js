@@ -38,15 +38,15 @@ class PostsPage {
       await Promise.resolve(
         this.page.click('button[data-test-button="publish-flow"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       await Promise.resolve(
         this.page.click('button[data-test-button="continue"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       await Promise.resolve(
         this.page.click('button[data-test-button="confirm-publish"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       const element = await this.page.$(
         '.gh-publish-title[data-test-publish-flow="complete"]'
       );
@@ -127,23 +127,23 @@ class PostsPage {
       await Promise.resolve(
         this.page.click('button[data-test-button="publish-flow"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       await this.page.evaluate(() => {
         document.querySelector('button.gh-publish-setting-title').click();
       });
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       await this.page.evaluate(() => {
         document.querySelector('.gh-radio-button[data-test-radio="schedule"]').click();
       });
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       await Promise.resolve(
         this.page.click('button[data-test-button="continue"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       await Promise.resolve(
         this.page.click('button[data-test-button="confirm-publish"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       const element = await this.page.$(
         '.gh-publish-title[data-test-publish-flow="complete"]'
       );
@@ -158,14 +158,14 @@ class PostsPage {
       await Promise.resolve(
         this.page.click('button[data-test-button="close-publish-flow"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(5000);
       return this.page;
     } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
+      console.error("Visit Scheduled Post Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }

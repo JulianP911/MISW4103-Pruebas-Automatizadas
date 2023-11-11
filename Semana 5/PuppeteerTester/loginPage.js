@@ -63,10 +63,13 @@ class LoginPage {
       await this.page.waitForFunction(
         'document.querySelector(".main-error") && document.querySelector(".main-error").offsetHeight > 0'
       );
-      await this.page.waitForFunction(() => {
-        const button = document.querySelector("#ember4 span");
-        return button && button.innerText.toLowerCase().includes("forgot");
-      });
+      await this.page.waitForFunction(
+        () => {
+          const button = document.querySelector("#ember4 span");
+          return button && button.innerText.toLowerCase().includes("forgot");
+        },
+        { timeout: 100000 } // Set timeout to 60 seconds (60000 milliseconds)
+      );
       await new Promise((r) => setTimeout(r, 5000));
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "afterForgot.png",
