@@ -30,15 +30,30 @@ class PostsPage {
       // Wait for an element that contains a span with the text "New post"
       await this.page.click(".view-actions-top-row");
       await this.page.waitForTimeout(2000);
-await this.page.keyboard.type(faker.lorem.sentence(2));
-      await this.page.keyboard.press('Tab');
       await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.press("Tab");
+      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.waitForTimeout(5000);
+      await Promise.resolve(
+        this.page.click('button[data-test-button="publish-flow"]')
+      );
       await this.page.waitForTimeout(1000);
-      await Promise.resolve(this.page.click('button[data-test-button="publish-flow"]'));
+      await Promise.resolve(
+        this.page.click('button[data-test-button="continue"]')
+      );
       await this.page.waitForTimeout(1000);
-      await Promise.resolve(this.page.click('button[data-test-button="continue"]'));
+      await Promise.resolve(
+        this.page.click('button[data-test-button="confirm-publish"]')
+      );
       await this.page.waitForTimeout(1000);
-      await Promise.resolve(this.page.click('button[data-test-button="confirm-publish"]'));
+      const element = await this.page.$(
+        '.gh-publish-title[data-test-publish-flow="complete"]'
+      );
+      if (element) {
+        console.log("Post creado exitosamente");
+      } else {
+        throw "No se encontro componente de creacion exitosa";
+      }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPostsPage.png",
       });
