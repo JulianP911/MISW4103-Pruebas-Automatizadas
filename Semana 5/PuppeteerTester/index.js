@@ -4,6 +4,7 @@ const { faker } = require("@faker-js/faker");
 const fs = require("fs");
 const LoginPage = require("./LoginPage");
 const PostsPage = require("./postsPage");
+const TagsPage = require("./tagsPage");
 const ghostUrl = "http://localhost:2369/ghost/";
 const userEmail = "prueba@prueba.com";
 const userPassword = "prueba12345";
@@ -29,11 +30,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se ingresa una contraseña valida
  * And: Se da clic en el botón de iniciar de sesión
  * Then: Se verifica que se encuentre en el dashboard
- */
+ */ 
 (async () => {
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario1/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -72,11 +73,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se ingresa una contraseña vacía - contraseña invalida
  * And: Se da clic en el botón de iniciar de sesión
  * Then: Se valida el mensaje de error
- */
+ */ 
 (async () => {
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario2/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -132,7 +133,7 @@ ensureDirectoryExists(screenshotDirectory);
 (async () => {
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario3/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
   await loginPage.visit();
@@ -200,11 +201,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en Publish post, right now
  * And: Se da click en posts
  * Then:Se valida que el post este creado
- */
+ */ 
 (async () => {
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -236,7 +237,7 @@ ensureDirectoryExists(screenshotDirectory);
 );
 
 /**
- * Escenario 5: Como usuario administrador creo un nuevo borrador de post para el sitio web 
+ * Escenario 5: Como usuario administrador creo un nuevo borrador de post para el sitio web
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
@@ -244,12 +245,12 @@ ensureDirectoryExists(screenshotDirectory);
  * And:Se ingresa una cadena de texto al título del post
  * And:Se ingresa un texto al contenido del post
  * And: Se da click en posts
- * Then:Se valida que aparezaca en el listado de posts el borador que se acabo de crear 
- */
+ * Then:Se valida que aparezaca en el listado de posts el borador que se acabo de crear
+ */ 
 (async () => {
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -279,7 +280,7 @@ ensureDirectoryExists(screenshotDirectory);
 );
 
 /**
- * Escenario 6: Como usuario administrador creo un nuevo post para publicarlo en el sitio web
+ * Escenario 6: Como usuario administrador creo un nuevo post con publicación programada
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
@@ -293,11 +294,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en Publish post, right now
  * And: Se da click en posts
  * Then:Se valida que el post este creado
- */
+ */ 
 (async () => {
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -321,6 +322,130 @@ ensureDirectoryExists(screenshotDirectory);
 })().catch((e) =>
   console.log(e,
     "E6-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
+
+/**
+ * Escenario 7: Como usuario administrador creo un nuevo tag para usarlo en el sitio web
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Tags
+ * And: Se da clic en el botón de New Tag
+ * And:Se ingresa una cadena de texto al nombre del tag
+ * And:Se ingresa un texto a la descripción del tag
+ * And: Se da click en Save
+ * And: Se da click en Tags
+ * And: Se da click en published Tags
+ * Then:Se valida que el post este creado
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: true});
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  await loginPage.login(userEmail, userPassword);
+  const tagsPage = new TagsPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  const newTagName = faker.lorem.sentence(2);
+  await Promise.resolve(tagsPage.visit());
+  await Promise.resolve(tagsPage.createTag(newTagName, true));
+  await page.waitForTimeout(5000);
+
+  // Close the browser after completing the tests
+  await browser.close();
+  console.log("E7-Test Passed ");
+})().catch((e) =>
+  console.log(
+    e,
+    "E7-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
+/**
+ * Escenario 8:  Como usuario administrador creo un nuevo tag (negativo)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Tags
+ * And: Se da clic en el botón de New Tag
+ * And:Se ingresa un texto a la descripción del tag
+ * And: Se da click en Save
+ * Then:Debe aparecer un mensaje de error exigiéndome un nombre de tag
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: true});
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  await loginPage.login(userEmail, userPassword);
+  const tagsPage = new TagsPage(page, ghostUrl, screenshotDirectoryEscenario);
+  await Promise.resolve(tagsPage.visit());
+  await Promise.resolve(tagsPage.createTagError());
+  await page.waitForTimeout(5000);
+
+  // Close the browser after completing the tests
+  await browser.close();
+  console.log("E8-Test Passed ");
+})().catch((e) =>
+  console.log(
+    e,
+    "E8-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
+/**
+ * Escenario 9: Como usuario administrador creo un nuevo internal tag
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Tags
+ * And: Se da clic en el botón de New Tag
+ * And:Se ingresa una cadena de texto al nombre del tag (con # al inicio del nombre)
+ * And:Se ingresa un texto a la descripción del tag
+ * And: Se da click en Save
+ * And: Se da click en Tags
+ * And: Se da click en internal Tags
+ * Then:Se valida que el post este creado
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: true});
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  await loginPage.login(userEmail, userPassword);
+  const tagsPage = new TagsPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  const newTagName = '#'+faker.lorem.sentence(2);
+  await Promise.resolve(tagsPage.visit());
+  await Promise.resolve(tagsPage.createTag(newTagName, false));
+  await page.waitForTimeout(5000);
+
+  // Close the browser after completing the tests
+  await browser.close();
+  console.log("E9-Test Passed ");
+})().catch((e) =>
+  console.log(
+    e,
+    "E9-Test Failed - Expected: ",
     e.expected,
     ", Actual: ",
     e.actual,
