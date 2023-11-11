@@ -28,21 +28,25 @@ class PostsPage {
   async createPost() {
     try {
       // Wait for an element that contains a span with the text "New post"
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForSelector(".view-actions-top-row");
       await this.page.click(".view-actions-top-row");
       await this.page.waitForTimeout(2000);
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.waitForTimeout(5000);
+      await this.page.waitForSelector('button[data-test-button="publish-flow"]');
       await Promise.resolve(
         this.page.click('button[data-test-button="publish-flow"]')
       );
       await this.page.waitForTimeout(5000);
+      await this.page.waitForSelector('button[data-test-button="continue"]');
       await Promise.resolve(
         this.page.click('button[data-test-button="continue"]')
       );
       await this.page.waitForTimeout(5000);
+      await this.page.waitForSelector('button[data-test-button="confirm-publish"]');
+    
       await Promise.resolve(
         this.page.click('button[data-test-button="confirm-publish"]')
       );
@@ -58,10 +62,14 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPostsPage.png",
       });
+      this.page.waitForSelector('button[data-test-button="close-publish-flow"]')
+
       await Promise.resolve(
         this.page.click('button[data-test-button="close-publish-flow"]')
       );
       await this.page.waitForTimeout(1000);
+      this.page.waitForSelector('.gh-btn-editor[data-test-link="posts"]')
+
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
@@ -75,8 +83,8 @@ class PostsPage {
 
   async createDraft() {
     try {
-      // Wait for an element that contains a span with the text "New post"
-      await this.page.waitForTimeout(1000);
+      this.page.waitForSelector(".view-actions-top-row")
+
       await this.page.click(".view-actions-top-row");
       await this.page.waitForTimeout(2000);
       const titlePost = faker.lorem.sentence(2);

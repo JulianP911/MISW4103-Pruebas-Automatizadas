@@ -64,7 +64,6 @@ ensureDirectoryExists(screenshotDirectory);
     "."
   )
 );
-
 /**
  * Escenario 2: Como usuario administrador realizo el inicio sesión en Ghost (negativo)
  *
@@ -235,7 +234,6 @@ ensureDirectoryExists(screenshotDirectory);
     "."
   )
 );
-
 /**
  * Escenario 5: Como usuario administrador creo un nuevo borrador de post para el sitio web
  *
@@ -446,6 +444,47 @@ ensureDirectoryExists(screenshotDirectory);
   console.log(
     e,
     "E9-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
+
+/**
+ * Escenario 16: Como usuario administrador edito un tag creado previamente (caso positivo)
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Tags
+ * And: Se selecciona el tag que ha sido creado previamente
+ * And:Se ingresa una nueva cadena de texto al nombre del tag 
+ * And: Se da click en Save
+ * And: Se da click en Tags
+ * Then:Se valida que el tag que ha sido creado previamente se le ha modificado el titulo
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: false});
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  await loginPage.login(userEmail, userPassword);
+  const tagsPage = new TagsPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  const newTagName = faker.lorem.sentence(2);
+  await Promise.resolve(tagsPage.visit());
+  await Promise.resolve(tagsPage.editTag(newTagName));
+  await page.waitForTimeout(5000);
+
+  // Close the browser after completing the tests
+  await browser.close();
+  console.log("E16-Test Passed ");
+})().catch((e) =>
+  console.log(
+    e,
+    "E16-Test Failed - Expected: ",
     e.expected,
     ", Actual: ",
     e.actual,
