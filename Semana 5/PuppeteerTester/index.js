@@ -224,11 +224,7 @@ ensureDirectoryExists(screenshotDirectory);
   // Close the browser after completing the tests
   await browser.close();
 
-  console.log(
-    "E4-Test Passed - Expected: , Actual: ",
-    'lalala',
-    "."
-  );
+  console.log("E4-Test Passed ");
 })().catch((e) =>
   console.log(e,
     "E4-Test Failed - Expected: ",
@@ -236,5 +232,48 @@ ensureDirectoryExists(screenshotDirectory);
     ", Actual: ",
     e.actual,
     "."
+  )
+);
+
+/**
+ * Escenario 5: Como usuario administrador creo un nuevo borrador de post para el sitio web 
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa una cadena de texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en posts
+ * Then:Se valida que aparezaca en el listado de posts el borador que se acabo de crear 
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  const afterlogin = await loginPage.login(userEmail, userPassword);
+  const postPage = new PostsPage(
+    page,
+    ghostUrl,
+    screenshotDirectoryEscenario
+  );
+   await Promise.resolve(postPage.visit());
+ const afterPostVisit= await Promise.resolve(postPage.createDraft());
+ await page.waitForTimeout(5000);
+
+
+  // Close the browser after completing the tests
+  await browser.close();
+
+  console.log(
+    "E5-Test Passed"
+  );
+})().catch((e) =>
+  console.log(e,
+    "E5-Test Failed",
   )
 );
