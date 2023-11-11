@@ -57,6 +57,14 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPostsPage.png",
       });
+      await Promise.resolve(
+        this.page.click('button[data-test-button="close-publish-flow"]')
+      );
+      await this.page.waitForTimeout(1000);
+      await Promise.resolve(
+        this.page.click('.gh-btn-editor[data-test-link="posts"]')
+      );
+      await this.page.waitForTimeout(1000);
       return this.page;
     } catch (error) {
       console.error("Visit Post Page failed:", error.message);
