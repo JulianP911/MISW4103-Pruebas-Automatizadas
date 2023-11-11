@@ -277,3 +277,53 @@ ensureDirectoryExists(screenshotDirectory);
     "E5-Test Failed",
   )
 );
+
+/**
+ * Escenario 6: Como usuario administrador creo un nuevo post para publicarlo en el sitio web
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa una cadena de texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación del post
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * And: Se da click en posts
+ * Then:Se valida que el post este creado
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  const afterlogin = await loginPage.login(userEmail, userPassword);
+  const postPage = new PostsPage(
+    page,
+    ghostUrl,
+    screenshotDirectoryEscenario
+  );
+   await Promise.resolve(postPage.visit());
+ const afterPostVisit= await Promise.resolve(postPage.createPostScheduled());
+ await page.waitForTimeout(5000);
+
+
+  // Close the browser after completing the tests
+  await browser.close();
+
+  console.log("E6-Test Passed ");
+})().catch((e) =>
+  console.log(e,
+    "E6-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
