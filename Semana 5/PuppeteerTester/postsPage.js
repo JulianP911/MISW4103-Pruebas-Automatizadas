@@ -188,7 +188,7 @@ class PostsPage {
       await this.page.waitForTimeout(1000);
       return this.page;
     } catch (error) {
-      console.error("Visit Scheduled Post Page failed:", error.message);
+      console.error("create Scheduled Post failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
