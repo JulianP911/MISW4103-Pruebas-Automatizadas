@@ -125,11 +125,74 @@ class PagesPage {
         }
       }
       if (!tituloEncontrado) {
-        throw "no se encontro el titulo del draft en el listado de posts";
+        throw "no se encontro el titulo del draft en el listado de pages";
       }
       return this.page;
     } catch (error) {
       console.error("Create draft page faile:", error.message);
+      throw error; // Rethrow the error to propagate it to the calling code
+    }
+  }
+
+  async createPageScheduled() {
+    try {
+      // Wait for an element that contains a span with the text "New Page"
+      await this.page.waitForSelector('a[data-test-new-page-button]');
+      await this.page.click('a[data-test-new-page-button]');
+      await this.page.waitForSelector('textarea[data-test-editor-title-input]');
+      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.press("Tab");
+      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "createPage.png",
+      });
+      await Promise.resolve(this.page.click('button[data-test-button="publish-flow"]'));
+      await this.page.waitForTimeout(2000);
+      await this.page.evaluate(() => {
+        document.querySelector('button.gh-publish-setting-title').click();
+      });
+      await this.page.waitForSelector('div[data-test-radio="schedule"]', { timeout: 100000 })
+      await this.page.evaluate(() => {
+        document.querySelector('div[data-test-radio="schedule"]').click();
+      });
+      await this.page.waitForTimeout(1000);
+      await this.page.waitForSelector('button[data-test-button="continue"]');
+      await Promise.resolve(
+        this.page.click('button[data-test-button="continue"]')
+      );
+      await this.page.waitForTimeout(5000);
+      await this.page.waitForSelector('button[data-test-button="confirm-publish"]');
+    
+      await Promise.resolve(
+        this.page.click('button[data-test-button="confirm-publish"]')
+      );
+      await this.page.waitForTimeout(5000);
+      const element = await this.page.$(
+        '.gh-publish-title[data-test-publish-flow="complete"]'
+      );
+      if (element) {
+        console.log("Page creado exitosamente");
+      } else {
+        throw "No se encontro componente de creacion exitosa";
+      }
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "createPagesPage.png",
+      });
+      this.page.waitForSelector('button[data-test-button="close-publish-flow"]')
+
+      await Promise.resolve(
+        this.page.click('button[data-test-button="close-publish-flow"]')
+      );
+      await this.page.waitForTimeout(1000);
+      this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]')
+
+      await Promise.resolve(
+        this.page.click('.gh-btn-editor[data-test-link="pages"]')
+      );
+      await this.page.waitForTimeout(1000);
+      return this.page;
+    } catch (error) {
+      console.error("Create page faile:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
