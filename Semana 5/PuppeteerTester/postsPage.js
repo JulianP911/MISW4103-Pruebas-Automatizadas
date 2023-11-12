@@ -91,7 +91,7 @@ async createPost(titlePost) {
     if (element) {
       console.log("Post created successfully");
     } else {
-      throw "No se encontró el componente de creación exitosa";
+      throw "Post created failed";
     }
 
     await this.page.screenshot({
@@ -317,7 +317,6 @@ async createDraft(titlePost) {
       await this.page.evaluate(async (titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === titlePost.trim()) {
             await element.click();
           }
@@ -382,7 +381,6 @@ async createDraft(titlePost) {
       await this.page.evaluate(async (nameTag) => {
         const elements = document.querySelectorAll("li");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === nameTag.trim()) {
             await element.click();
           }
@@ -399,7 +397,6 @@ async createDraft(titlePost) {
       const element = await this.page.evaluate((titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === titlePost.trim()) {
             return element;
           }
@@ -408,9 +405,9 @@ async createDraft(titlePost) {
       }, titlePost);
 
       if (element) {
-        console.log("Tag adicionado exitosamente");
+        console.log("Add Tag successfully");
       } else {
-        throw "No se encontro componente de adición exitosa";
+        throw "Add Tag failed";
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "addTagPostsPage.png",
@@ -427,7 +424,6 @@ async createDraft(titlePost) {
       await this.page.evaluate(async (titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === titlePost.trim()) {
             await element.click();
           }
@@ -454,7 +450,6 @@ async createDraft(titlePost) {
       const element = await this.page.evaluate((titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === titlePost.trim()) {
             return false;
           }
@@ -465,9 +460,9 @@ async createDraft(titlePost) {
         path: this.screenshotDirectoryEscenario + "listPosts.png",
       });
       if (element) {
-        console.log("Post eliminado exitosamente");
+        console.log("Delete Post successfully");
       } else {
-        throw "No se encontro componente de eliminado exitosa";
+        throw "Delete post fail";
       }
       return this.page;
     } catch (error) {
@@ -481,7 +476,6 @@ async createDraft(titlePost) {
       await this.page.evaluate(async (titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === titlePost.trim()) {
             await element.click();
           }

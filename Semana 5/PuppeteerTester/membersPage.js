@@ -86,6 +86,7 @@ class MembersPage {
       // Wait for an element that contains a span with the text "New member"
       await this.page.waitForSelector('a[data-test-new-member-button="true"]');
       await this.page.click('a[data-test-new-member-button="true"]');
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector('input[data-test-input="member-name"]');
       const nameMember = faker.person.firstName();
       await this.page.keyboard.type(nameMember);
@@ -151,7 +152,6 @@ class MembersPage {
       const memberEncontrado = await this.page.evaluate((newEmail) => {
         const elements = document.querySelectorAll(".gh-members-list-email");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === newEmail.trim()) {
             return true;
           }

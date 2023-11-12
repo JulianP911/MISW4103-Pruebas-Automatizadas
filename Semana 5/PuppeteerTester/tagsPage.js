@@ -73,7 +73,6 @@ class TagsPage {
       const element = await this.page.evaluate((newTagName) => {
         const elements = document.querySelectorAll(".gh-tag-list-name");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === newTagName.trim()) {
             return element;
           }
@@ -82,9 +81,9 @@ class TagsPage {
       }, newTagName);
 
       if (element) {
-        console.log("Tag creado exitosamente");
+        console.log("Tag created successfully");
       } else {
-        throw "No se encontro componente de creacion exitosa";
+        throw "Create tag fail";
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPostsPage.png",
@@ -174,7 +173,6 @@ class TagsPage {
       const element = await this.page.evaluate((newTagName) => {
         const elements = document.querySelectorAll(".gh-tag-list-name");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === newTagName.trim()) {
             return element;
           }
@@ -183,9 +181,9 @@ class TagsPage {
       }, newTagName);
 
       if (element) {
-        console.log("Tag editado exitosamente");
+        console.log("Edit tag successfully");
       } else {
-        throw "No se encontro componente de creacion exitosa";
+        throw "Edit tag fail";
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "finalEditTags.png",

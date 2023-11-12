@@ -73,9 +73,9 @@ class PagesPage {
         '.gh-publish-title[data-test-publish-flow="complete"]'
       );
       if (element) {
-        console.log("Page creado exitosamente");
+        console.log("Create page successfully");
       } else {
-        throw "No se encontro componente de creacion exitosa";
+        throw "Create page failed";
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPagesPage.png",
@@ -220,7 +220,6 @@ class PagesPage {
       await this.page.evaluate(async (titlePage) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
-          console.log(element.textContent.trim());
           if (element.textContent.trim() === titlePage.trim()) {
             await element.click();
           }
