@@ -40,6 +40,7 @@ const runScenarios = async () => {
   await runScenario13();
   await runScenario14();
   await runScenario16();
+  await runScenario17();
   await runScenario19();
   await runScenario20();
 };
@@ -766,6 +767,50 @@ const runScenario16 = async () => {
     console.log("E16-Test Passed ");
   } catch (e) {
     console.log(e, "E16-Test Failed");
+  }
+};
+/**
+ * Escenario 17: Como usuario administrador edito un member creado previamente
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un member
+ * And: Se da clic en el botón de Members
+ * And:Se selecciona un member creado
+ * And:Se ingresa una nueva cadena de texto al campo del correo del member
+ * And: Se da clic en el botón save
+ * And: Se da clic en el botón de Members
+ * Then:Se verifica que el cambio en el campo de correo realizado al member
+ */
+const runScenario17 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const membersPage = new MembersPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(membersPage.visit());
+    await Promise.resolve(membersPage.createMember());
+    await page.waitForTimeout(5000);
+    await Promise.resolve(membersPage.editMember());
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    console.log("E10-Test Passed ");
+  } catch (e) {
+    console.log(e, "E10-Test Failed");
   }
 };
 /**

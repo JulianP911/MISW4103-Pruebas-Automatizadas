@@ -110,6 +110,57 @@ class MembersPage {
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
+  async editMember() {
+    const newEmail=faker.internet.email()
+    await this.page.waitForTimeout(6000);
+     console.log(newEmail)
+      await this.page.evaluate(() => {
+        document.querySelectorAll(".gh-members-list-name")[0].click();
+      }, this.page);
+    try {
+      const email = await this.page.$("#member-email");
+      await this.page.evaluate((newEmail) => {
+        document.querySelector("#member-email").value="";
+
+      }, this.page);
+      await this.page.waitForTimeout(5000);
+email.type(newEmail)
+await this.page.waitForTimeout(8000);
+
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "editMember.png",
+      });
+      await Promise.resolve(this.page.click('button[data-test-button="save"]'));
+      await this.page.waitForTimeout(2000);
+      await Promise.resolve(
+        this.page.click('a[data-test-link="members-back"]')
+      );
+      await this.page.waitForSelector("h2.gh-canvas-title");
+
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "editMemberFinalPage.png",
+      });
+      const memberEncontrado = await this.page.evaluate((newEmail) => {
+        const elements = document.querySelectorAll(".gh-members-list-email");
+        for (const element of elements) {
+          console.log(element.textContent.trim());
+          if (element.textContent.trim() === newEmail.trim()) {
+             return true;
+          }
+        }
+        return false;
+      }, newEmail);
+
+      if (!memberEncontrado) {
+        throw "no se encontro el member creado";
+      }
+      await this.page.waitForTimeout(1000);
+      return this.page;
+    } catch (error) {
+      console.error("Create member faile:", error.message);
+      throw error; // Rethrow the error to propagate it to the calling code
+    }
+  }
 }
 
 module.exports = MembersPage;
