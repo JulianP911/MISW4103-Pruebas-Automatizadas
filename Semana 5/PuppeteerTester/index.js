@@ -39,8 +39,10 @@ const runScenarios = async () => {
   await runScenario12();
   await runScenario13();
   await runScenario14();
+  await runScenario15();
   await runScenario16();
   await runScenario17();
+  await runScenario18();
   await runScenario19();
   await runScenario20();
 };
@@ -303,7 +305,7 @@ const runScenario3 = async () => {
  * And:Se ingresa una cadena de texto al título del post
  * And:Se ingresa un texto al contenido del post
  * And: Se da click en posts
- * Then:Se valida que aparezaca en el listado de posts el borador que se acabo de crear
+ * Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
  */
 const runScenario5 = async () => {
   try {
@@ -326,7 +328,8 @@ const runScenario5 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const afterPostVisit = await Promise.resolve(postPage.createDraft());
+    const titlePost = faker.lorem.sentence(2);
+    await Promise.resolve(postPage.createDraft(titlePost));
     await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
@@ -669,8 +672,9 @@ const runScenario13 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
+    const titlePage = faker.lorem.sentence(2);
     await Promise.resolve(pagesPage.visit());
-    await Promise.resolve(pagesPage.createDraft());
+    await Promise.resolve(pagesPage.createDraft(titlePage));
     await page.waitForTimeout(5000);
     // Close the browser after completing the tests
     await browser.close();
@@ -725,6 +729,53 @@ const runScenario14 = async () => {
     console.log("E14-Test Passed ");
   } catch (e) {
     console.log(e, "E14-Test Failed");
+  }
+};
+
+/**
+ * Escenario 15: Como usuario administrador edito un post creado previamente de mis borradores
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa una nueva cadena de texto al título del post
+ * And: Se da click en posts
+ * Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+ */
+const runScenario15 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    await page.waitForTimeout(2000);
+    const titlePost = faker.lorem.sentence(2);
+    const newTitlePost = faker.lorem.sentence(2);
+    await Promise.resolve(postPage.createDraft(titlePost));
+    await Promise.resolve(postPage.editDraft(titlePost,newTitlePost));
+    await page.waitForTimeout(2000);
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    console.log("E15-Test Passed");
+  } catch (e) {
+    console.log(e, "E15-Test Failed");
   }
 };
 
@@ -813,6 +864,54 @@ const runScenario17 = async () => {
     console.log(e, "E10-Test Failed");
   }
 };
+
+/**
+ * Escenario 18: Como usuario administrador edito un page creado previamente de mis borradores
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de una page
+ * And:Se selecciona la page que ha sido creada
+ * And:Se ingresa una nueva cadena de texto al título de la page
+ * And: Se da click en pages
+ * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+ */
+const runScenario18 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagesPage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagesPage.visit());
+    await page.waitForTimeout(2000);
+    const titlePage = faker.lorem.sentence(2);
+    const newTitlePage = faker.lorem.sentence(2);
+    await Promise.resolve(pagesPage.createDraft(titlePage));
+    await Promise.resolve(pagesPage.editDraft(titlePage,newTitlePage));
+    await page.waitForTimeout(2000);
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    console.log("E18-Test Passed");
+  } catch (e) {
+    console.log(e, "E18-Test Failed");
+  }
+};
+
 /**
  * Escenario 19: Como usuario administrador le asigno un tag a un post ya publicado
  * Given: Se ingresa a la página correspondiente a login

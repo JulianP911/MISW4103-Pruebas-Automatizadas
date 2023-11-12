@@ -91,13 +91,12 @@ class PagesPage {
     }
   }
 
-  async createDraft() {
+  async createDraft(titlePage) {
     try {
       // Wait for an element that contains a span with the text "New Page"
       await this.page.waitForSelector('a[data-test-new-page-button]');
       await this.page.click('a[data-test-new-page-button]');
       await this.page.waitForSelector('textarea[data-test-editor-title-input]');
-      const titlePage = faker.lorem.sentence(2);
       await this.page.keyboard.type(titlePage);
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(faker.lorem.sentence(2));
@@ -196,6 +195,64 @@ class PagesPage {
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
+
+  async editDraft(titlePage, newTitlePage) {
+    try {
+      await this.page.evaluate(async (titlePage) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          console.log(element.textContent.trim());
+          if (element.textContent.trim() === titlePage.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, titlePage);
+
+      await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+      await this.page.evaluate(() => {
+        const element = document.querySelector("textarea[data-test-editor-title-input]");
+        element.value ="";
+        element.focus();
+      });
+      await this.page.keyboard.type(newTitlePage);
+      await this.page.waitForTimeout(3000);
+      await this.page.waitForSelector(
+        '.gh-btn-editor[data-test-link="pages"]',
+        { timeout: 100000 }
+      );
+
+      await Promise.resolve(
+        this.page.click('.gh-btn-editor[data-test-link="pages"]')
+      );
+      await this.page.waitForTimeout(1000);
+      await this.page.waitForSelector("h3.gh-content-entry-title", {
+        timeout: 100000,
+      });
+
+      const h3Elements = await this.page.$$eval(
+        "h3.gh-content-entry-title",
+        (h3s) => h3s.map((h3) => h3.textContent)
+      );
+      let tituloEncontrado = false;
+      for (let i = 0; i < h3Elements.length; i++) {
+        if (h3Elements[i].includes(newTitlePage)) {
+          tituloEncontrado = true;
+          return;
+        }
+      }
+      if (!tituloEncontrado) {
+        throw "no se encontro el titulo del draft en el listado de pages";
+      }
+      
+      await this.page.waitForTimeout(1000);
+      return this.page;
+    } catch (error) {
+      console.error("Edit draft Pages failed:", error.message);
+      throw error; // Rethrow the error to propagate it to the calling code
+    }
+  }
+
 }
 
 module.exports = PagesPage;

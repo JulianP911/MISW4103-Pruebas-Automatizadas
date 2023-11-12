@@ -369,11 +369,11 @@ class PostsPage {
       }, titlePost);
 
       await this.page.waitForSelector("textarea[data-test-editor-title-input]");
-      await this.page.evaluate((titlePost) => {
+      await this.page.evaluate(() => {
         const element = document.querySelector("textarea[data-test-editor-title-input]");
         element.value ="";
         element.focus();
-      }, newTitlePost);
+      });
       await this.page.keyboard.type(newTitlePost);
       await this.page.waitForTimeout(3000);
       await this.page.waitForSelector(
