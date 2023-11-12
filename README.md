@@ -2,6 +2,14 @@
 
 ## Semana 5
 
+A continuación, se adjunta los enlaces a los entregables de la wiki:
+
+[Funcionalidades bajo pruebas](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Funcionalidades-bajo-pruebas)
+
+[Escenarios de pruebas](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Escenarios-de-pruebas)
+
+[Pros - Contras de Kraken y Puppeteer](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Pros-%E2%80%90-Contras-de-Kraken-Puppeteer)
+
 ### Kraken
 
 **Importante:** Para corre los ecenarios de pruebas con Kraken se necesita correr la aplicación de Ghost en el puerto <code>2368</code>, asimismo, se requiere que la base de datos de ghost este vacía, es decir, que no haya posts, pages, tags y members creados previmente.
