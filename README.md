@@ -12,7 +12,7 @@ A continuación, se adjunta los enlaces a los entregables de la wiki:
 
 ### Kraken
 
-**Importante:** Para corre los ecenarios de pruebas con Kraken se necesita correr la aplicación de Ghost en el puerto <code>2368</code>, asimismo, se requiere que la base de datos de ghost este vacía, es decir, que no haya posts, pages, tags y members creados previmente.
+**Importante:** Para corre los ecenarios de pruebas con Kraken se necesita correr la aplicación de Ghost en el puerto <code>2368</code>, asimismo, se requiere que la base de datos de ghost este vacía, es decir, que no haya posts, pages, tags y members creados previmente. La versión de node necesaria para ejecutar los escenarios de pruebas es 16.20.2.
 
 A continuación, se detalla los pasos a seguir para ejecutar los escenarios de pruebas creados con Kraken:
 
