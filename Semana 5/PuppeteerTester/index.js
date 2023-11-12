@@ -24,17 +24,17 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  await runScenario1();
-  await runScenario2();
-  await runScenario3();
-  await runScenario4();
-  await runScenario5();
-  await runScenario6();
-  await runScenario7();
-  await runScenario8();
-  await runScenario9();
-  await runScenario10();
-  await runScenario11();
+  //await runScenario1();
+  //await runScenario2();
+  //await runScenario3();
+  //await runScenario4();
+  //await runScenario5();
+  //await runScenario6();
+  //await runScenario7();
+  //await runScenario8();
+  //await runScenario9();
+  //await runScenario10();
+  //await runScenario11();
   await runScenario16();
 };
 /**
@@ -266,7 +266,8 @@ const runScenario3 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const afterPostVisit = await Promise.resolve(postPage.createPost());
+    const titlePost= faker.lorem.sentence(2);
+    const afterPostVisit = await Promise.resolve(postPage.createPost(titlePost));
     await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
@@ -600,6 +601,52 @@ const runScenario16 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const tagsPage = new TagsPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+    const newTagName = faker.lorem.sentence(2);
+    const editTagName = faker.lorem.sentence(2);
+    await Promise.resolve(tagsPage.visit());
+    await Promise.resolve(tagsPage.createTag(newTagName,true));
+    await Promise.resolve(tagsPage.editTag(editTagName));
+    await page.waitForTimeout(5000);
+
+    // Close the browser after completing the tests
+    await browser.close();
+    console.log("E16-Test Passed ");
+  } catch (e) {
+    console.log(e, "E16-Test Failed");
+  }
+};
+/**
+ * Escenario 19: Como usuario administrador le asigno un tag a un post ya publicado
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación y publicación de un post
+ * And: Se realiza la creación de un tag
+ * And:Se da click en el botón de Posts
+ * And: Se selecciona el post que ha sido creado
+ * And: se da click en el botón de settings
+ * And: Se selecciona el tag creado en el dropdown de Tags
+ * And: Se da click en el botón update
+ * And: Se da clic en el botón de Posts
+ * And: Se da click en el filtro all tags
+ * And: Se selecciona el tag asignado
+ * Then:Se verifica que al filtrar aparezca el post al cual se le asigno el tag
+ */
+const runScenario19 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
@@ -615,14 +662,20 @@ const runScenario16 = async () => {
 
     const newTagName = faker.lorem.sentence(2);
     await Promise.resolve(tagsPage.visit());
-    await Promise.resolve(tagsPage.editTag(newTagName));
+    await Promise.resolve(tagsPage.createTag(newTagName));
+    const postPage =new PostsPage(page, ghostUrl, screenshotDirectoryEscenario);
+    await Promise.resolve(postPage.visit());
+    const titlePost= faker.lorem.sentence(2);
+    await Promise.resolve(postPage.createPost(titlePost));
+    await Promise.resolve(postPage.visit());    
+    await Promise.resolve(postPage.addTagPost(titlePost));    
     await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
-    console.log("E16-Test Passed ");
+    console.log("E19-Test Passed ");
   } catch (e) {
-    console.log(e, "E16-Test Failed");
+    console.log(e, "E19-Test Failed");
   }
 };
 runScenarios();

@@ -30,7 +30,6 @@ class TagsPage {
   async createTag(newTagName, isPublic) {
     try {
       await this.page.waitForTimeout(6000);
-      await this.page.waitForSelector('a[href="#/tags/new/"]', { timeout: 100000 });
 
       await this.page.click('a[href="#/tags/new/"]');
       await this.page.waitForTimeout(6000);
@@ -113,7 +112,7 @@ class TagsPage {
       await this.page.waitForTimeout(6000);
       return this.page;
     } catch (error) {
-      error, console.error("Create tag Page failed:", error.message);
+      error, console.error("Create tag Error Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
@@ -170,7 +169,7 @@ class TagsPage {
       await this.page.waitForTimeout(1000);
       return this.page;
     } catch (error) {
-      error, console.error("Create tag Page failed:", error.message);
+      error, console.error("Edit tag Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }

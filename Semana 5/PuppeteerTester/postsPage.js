@@ -25,13 +25,13 @@ class PostsPage {
     }
   }
 
-  async createPost() {
+  async createPost(titlePost) {
     try {
       // Wait for an element that contains a span with the text "New post"
       await this.page.waitForSelector(".view-actions-top-row", { timeout: 100000 });
       await this.page.click(".view-actions-top-row");
       await this.page.waitForTimeout(2000);
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(titlePost);
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.waitForTimeout(1000);
@@ -189,6 +189,26 @@ class PostsPage {
       return this.page;
     } catch (error) {
       console.error("Visit Scheduled Post Page failed:", error.message);
+      throw error; // Rethrow the error to propagate it to the calling code
+    }
+  }
+  async addTagPost(titlePost) {
+    try {
+      const elementp = await this.page.evaluate((titlePost) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          console.log(element.textContent.trim());
+          if (element.textContent.trim() === titlePost.trim()) {
+            return element;
+          }
+        }
+        return null;
+      }, titlePost);
+      await elementp.click()
+      await this.page.waitForTimeout(1000);
+      return this.page;
+    } catch (error) {
+      console.error("Visit Post Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
