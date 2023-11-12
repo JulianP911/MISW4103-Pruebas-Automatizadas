@@ -5,6 +5,7 @@ const fs = require("fs");
 const LoginPage = require("./LoginPage");
 const PostsPage = require("./postsPage");
 const TagsPage = require("./tagsPage");
+const MembersPage = require("./membersPage");
 const ghostUrl = "http://localhost:2369/ghost/";
 const userEmail = "prueba@prueba.com";
 const userPassword = "prueba12345";
@@ -444,6 +445,94 @@ ensureDirectoryExists(screenshotDirectory);
   console.log(
     e,
     "E9-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
+
+/**
+ * Escenario 10: Como usuario administrador creo un nuevo post para publicarlo en el sitio web
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa una cadena de texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación del post
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * And: Se da click en posts
+ * Then:Se valida que el post este creado
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+
+  await loginPage.visit();
+
+  await loginPage.login(userEmail, userPassword);
+  const membersPage = new MembersPage(
+    page,
+    ghostUrl,
+    screenshotDirectoryEscenario
+  );
+   await Promise.resolve(membersPage.visit());
+ await Promise.resolve(membersPage.createMember());
+ await page.waitForTimeout(5000);
+  // Close the browser after completing the tests
+  await browser.close();
+
+  console.log("E10-Test Passed ");
+})().catch((e) =>
+  console.log(e,
+    "E10-Test Failed - Expected: ",
+    e.expected,
+    ", Actual: ",
+    e.actual,
+    "."
+  )
+);
+
+/**
+ * Escenario 11: Como usuario administrador creo un nuevo post para publicarlo en el sitio web
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de members
+ * And: Se da clic en el botón de New member
+ * And:Se ingresa una cadena de texto en el campo de nombre del miembro
+ * And: Se da click en Guardar
+ * Then:Se valida que aparezca error por no ingresar un correo
+ */
+(async () => {
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario11/`;
+  ensureDirectoryExists(screenshotDirectoryEscenario);
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+  const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
+  await loginPage.visit();
+  await loginPage.login(userEmail, userPassword);
+  const membersPage = new MembersPage(
+    page,
+    ghostUrl,
+    screenshotDirectoryEscenario
+  );
+   await Promise.resolve(membersPage.visit());
+ await Promise.resolve(membersPage.createMemberWithoutMail_Error());
+ await page.waitForTimeout(5000);
+  // Close the browser after completing the tests
+  await browser.close();
+
+  console.log("E11-Test Passed ");
+})().catch((e) =>
+  console.log(e,
+    "E11-Test Failed - Expected: ",
     e.expected,
     ", Actual: ",
     e.actual,
