@@ -30,3 +30,6 @@ Aplicativo para hacer pruebas a Ghost con Puppeteer
 ### Lectura de resultado
 - En el momento en el que se ejecuten las pruebas se vera en el terminal el estado en el que termina cada una de ellas (las pruebas se ejecutan secuencial, una tras otra)
 - En la carpeta del proyecto se creara una carpeta screenshots en donde se encuentra una carpeta por fecha y por cada uno de los escenarios, alli se encontrara las imagenes de las principales pantallas recorridas
+
+### Resultado de pruebas
+![image](https://github.com/JulianP911/Pruebas-Automatizadas/assets/142235794/0ca5a6f1-03c9-43d2-b955-a127ab91c40f)
