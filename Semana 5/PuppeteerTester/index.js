@@ -38,7 +38,7 @@ const runScenarios = async () => {
   await runScenario10();
   await runScenario11();
   await runScenario12();
-
+  await runScenario13();
   await runScenario16();
 };
 /**
@@ -631,6 +631,48 @@ const runScenario12 = async () => {
     console.log("E12-Test Passed ");
   } catch (e) {
     console.log(e, "E12-Test Failed");
+  }
+};
+
+/**
+ * Escenario 13: Como usuario administrador creo una nueva page para publicarlo en el sitio web
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And: Se ingresa una cadena de texto al título del page
+ * And: Se ingresa un texto al contenido del page
+ * And: Se da click en pages
+ * Then: Se valida que aparezaca en el listado de pages el borrador que se acabo de crear
+ * 
+ */
+const runScenario13 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario13/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+    const pagesPage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagesPage.visit());
+    await Promise.resolve(pagesPage.createDraft());
+    await page.waitForTimeout(5000);
+    // Close the browser after completing the tests
+    await browser.close();
+
+    console.log("E13-Test Passed ");
+  } catch (e) {
+    console.log(e, "E13-Test Failed");
   }
 };
 
