@@ -22,6 +22,18 @@ const ensureDirectoryExists = (directoryPath) => {
   }
 };
 ensureDirectoryExists(screenshotDirectory);
+const runScenarios = async () => {
+  await runScenario1();
+await runScenario2();
+  await runScenario3();
+  await runScenario4();
+  await runScenario5();
+  await runScenario6();
+  await runScenario7();
+  await runScenario8();
+  await runScenario9();
+  await runScenario16();
+};
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
  *
@@ -31,10 +43,10 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da clic en el botón de iniciar de sesión
  * Then: Se verifica que se encuentre en el dashboard
  */ 
-(async () => {
-  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario1/`;
+const runScenario1 = async () => {
+ try{ const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario1/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -54,16 +66,17 @@ ensureDirectoryExists(screenshotDirectory);
     "E1-Test Passed - Expected: http://localhost:2369/ghost/#/dashboard, Actual: ",
     url,
     "."
-  );
-})().catch((e) =>
-  console.log(
-    "E1-Test Failed - Expected: ",
-    e.expected,
-    ", Actual: ",
-    e.actual,
-    "."
-  )
-);
+  );}catch(e) { // Close the browser after completing the tests
+    await browser.close();
+    console.log(
+      "E1-Test Failed - Expected: ",
+      e.expected,
+      ", Actual: ",
+      e.actual,
+      "."
+    )}
+}
+;
 /**
  * Escenario 2: Como usuario administrador realizo el inicio sesión en Ghost (negativo)
  *
@@ -73,10 +86,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da clic en el botón de iniciar de sesión
  * Then: Se valida el mensaje de error
  */ 
-(async () => {
+const runScenario2 = async () => {
+  try{
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario2/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -118,8 +132,9 @@ ensureDirectoryExists(screenshotDirectory);
     }
   }
 
-  await browser.close();
-})().catch((e) => console.log(e));
+  await browser.close();}catch(e) {  // Close the browser after completing the tests
+    await browser.close();console.log(e)}
+}
 
 /**
  * Escenario 3: Como usuario administrador realizo el inicio sesión en Ghost (negativo)
@@ -129,10 +144,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da clic en el botón de olvide contraseña
  * Then: Se valida el mensaje de error
  */
-(async () => {
+const runScenario3 = async () => {
+  try{
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario3/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
   await loginPage.visit();
@@ -184,8 +200,8 @@ ensureDirectoryExists(screenshotDirectory);
     }
   }
 
-  await browser.close();
-})().catch((e) => console.log(e));
+  await browser.close();}catch(e){ // Close the browser after completing the tests
+    await browser.close();console.log(e)}}
 
 /**
  * Escenario 4: Como usuario administrador creo un nuevo post para publicarlo en el sitio web
@@ -200,11 +216,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en Publish post, right now
  * And: Se da click en posts
  * Then:Se valida que el post este creado
- */ 
-(async () => {
+ */ const runScenario4 = async () => {
+  try{
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -224,16 +240,17 @@ ensureDirectoryExists(screenshotDirectory);
   // Close the browser after completing the tests
   await browser.close();
 
-  console.log("E4-Test Passed ");
-})().catch((e) =>
+  console.log("E4-Test Passed ")}catch(e){
+     // Close the browser after completing the tests
+  await browser.close();
   console.log(e,
     "E4-Test Failed - Expected: ",
     e.expected,
     ", Actual: ",
     e.actual,
     "."
-  )
-);
+  )}
+}
 /**
  * Escenario 5: Como usuario administrador creo un nuevo borrador de post para el sitio web
  *
@@ -245,10 +262,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borador que se acabo de crear
  */ 
-(async () => {
+const runScenario5 = async () => {
+  try{
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -270,12 +288,10 @@ ensureDirectoryExists(screenshotDirectory);
 
   console.log(
     "E5-Test Passed"
-  );
-})().catch((e) =>
+  );}catch(e){
   console.log(e,
     "E5-Test Failed",
-  )
-);
+  )}}
 
 /**
  * Escenario 6: Como usuario administrador creo un nuevo post con publicación programada
@@ -293,10 +309,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en posts
  * Then:Se valida que el post este creado
  */ 
-(async () => {
+const runScenario6 = async () => {
+  try{
   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -316,17 +333,10 @@ ensureDirectoryExists(screenshotDirectory);
   // Close the browser after completing the tests
   await browser.close();
 
-  console.log("E6-Test Passed ");
-})().catch((e) =>
-  console.log(e,
-    "E6-Test Failed - Expected: ",
-    e.expected,
-    ", Actual: ",
-    e.actual,
-    "."
-  )
-);
-
+  console.log("E6-Test Passed ");}catch(e){
+    console.log(e,
+      "E6-Test Failed",
+    )}}
 /**
  * Escenario 7: Como usuario administrador creo un nuevo tag para usarlo en el sitio web
  *
@@ -340,10 +350,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en published Tags
  * Then:Se valida que el post este creado
  */
-(async () => {
-  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+const runScenario7 = async () => {
+  try{
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario7/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -359,17 +370,10 @@ ensureDirectoryExists(screenshotDirectory);
 
   // Close the browser after completing the tests
   await browser.close();
-  console.log("E7-Test Passed ");
-})().catch((e) =>
-  console.log(
-    e,
-    "E7-Test Failed - Expected: ",
-    e.expected,
-    ", Actual: ",
-    e.actual,
-    "."
-  )
-);
+  console.log("E7-Test Passed ");}catch(e){
+    console.log(e,
+      "E7-Test Failed",
+    )}}
 /**
  * Escenario 8:  Como usuario administrador creo un nuevo tag (negativo)
  *
@@ -380,10 +384,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en Save
  * Then:Debe aparecer un mensaje de error exigiéndome un nombre de tag
  */
-(async () => {
-  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+const runScenario8 = async () => {
+  try{
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario8/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -397,17 +402,10 @@ ensureDirectoryExists(screenshotDirectory);
 
   // Close the browser after completing the tests
   await browser.close();
-  console.log("E8-Test Passed ");
-})().catch((e) =>
-  console.log(
-    e,
-    "E8-Test Failed - Expected: ",
-    e.expected,
-    ", Actual: ",
-    e.actual,
-    "."
-  )
-);
+  console.log("E8-Test Passed ");}catch(e){
+    console.log(e,
+      "E8-Test Failed",
+    )}}
 /**
  * Escenario 9: Como usuario administrador creo un nuevo internal tag
  * Given: Se ingresa a la página correspondiente a login
@@ -420,10 +418,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en internal Tags
  * Then:Se valida que el post este creado
  */
-(async () => {
-  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+const runScenario9 = async () => {
+  try{
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario9/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: true});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -439,18 +438,10 @@ ensureDirectoryExists(screenshotDirectory);
 
   // Close the browser after completing the tests
   await browser.close();
-  console.log("E9-Test Passed ");
-})().catch((e) =>
-  console.log(
-    e,
-    "E9-Test Failed - Expected: ",
-    e.expected,
-    ", Actual: ",
-    e.actual,
-    "."
-  )
-);
-
+  console.log("E9-Test Passed ");}catch(e){
+    console.log(e,
+      "E9-Test Failed",
+    )}}
 /**
  * Escenario 16: Como usuario administrador edito un tag creado previamente (caso positivo)
  * Given: Se ingresa a la página correspondiente a login
@@ -461,10 +452,11 @@ ensureDirectoryExists(screenshotDirectory);
  * And: Se da click en Tags
  * Then:Se valida que el tag que ha sido creado previamente se le ha modificado el titulo
  */
-(async () => {
-  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+const runScenario16 = async () => {
+  try{
+  const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
   ensureDirectoryExists(screenshotDirectoryEscenario);
-  const browser = await puppeteer.launch({ headless: false});
+  const browser = await puppeteer.launch({ headless: "new"});
   const page = await browser.newPage();
   const loginPage = new LoginPage(page, ghostUrl, screenshotDirectoryEscenario);
 
@@ -480,14 +472,8 @@ ensureDirectoryExists(screenshotDirectory);
 
   // Close the browser after completing the tests
   await browser.close();
-  console.log("E16-Test Passed ");
-})().catch((e) =>
-  console.log(
-    e,
-    "E16-Test Failed - Expected: ",
-    e.expected,
-    ", Actual: ",
-    e.actual,
-    "."
-  )
-);
+  console.log("E16-Test Passed ");}catch(e){
+    console.log(e,
+      "E16-Test Failed",
+    )}}
+runScenarios();
