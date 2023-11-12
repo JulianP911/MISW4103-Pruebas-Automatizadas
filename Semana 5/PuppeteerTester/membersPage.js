@@ -59,7 +59,6 @@ class MembersPage {
         "h3.ma0.pa0.gh-members-list-name",
         (h3s) => h3s.map((h3) => h3.textContent)
       );
-      console.log(h3Elements);
       let memberEncontrado = false;
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(nameMember)) {
@@ -73,7 +72,7 @@ class MembersPage {
       await this.page.waitForTimeout(1000);
       return this.page;
     } catch (error) {
-      console.error("Visit Scheduled Post Page failed:", error.message);
+      console.error("Create member faile:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
@@ -107,7 +106,7 @@ class MembersPage {
       await this.page.waitForTimeout(1000);
       return this.page;
     } catch (error) {
-      console.error("Visit Scheduled Post Page failed:", error.message);
+      console.error("Create member without mail faile:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
