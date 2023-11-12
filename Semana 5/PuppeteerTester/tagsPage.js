@@ -11,11 +11,10 @@ class TagsPage {
       if ((await this.page.$(".gh-mobile-nav-bar-more")) !== null) {
         await this.page.click(".gh-mobile-nav-bar-more");
       }
-      await this.page.waitForSelector('a[data-test-nav="tags"]', { timeout: 100000 });
-      if ((await this.page.$('a[data-test-nav="tags"]')) !== null) {
+      await new Promise((r) => setTimeout(r, 6000));
         await this.page.click('a[data-test-nav="tags"]');
 
-      }
+      
     
 
       await this.page.screenshot({

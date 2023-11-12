@@ -26,20 +26,21 @@ const ensureDirectoryExists = (directoryPath) => {
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
 
-  await runScenario1();
-  await runScenario2();
-  await runScenario3();
-  await runScenario4();
-  await runScenario5();
-  await runScenario6();
-  await runScenario7();
-  await runScenario8();
-  await runScenario9();
-  await runScenario10();
-  await runScenario11();
-  await runScenario12();
+  //await runScenario1();
+  //await runScenario2();
+  //await runScenario3();
+  //await runScenario4();
+  //await runScenario5();
+  //await runScenario6();
+  //await runScenario7();
+  //await runScenario8();
+  //await runScenario9();
+ // await runScenario10();
+  //await runScenario11();
+  //await runScenario12();
 
-  await runScenario16();
+  //await runScenario16();
+  await runScenario19();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -692,7 +693,7 @@ const runScenario16 = async () => {
  */
 const runScenario19 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
@@ -709,13 +710,12 @@ const runScenario19 = async () => {
 
     const newTagName = faker.lorem.sentence(2);
     await Promise.resolve(tagsPage.visit());
-    await Promise.resolve(tagsPage.createTag(newTagName));
+    await Promise.resolve(tagsPage.createTag(newTagName,true));
     const postPage =new PostsPage(page, ghostUrl, screenshotDirectoryEscenario);
     await Promise.resolve(postPage.visit());
     const titlePost= faker.lorem.sentence(2);
     await Promise.resolve(postPage.createPost(titlePost));
-    await Promise.resolve(postPage.visit());    
-    await Promise.resolve(postPage.addTagPost(titlePost));    
+    await Promise.resolve(postPage.addTagPost(titlePost,newTagName));    
     await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
