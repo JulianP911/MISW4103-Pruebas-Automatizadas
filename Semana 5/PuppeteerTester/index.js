@@ -25,7 +25,6 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-
   await runScenario1();
   await runScenario2();
   await runScenario3();
@@ -42,7 +41,7 @@ const runScenarios = async () => {
   await runScenario14();
   await runScenario16();
   await runScenario19();
-
+  await runScenario20();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -273,8 +272,10 @@ const runScenario3 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const titlePost= faker.lorem.sentence(2);
-    const afterPostVisit = await Promise.resolve(postPage.createPost(titlePost));
+    const titlePost = faker.lorem.sentence(2);
+    const afterPostVisit = await Promise.resolve(
+      postPage.createPost(titlePost)
+    );
     await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
@@ -605,7 +606,7 @@ const runScenario11 = async () => {
  * And: Se da click en el publish
  * And: Se da click en Continue, final review
  * And: Se da click en Publish page, right now
- * Then:Se valida que aparezca el titulo de publicacion exitosa 
+ * Then:Se valida que aparezca el titulo de publicacion exitosa
  */
 const runScenario12 = async () => {
   try {
@@ -647,7 +648,7 @@ const runScenario12 = async () => {
  * And: Se ingresa un texto al contenido del page
  * And: Se da click en pages
  * Then: Se valida que aparezaca en el listado de pages el borrador que se acabo de crear
- * 
+ *
  */
 const runScenario13 = async () => {
   try {
@@ -756,7 +757,7 @@ const runScenario16 = async () => {
     const newTagName = faker.lorem.sentence(2);
     const editTagName = faker.lorem.sentence(2);
     await Promise.resolve(tagsPage.visit());
-    await Promise.resolve(tagsPage.createTag(newTagName,true));
+    await Promise.resolve(tagsPage.createTag(newTagName, true));
     await Promise.resolve(tagsPage.editTag(editTagName));
     await page.waitForTimeout(5000);
 
@@ -801,12 +802,16 @@ const runScenario19 = async () => {
 
     const newTagName = faker.lorem.sentence(2);
     await Promise.resolve(tagsPage.visit());
-    await Promise.resolve(tagsPage.createTag(newTagName,true));
-    const postPage =new PostsPage(page, ghostUrl, screenshotDirectoryEscenario);
+    await Promise.resolve(tagsPage.createTag(newTagName, true));
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
     await Promise.resolve(postPage.visit());
-    const titlePost= faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.createPost(titlePost));
-    await Promise.resolve(postPage.addTagPost(titlePost,newTagName));    
+    await Promise.resolve(postPage.addTagPost(titlePost, newTagName));
     await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
@@ -814,6 +819,50 @@ const runScenario19 = async () => {
     console.log("E19-Test Passed ");
   } catch (e) {
     console.log(e, "E19-Test Failed");
+  }
+};
+/**
+ * Escenario 20: Como usuario administrador elimino un post
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación y publicación de un post
+ * And:Se da click en el botón de Posts
+ * And: Se selecciona el post que ha sido creado
+ * And: se da click en el botón de settings
+ * And: Se da click en el botón eliminar post
+ * And: Se da clic en el botón de Eliminar
+ * Then:Se verifica que en la lista de post ya no se encuentra el post eliminado
+ */
+const runScenario20 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const titlePost = faker.lorem.sentence(2);
+    await Promise.resolve(postPage.createPost(titlePost));
+    await page.waitForTimeout(5000);
+    await Promise.resolve(postPage.deletePost(titlePost));
+
+    // Close the browser after completing the tests
+    await browser.close();
+    console.log("E20-Test Passed ");
+  } catch (e) {
+    console.log(e, "E20-Test Failed");
   }
 };
 runScenarios();

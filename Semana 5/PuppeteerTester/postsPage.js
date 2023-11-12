@@ -261,7 +261,7 @@ class PostsPage {
         throw "No se encontro componente de adición exitosa";
       }
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "createPostsPage.png",
+        path: this.screenshotDirectoryEscenario + "addTagPostsPage.png",
       });
       return this.page;
     } catch (error) {
@@ -269,6 +269,56 @@ class PostsPage {
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
+
+async deletePost(titlePost) {
+  try {
+    await this.page.evaluate(async (titlePost) => {
+      const elements = document.querySelectorAll(".gh-content-entry-title");
+      for (const element of elements) {
+        console.log(element.textContent.trim());
+        if (element.textContent.trim() === titlePost.trim()) {
+          await element.click()
+        }
+      }
+      return null;
+    }, titlePost);
+    await this.page.waitForTimeout(10000);
+    await Promise.resolve(
+      this.page.click('button[title="Settings"]')
+    );
+    await this.page.waitForTimeout(5000);
+    await Promise.resolve(
+      this.page.click('button.gh-btn.gh-btn-outline.gh-btn-icon.gh-btn-fullwidth')
+    );
+    await this.page.waitForTimeout(7000);
+    await Promise.resolve(
+      this.page.click('button.gh-btn-red')
+    );
+    await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "deletePostsPage.png",
+    });
+    const element = await this.page.evaluate((titlePost) => {
+      const elements = document.querySelectorAll(".gh-content-entry-title");
+      for (const element of elements) {
+        console.log(element.textContent.trim());
+        if (element.textContent.trim() === titlePost.trim()) {
+           return false;
+        }
+      }
+      return true;
+    }, titlePost);
+
+    if (element) {
+      console.log("Post eliminado exitosamente");
+    } else {
+      throw "No se encontro componente de eliminado exitosa";
+    }
+    return this.page;
+  } catch (error) {
+    console.error("Visit Post Page failed:", error.message);
+    throw error; // Rethrow the error to propagate it to the calling code
+  }
+}
 }
 
 module.exports = PostsPage;
