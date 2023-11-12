@@ -27,7 +27,7 @@ Dentro de la carpeta KrakenTester en la subcarpeta reports:
 
 **Patrones implentados:**
 En los escenarios de pruebas desarrollados se utilizaron los patrones:
-* Given - When - Then: Definiendo el flujo de ejecución de los escenarios de pruebas en tres etapas precondiciones, ejecución y postcondiciones para validar las funcionalidades.
+* Given - When - Then: Definiendo el flujo de ejecución de los escenarios de pruebas en tres etapas precondiciones, condiciones y postcondiciones para validar las funcionalidades.
 * PageObject: Se separa la definción de los escenarios explitos en lenguaje natural por medio de los feature y en lenguaje de programación JavaScript por medio de los steps.
 
 ### Puppeteer
