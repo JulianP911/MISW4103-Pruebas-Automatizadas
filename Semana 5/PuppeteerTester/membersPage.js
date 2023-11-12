@@ -41,7 +41,6 @@ class MembersPage {
       await this.page.waitForSelector('a[data-test-new-member-button="true"]');
       await this.page.click('a[data-test-new-member-button="true"]');
       await this.page.waitForTimeout(timeoutConfig);
-      await this.page.waitForSelector('input[data-test-input="member-name"]');
       const nameMember = faker.person.firstName();
       await this.page.keyboard.type(nameMember);
       await this.page.keyboard.press("Tab");
@@ -87,7 +86,6 @@ class MembersPage {
       await this.page.waitForSelector('a[data-test-new-member-button="true"]');
       await this.page.click('a[data-test-new-member-button="true"]');
       await this.page.waitForTimeout(timeoutConfig);
-      await this.page.waitForSelector('input[data-test-input="member-name"]');
       const nameMember = faker.person.firstName();
       await this.page.keyboard.type(nameMember);
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));

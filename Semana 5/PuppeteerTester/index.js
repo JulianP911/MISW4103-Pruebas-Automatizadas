@@ -61,7 +61,7 @@ const runScenario1 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario1/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -111,7 +111,7 @@ const runScenario2 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario2/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -180,7 +180,7 @@ const runScenario3 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario3/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -260,7 +260,7 @@ const runScenario3 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -312,7 +312,7 @@ const runScenario5 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -362,7 +362,7 @@ const runScenario6 = async () => {
     //Create directory to save screenshots
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -408,7 +408,7 @@ const runScenario7 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario7/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -446,7 +446,7 @@ const runScenario8 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario8/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -484,7 +484,7 @@ const runScenario9 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario9/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -528,7 +528,7 @@ const runScenario10 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -569,7 +569,7 @@ const runScenario11 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario11/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -611,7 +611,7 @@ const runScenario12 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario12/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -652,7 +652,7 @@ const runScenario13 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario13/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -699,7 +699,7 @@ const runScenario14 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario14/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -738,7 +738,7 @@ const runScenario15 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -783,7 +783,7 @@ const runScenario16 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -824,7 +824,7 @@ const runScenario17 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -867,7 +867,7 @@ const runScenario18 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -917,7 +917,7 @@ const runScenario19 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -965,7 +965,7 @@ const runScenario20 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
