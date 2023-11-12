@@ -25,26 +25,26 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  await runScenario1();
-  await runScenario2();
-  await runScenario3();
+  //await runScenario1();
+  //await runScenario2();
+  //await runScenario3();
   await runScenario4();
   await runScenario5();
   await runScenario6();
-  await runScenario7();
-  await runScenario8();
-  await runScenario9();
-  await runScenario10();
-  await runScenario11();
-  await runScenario12();
-  await runScenario13();
-  await runScenario14();
-  await runScenario15();
-  await runScenario16();
-  await runScenario17();
-  await runScenario18();
-  await runScenario19();
-  await runScenario20();
+  //await runScenario7();
+  //await runScenario8();
+  //await runScenario9();
+  //await runScenario10();
+  //await runScenario11();
+  //await runScenario12();
+  //await runScenario13();
+  //await runScenario14();
+  //await runScenario15();
+  //await runScenario16();
+  //await runScenario17();
+  //await runScenario18();
+  //await runScenario19();
+  //await runScenario20();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -359,9 +359,10 @@ const runScenario5 = async () => {
  */
 const runScenario6 = async () => {
   try {
+    //Create directory to save screenshots
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "new" });
+    const browser = await puppeteer.launch({ headless: "null" });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
