@@ -41,12 +41,15 @@ class PagesPage {
       // Wait for an element that contains a span with the text "New Page"
       await this.page.waitForSelector('a[data-test-new-page-button]');
       await this.page.click('a[data-test-new-page-button]');
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newPage.png",
+      });
       await this.page.waitForSelector('textarea[data-test-editor-title-input]');
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "createPage.png",
+        path: this.screenshotDirectoryEscenario + "completePage.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="publish-flow"]'));
       await this.page.waitForTimeout(2000);
@@ -56,7 +59,9 @@ class PagesPage {
       );
       await this.page.waitForTimeout(5000);
       await this.page.waitForSelector('button[data-test-button="confirm-publish"]');
-    
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "confirmNewPage.png",
+      });
       await Promise.resolve(
         this.page.click('button[data-test-button="confirm-publish"]')
       );
@@ -96,12 +101,15 @@ class PagesPage {
       // Wait for an element that contains a span with the text "New Page"
       await this.page.waitForSelector('a[data-test-new-page-button]');
       await this.page.click('a[data-test-new-page-button]');
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newPage.png",
+      });
       await this.page.waitForSelector('textarea[data-test-editor-title-input]');
       await this.page.keyboard.type(titlePage);
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "createPage.png",
+        path: this.screenshotDirectoryEscenario + "completePage.png",
       });
       await this.page.waitForTimeout(1000);
       this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]')
@@ -111,7 +119,9 @@ class PagesPage {
       );
       await this.page.waitForTimeout(1000);
       await this.page.waitForSelector('h3.gh-content-entry-title', { timeout: 100000 })
-
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "listPages.png",
+      });
       const h3Elements = await this.page.$$eval(
         "h3.gh-content-entry-title",
         (h3s) => h3s.map((h3) => h3.textContent)
@@ -138,12 +148,15 @@ class PagesPage {
       // Wait for an element that contains a span with the text "New Page"
       await this.page.waitForSelector('a[data-test-new-page-button]');
       await this.page.click('a[data-test-new-page-button]');
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newPage.png",
+      });
       await this.page.waitForSelector('textarea[data-test-editor-title-input]');
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "createPage.png",
+        path: this.screenshotDirectoryEscenario + "completePage.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="publish-flow"]'));
       await this.page.waitForTimeout(2000);
@@ -155,6 +168,9 @@ class PagesPage {
         document.querySelector('div[data-test-radio="schedule"]').click();
       });
       await this.page.waitForTimeout(1000);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "scheduleNewPage.png",
+      });
       await this.page.waitForSelector('button[data-test-button="continue"]');
       await Promise.resolve(
         this.page.click('button[data-test-button="continue"]')
@@ -208,7 +224,9 @@ class PagesPage {
         }
         return null;
       }, titlePage);
-
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "editPage.png",
+      });
       await this.page.waitForSelector("textarea[data-test-editor-title-input]");
       await this.page.evaluate(() => {
         const element = document.querySelector("textarea[data-test-editor-title-input]");
@@ -217,6 +235,9 @@ class PagesPage {
       });
       await this.page.keyboard.type(newTitlePage);
       await this.page.waitForTimeout(3000);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "editedPage.png",
+      });
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="pages"]',
         { timeout: 100000 }
@@ -246,6 +267,9 @@ class PagesPage {
       }
       
       await this.page.waitForTimeout(1000);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "finalEditPage.png",
+      });
       return this.page;
     } catch (error) {
       console.error("Edit draft Pages failed:", error.message);

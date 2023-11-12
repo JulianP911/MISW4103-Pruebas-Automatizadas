@@ -94,6 +94,9 @@ class MembersPage {
         ps.map((p) => p.textContent)
       );
       let errorEncontrado = false;
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "errorMemeberCreation.png",
+      });
       for (let i = 0; i < pElements.length; i++) {
         if (pElements[i].includes("Please enter an email.")) {
           errorEncontrado = true;
@@ -117,9 +120,12 @@ class MembersPage {
       await this.page.evaluate(() => {
         document.querySelectorAll(".gh-members-list-name")[0].click();
       }, this.page);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectMemberToEdit.png",
+      });
     try {
       const email = await this.page.$("#member-email");
-      await this.page.evaluate((newEmail) => {
+      await this.page.evaluate(() => {
         document.querySelector("#member-email").value="";
 
       }, this.page);
