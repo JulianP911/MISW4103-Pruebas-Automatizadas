@@ -1,4 +1,7 @@
 const { faker } = require("@faker-js/faker");
+let config = require("./config.json");
+
+const timeoutConfig = config.timeout;
 
 class PagesPage {
   constructor(page, ghostUrl, screenshotDirectoryEscenario) {
@@ -15,7 +18,7 @@ class PagesPage {
         await Promise.resolve(
           this.page.click(`div[role='button'].gh-mobile-nav-bar-more`)
         );
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(timeoutConfig);
         await Promise.resolve(this.page.click('a[data-test-nav="pages"]'));
       } catch (error) {
         try {
@@ -29,7 +32,7 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "PagesPage.png",
       });
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForTimeout(timeoutConfig);
     } catch (error) {
       console.error("Visit pages Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
@@ -52,12 +55,12 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "completePage.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="publish-flow"]'));
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector('button[data-test-button="continue"]');
       await Promise.resolve(
         this.page.click('button[data-test-button="continue"]')
       );
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector('button[data-test-button="confirm-publish"]');
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "confirmNewPage.png",
@@ -65,7 +68,7 @@ class PagesPage {
       await Promise.resolve(
         this.page.click('button[data-test-button="confirm-publish"]')
       );
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       const element = await this.page.$(
         '.gh-publish-title[data-test-publish-flow="complete"]'
       );
@@ -82,13 +85,13 @@ class PagesPage {
       await Promise.resolve(
         this.page.click('button[data-test-button="close-publish-flow"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]')
 
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="pages"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       return this.page;
     } catch (error) {
       console.error("Create page faile:", error.message);
@@ -111,14 +114,14 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completePage.png",
       });
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]')
 
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="pages"]')
       );
-      await this.page.waitForTimeout(1000);
-      await this.page.waitForSelector('h3.gh-content-entry-title', { timeout: 100000 })
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.waitForSelector('h3.gh-content-entry-title', { timeout: timeoutConfig })
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "listPages.png",
       });
@@ -159,15 +162,15 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "completePage.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="publish-flow"]'));
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.evaluate(() => {
         document.querySelector('button.gh-publish-setting-title').click();
       });
-      await this.page.waitForSelector('div[data-test-radio="schedule"]', { timeout: 100000 })
+      await this.page.waitForSelector('div[data-test-radio="schedule"]', { timeout: timeoutConfig })
       await this.page.evaluate(() => {
         document.querySelector('div[data-test-radio="schedule"]').click();
       });
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "scheduleNewPage.png",
       });
@@ -175,13 +178,13 @@ class PagesPage {
       await Promise.resolve(
         this.page.click('button[data-test-button="continue"]')
       );
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector('button[data-test-button="confirm-publish"]');
     
       await Promise.resolve(
         this.page.click('button[data-test-button="confirm-publish"]')
       );
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       const element = await this.page.$(
         '.gh-publish-title[data-test-publish-flow="complete"]'
       );
@@ -198,13 +201,13 @@ class PagesPage {
       await Promise.resolve(
         this.page.click('button[data-test-button="close-publish-flow"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]')
 
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="pages"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       return this.page;
     } catch (error) {
       console.error("Create page faile:", error.message);
@@ -234,21 +237,21 @@ class PagesPage {
         element.focus();
       });
       await this.page.keyboard.type(newTitlePage);
-      await this.page.waitForTimeout(3000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "editedPage.png",
       });
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="pages"]',
-        { timeout: 100000 }
+        { timeout: timeoutConfig }
       );
 
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="pages"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector("h3.gh-content-entry-title", {
-        timeout: 100000,
+        timeout: timeoutConfig,
       });
 
       const h3Elements = await this.page.$$eval(
@@ -266,7 +269,7 @@ class PagesPage {
         throw "no se encontro el titulo del draft en el listado de pages";
       }
       
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "finalEditPage.png",
       });

@@ -1,5 +1,7 @@
 const { faker } = require("@faker-js/faker");
+let config = require("./config.json");
 
+const timeoutConfig = config.timeout;
 class PostsPage {
   constructor(page, ghostUrl, screenshotDirectoryEscenario) {
     this.page = page;
@@ -36,9 +38,9 @@ class PostsPage {
 async createPost(titlePost) {
   try {
     // Wait for an element that contains a span with the text "New post"
-    await this.page.waitForSelector(".view-actions-top-row", { timeout: 100000 });
+    await this.page.waitForSelector(".view-actions-top-row", { timeout: timeoutConfig });
     await this.page.click(".view-actions-top-row");
-    await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     // Type title
     await this.page.keyboard.type(titlePost);
@@ -46,7 +48,7 @@ async createPost(titlePost) {
 
     // Type content
     await this.page.keyboard.type(faker.lorem.sentence(2));
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     await this.page.screenshot({
       path: this.screenshotDirectoryEscenario + "postCreationPage.png",
@@ -54,16 +56,16 @@ async createPost(titlePost) {
 
     // Click on publish
     await this.page.waitForSelector('button[data-test-button="publish-flow"]', {
-      timeout: 100000,
+      timeout: timeoutConfig,
     });
     await Promise.resolve(
       this.page.click('button[data-test-button="publish-flow"]')
     );
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     // Confirm the publication
     await this.page.waitForSelector('button[data-test-button="continue"]', {
-      timeout: 100000,
+      timeout: timeoutConfig,
     });
     await Promise.resolve(
       this.page.click('button[data-test-button="continue"]')
@@ -71,15 +73,15 @@ async createPost(titlePost) {
     await this.page.screenshot({
       path: this.screenshotDirectoryEscenario + "continuePostCreationPage.png",
     });
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     await this.page.waitForSelector('button[data-test-button="confirm-publish"]', {
-      timeout: 100000,
+      timeout: timeoutConfig,
     });
     await Promise.resolve(
       this.page.click('button[data-test-button="confirm-publish"]')
     );
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     // Check if the post is created successfully
     const element = await this.page.$(
@@ -99,21 +101,21 @@ async createPost(titlePost) {
     // Close the publish flow
     await this.page.waitForSelector(
       'button[data-test-button="close-publish-flow"]',
-      { timeout: 100000 }
+      { timeout: timeoutConfig }
     );
     await Promise.resolve(
       this.page.click('button[data-test-button="close-publish-flow"]')
     );
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     // Navigate back to the posts section
     await this.page.waitForSelector('.gh-btn-editor[data-test-link="posts"]', {
-      timeout: 100000,
+      timeout: timeoutConfig,
     });
     await Promise.resolve(
       this.page.click('.gh-btn-editor[data-test-link="posts"]')
     );
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     return this.page;
   } catch (error) {
@@ -135,9 +137,9 @@ async createPost(titlePost) {
 async createDraft(titlePost) {
   try {
     // Click on 'New Post'
-    await this.page.waitForSelector(".view-actions-top-row", { timeout: 100000 });
+    await this.page.waitForSelector(".view-actions-top-row", { timeout: timeoutConfig });
     await this.page.click(".view-actions-top-row");
-    await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     // Type the title
     await this.page.keyboard.type(titlePost);
@@ -145,7 +147,7 @@ async createDraft(titlePost) {
 
     // Type the content
     await this.page.keyboard.type(faker.lorem.sentence(2));
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
 
     await this.page.screenshot({
       path: this.screenshotDirectoryEscenario + "draftPage.png",
@@ -154,16 +156,16 @@ async createDraft(titlePost) {
     // Go back to the list of posts
     await this.page.waitForSelector(
       '.gh-btn-editor[data-test-link="posts"]',
-      { timeout: 100000 }
+      { timeout: timeoutConfig }
     );
     await Promise.resolve(
       this.page.click('.gh-btn-editor[data-test-link="posts"]')
     );
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(timeoutConfig);
     
     // Wait for the list of posts to be visible
     await this.page.waitForSelector("h3.gh-content-entry-title", {
-      timeout: 100000,
+      timeout: timeoutConfig,
     });
 
     // Validate if the draft post was created
@@ -203,10 +205,10 @@ async createDraft(titlePost) {
     try {
       // Click on new post
       await this.page.waitForSelector(".view-actions-top-row", {
-        timeout: 100000,
+        timeout: timeoutConfig,
       });
       await this.page.click(".view-actions-top-row");
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       // Type title
       await this.page.keyboard.type(faker.lorem.sentence(2));
@@ -214,7 +216,7 @@ async createDraft(titlePost) {
 
       // Type description
       await this.page.keyboard.type(faker.lorem.sentence(2));
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "fillPostsPage.png",
@@ -225,13 +227,13 @@ async createDraft(titlePost) {
       await this.page.waitForSelector(
         'button[data-test-button="publish-flow"]',
         {
-          timeout: 100000,
+          timeout: timeoutConfig,
         }
       );
       await Promise.resolve(
         this.page.click('button[data-test-button="publish-flow"]')
       );
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       // Click on Schedule config
       await Promise.resolve(
@@ -239,16 +241,16 @@ async createDraft(titlePost) {
       );
 
       // Click on select date
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector('div[data-test-radio="schedule"]', {
-        timeout: 100000,
+        timeout: timeoutConfig,
       });
 
       await this.page.evaluate(() => {
         document.querySelector('div[data-test-radio="schedule"]').click();
       });
 
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "schedulePostsPage.png",
       });
@@ -257,12 +259,12 @@ async createDraft(titlePost) {
       await Promise.resolve(
         this.page.click('button[data-test-button="continue"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       await Promise.resolve(
         this.page.click('button[data-test-button="confirm-publish"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       // Check if the post is created successfully
       const element = await this.page.$(
@@ -283,24 +285,24 @@ async createDraft(titlePost) {
 
       await this.page.waitForSelector(
         'button[data-test-button="close-publish-flow"]',
-        { timeout: 100000 }
+        { timeout: timeoutConfig }
       );
 
       // Close the publish flow
       await Promise.resolve(
         this.page.click('button[data-test-button="close-publish-flow"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       // Navigate back to the posts section
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: 100000 }
+        { timeout: timeoutConfig }
       );
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       return this.page;
     } catch (error) {
@@ -322,7 +324,7 @@ async createDraft(titlePost) {
         }
         return null;
       }, titlePost);
-      await this.page.waitForTimeout(10000);
+      await this.page.waitForTimeout(timeoutConfig);
       
       await this.page.screenshot({
         path:
@@ -339,7 +341,7 @@ async createDraft(titlePost) {
       await this.page.keyboard.press("Enter");
       
      
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path:
           this.screenshotDirectoryEscenario +
@@ -348,26 +350,26 @@ async createDraft(titlePost) {
       //Save the update of the post
       this.page.click('button[title="Settings"]');
       this.page.waitForSelector('span[data-test-task-button-state="idle"]', {
-        timeout: 100000,
+        timeout: timeoutConfig,
       });
 
       await Promise.resolve(
         this.page.click('span[data-test-task-button-state="idle"]')
       );
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       //Get back to posts
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: 100000 }
+        { timeout: timeoutConfig }
       );
 
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       //Filter by the tag that was assigned
       await this.page.waitForSelector('div[data-test-tag-select="true"]', {
-        timeout: 100000,
+        timeout: timeoutConfig,
       });
       await this.page.screenshot({
         path:
@@ -387,7 +389,7 @@ async createDraft(titlePost) {
         }
         return null;
       }, nameTag);
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path:
           this.screenshotDirectoryEscenario +
@@ -435,15 +437,15 @@ async createDraft(titlePost) {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "selectPostToDelete.png",
       });
-      await this.page.waitForTimeout(10000);
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(this.page.click('button[title="Settings"]'));
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(
         this.page.click(
           "button.gh-btn.gh-btn-outline.gh-btn-icon.gh-btn-fullwidth"
         )
       );
-      await this.page.waitForTimeout(7000);
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(this.page.click("button.gh-btn-red"));
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "deletePostsPage.png",
@@ -498,21 +500,21 @@ async createDraft(titlePost) {
         element.focus();
       });
       await this.page.keyboard.type(newTitlePost);
-      await this.page.waitForTimeout(3000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newInfoPost.png",
       });
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: 100000 }
+        { timeout: timeoutConfig }
       );
 
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector("h3.gh-content-entry-title", {
-        timeout: 100000,
+        timeout: timeoutConfig,
       });
 
       const h3Elements = await this.page.$$eval(
@@ -533,7 +535,7 @@ async createDraft(titlePost) {
         throw "no se encontro el titulo del draft en el listado de posts";
       }
 
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       return this.page;
     } catch (error) {
       console.error("Edit draft Post failed:", error.message);

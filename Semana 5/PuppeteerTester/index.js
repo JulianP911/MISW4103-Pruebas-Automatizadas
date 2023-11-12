@@ -7,9 +7,11 @@ const PostsPage = require("./postsPage");
 const TagsPage = require("./tagsPage");
 const MembersPage = require("./membersPage");
 const PagesPage = require("./pagesPage");
-const ghostUrl = "http://localhost:2369/ghost/";
-const userEmail = "prueba@prueba.com";
-const userPassword = "prueba12345";
+let config = require("./config.json");
+
+const ghostUrl = config.ghostUrl;
+const userEmail = config.userEmail;
+const userPassword = config.userPassword;
 
 // Create a directory with a timestamp
 const timestamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0];
@@ -78,9 +80,9 @@ const runScenario1 = async () => {
     await browser.close();
 
     // Perform the assertion after all the asynchronous operations are complete
-    assert.equal(url, "http://localhost:2369/ghost/#/dashboard");
+    assert.equal(url, "http://localhost:2368/ghost/#/dashboard");
     console.log(
-      "E1-Test Passed - Expected: http://localhost:2369/ghost/#/dashboard, Actual: ",
+      "E1-Test Passed - Expected: http://localhost:2368/ghost/#/dashboard, Actual: ",
       url,
       "."
     );
@@ -279,7 +281,6 @@ const runScenario3 = async () => {
     const afterPostVisit = await Promise.resolve(
       postPage.createPost(titlePost)
     );
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -330,7 +331,6 @@ const runScenario5 = async () => {
     await Promise.resolve(postPage.visit());
     const titlePost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.createDraft(titlePost));
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -362,7 +362,7 @@ const runScenario6 = async () => {
     //Create directory to save screenshots
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: "null" });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -382,7 +382,6 @@ const runScenario6 = async () => {
     const afterPostVisit = await Promise.resolve(
       postPage.createPostScheduled()
     );
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -425,7 +424,6 @@ const runScenario7 = async () => {
     const newTagName = faker.lorem.sentence(2);
     await Promise.resolve(tagsPage.visit());
     await Promise.resolve(tagsPage.createTag(newTagName, true));
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -462,7 +460,6 @@ const runScenario8 = async () => {
     const tagsPage = new TagsPage(page, ghostUrl, screenshotDirectoryEscenario);
     await Promise.resolve(tagsPage.visit());
     await Promise.resolve(tagsPage.createTagError());
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -503,7 +500,6 @@ const runScenario9 = async () => {
     const newTagName = "#" + faker.lorem.sentence(2);
     await Promise.resolve(tagsPage.visit());
     await Promise.resolve(tagsPage.createTag(newTagName, false));
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -550,7 +546,6 @@ const runScenario10 = async () => {
     );
     await Promise.resolve(membersPage.visit());
     await Promise.resolve(membersPage.createMember());
-    await page.waitForTimeout(5000);
     // Close the browser after completing the tests
     await browser.close();
 
@@ -590,7 +585,6 @@ const runScenario11 = async () => {
     );
     await Promise.resolve(membersPage.visit());
     await Promise.resolve(membersPage.createMemberWithoutMail_Error());
-    await page.waitForTimeout(5000);
     // Close the browser after completing the tests
     await browser.close();
 
@@ -633,7 +627,6 @@ const runScenario12 = async () => {
     );
     await Promise.resolve(pagesPage.visit());
     await Promise.resolve(pagesPage.createPage());
-    await page.waitForTimeout(5000);
     // Close the browser after completing the tests
     await browser.close();
 
@@ -676,7 +669,6 @@ const runScenario13 = async () => {
     const titlePage = faker.lorem.sentence(2);
     await Promise.resolve(pagesPage.visit());
     await Promise.resolve(pagesPage.createDraft(titlePage));
-    await page.waitForTimeout(5000);
     // Close the browser after completing the tests
     await browser.close();
 
@@ -723,7 +715,6 @@ const runScenario14 = async () => {
     );
     await Promise.resolve(pagesPage.visit());
     await Promise.resolve(pagesPage.createPageScheduled());
-    await page.waitForTimeout(5000);
     // Close the browser after completing the tests
     await browser.close();
 
@@ -747,7 +738,7 @@ const runScenario15 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -764,12 +755,10 @@ const runScenario15 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    await page.waitForTimeout(2000);
     const titlePost = faker.lorem.sentence(2);
     const newTitlePost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.createDraft(titlePost));
-    await Promise.resolve(postPage.editDraft(titlePost,newTitlePost));
-    await page.waitForTimeout(2000);
+    await Promise.resolve(postPage.editDraft(titlePost, newTitlePost));
 
     // Close the browser after completing the tests
     await browser.close();
@@ -794,7 +783,7 @@ const runScenario16 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -812,7 +801,6 @@ const runScenario16 = async () => {
     await Promise.resolve(tagsPage.visit());
     await Promise.resolve(tagsPage.createTag(newTagName, true));
     await Promise.resolve(tagsPage.editTag(editTagName));
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -836,7 +824,7 @@ const runScenario17 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -854,15 +842,14 @@ const runScenario17 = async () => {
     );
     await Promise.resolve(membersPage.visit());
     await Promise.resolve(membersPage.createMember());
-    await page.waitForTimeout(5000);
     await Promise.resolve(membersPage.editMember());
 
     // Close the browser after completing the tests
     await browser.close();
 
-    console.log("E10-Test Passed ");
+    console.log("E17-Test Passed ");
   } catch (e) {
-    console.log(e, "E10-Test Failed");
+    console.log(e, "E17-Test Failed");
   }
 };
 
@@ -880,7 +867,7 @@ const runScenario18 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
@@ -897,12 +884,10 @@ const runScenario18 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(pagesPage.visit());
-    await page.waitForTimeout(2000);
     const titlePage = faker.lorem.sentence(2);
     const newTitlePage = faker.lorem.sentence(2);
     await Promise.resolve(pagesPage.createDraft(titlePage));
-    await Promise.resolve(pagesPage.editDraft(titlePage,newTitlePage));
-    await page.waitForTimeout(2000);
+    await Promise.resolve(pagesPage.editDraft(titlePage, newTitlePage));
 
     // Close the browser after completing the tests
     await browser.close();
@@ -957,7 +942,6 @@ const runScenario19 = async () => {
     const titlePost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.createPost(titlePost));
     await Promise.resolve(postPage.addTagPost(titlePost, newTagName));
-    await page.waitForTimeout(5000);
 
     // Close the browser after completing the tests
     await browser.close();
@@ -1000,7 +984,6 @@ const runScenario20 = async () => {
     await Promise.resolve(postPage.visit());
     const titlePost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.createPost(titlePost));
-    await page.waitForTimeout(5000);
     await Promise.resolve(postPage.deletePost(titlePost));
 
     // Close the browser after completing the tests

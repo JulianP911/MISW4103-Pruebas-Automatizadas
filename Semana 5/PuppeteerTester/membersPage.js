@@ -1,4 +1,7 @@
 const { faker } = require("@faker-js/faker");
+let config = require("./config.json");
+
+const timeoutConfig = config.timeout;
 
 class MembersPage {
   constructor(page, ghostUrl, screenshotDirectoryEscenario) {
@@ -37,6 +40,7 @@ class MembersPage {
       // Wait for an element that contains a span with the text "New member"
       await this.page.waitForSelector('a[data-test-new-member-button="true"]');
       await this.page.click('a[data-test-new-member-button="true"]');
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector('input[data-test-input="member-name"]');
       const nameMember = faker.person.firstName();
       await this.page.keyboard.type(nameMember);
@@ -46,7 +50,7 @@ class MembersPage {
         path: this.screenshotDirectoryEscenario + "createMember.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(
         this.page.click('a[data-test-link="members-back"]')
       );
@@ -69,7 +73,7 @@ class MembersPage {
       if (!memberEncontrado) {
         throw "no se encontro el member creado";
       }
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       return this.page;
     } catch (error) {
       console.error("Create member faile:", error.message);
@@ -89,7 +93,7 @@ class MembersPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createMember.png",
       });
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForTimeout(timeoutConfig);
       const pElements = await this.page.$$eval("p.response", (ps) =>
         ps.map((p) => p.textContent)
       );
@@ -106,7 +110,7 @@ class MembersPage {
       if (!errorEncontrado) {
         throw "no se encontro el error esperado";
       }
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       return this.page;
     } catch (error) {
       console.error("Create member without mail faile:", error.message);
@@ -114,30 +118,28 @@ class MembersPage {
     }
   }
   async editMember() {
-    const newEmail=faker.internet.email()
-    await this.page.waitForTimeout(6000);
-     console.log(newEmail)
-      await this.page.evaluate(() => {
-        document.querySelectorAll(".gh-members-list-name")[0].click();
-      }, this.page);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "selectMemberToEdit.png",
-      });
+    const newEmail = faker.internet.email();
+    await this.page.waitForTimeout(timeoutConfig);
+    await this.page.evaluate(() => {
+      document.querySelectorAll(".gh-members-list-name")[0].click();
+    }, this.page);
+    await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "selectMemberToEdit.png",
+    });
     try {
       const email = await this.page.$("#member-email");
       await this.page.evaluate(() => {
-        document.querySelector("#member-email").value="";
-
+        document.querySelector("#member-email").value = "";
       }, this.page);
-      await this.page.waitForTimeout(5000);
-email.type(newEmail)
-await this.page.waitForTimeout(8000);
+      await this.page.waitForTimeout(timeoutConfig);
+      email.type(newEmail);
+      await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "editMember.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
-      await this.page.waitForTimeout(2000);
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(
         this.page.click('a[data-test-link="members-back"]')
       );
@@ -151,7 +153,7 @@ await this.page.waitForTimeout(8000);
         for (const element of elements) {
           console.log(element.textContent.trim());
           if (element.textContent.trim() === newEmail.trim()) {
-             return true;
+            return true;
           }
         }
         return false;
@@ -160,7 +162,7 @@ await this.page.waitForTimeout(8000);
       if (!memberEncontrado) {
         throw "no se encontro el member creado";
       }
-      await this.page.waitForTimeout(1000);
+      await this.page.waitForTimeout(timeoutConfig);
       return this.page;
     } catch (error) {
       console.error("Create member faile:", error.message);

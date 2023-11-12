@@ -1,3 +1,6 @@
+let config = require("./config.json");
+
+const timeoutConfig = config.timeout;
 // LoginPage.js
 
 /**
@@ -22,7 +25,7 @@ class LoginPage {
    */
   async visit() {
     await this.page.goto(this.ghostUrl);
-    await this.page.waitForTimeout(5000);
+    await this.page.waitForTimeout(timeoutConfig);
     await this.page.screenshot({
       path: this.screenshotDirectoryEscenario + "signInPage.png",
     });
@@ -56,7 +59,7 @@ class LoginPage {
 
       // Click on login button
       await Promise.resolve(this.page.click("#ember5"));
-      await this.page.waitForTimeout(5000);
+      await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "afterSignIn.png",
@@ -94,22 +97,22 @@ class LoginPage {
 
       // Click on forgot button
       await Promise.resolve(this.page.click("#ember4"));
-      
+
       // Wait for the password reset confirmation or error
       await this.page.waitForFunction(
         'document.querySelector(".main-error") && document.querySelector(".main-error").offsetHeight > 0'
       );
-      
+
       // Wait for the password reset button to be visible
       await this.page.waitForFunction(
         () => {
           const button = document.querySelector("#ember4 span");
           return button && button.innerText.toLowerCase().includes("forgot");
         },
-        { timeout: 100000 } 
+        { timeout: timeoutConfig + 10000 }
       );
 
-      await new Promise((r) => setTimeout(r, 5000));
+      await new Promise((r) => setTimeout(r, timeoutConfig));
 
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "afterForgot.png",
