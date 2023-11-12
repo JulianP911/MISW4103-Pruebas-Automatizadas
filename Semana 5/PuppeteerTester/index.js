@@ -6,6 +6,7 @@ const LoginPage = require("./LoginPage");
 const PostsPage = require("./postsPage");
 const TagsPage = require("./tagsPage");
 const MembersPage = require("./membersPage");
+const PagesPage = require("./pagesPage");
 const ghostUrl = "http://localhost:2369/ghost/";
 const userEmail = "prueba@prueba.com";
 const userPassword = "prueba12345";
@@ -35,6 +36,7 @@ const runScenarios = async () => {
   await runScenario9();
   await runScenario10();
   await runScenario11();
+  await runScenario12();
   await runScenario16();
 };
 /**
@@ -583,6 +585,49 @@ const runScenario11 = async () => {
     console.log("E11-Test Passed ");
   } catch (e) {
     console.log(e, "E11-Test Failed");
+  }
+};
+
+/**
+ * Escenario 12: Como usuario administrador creo una nueva page para publicarlo en el sitio web
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa una cadena de texto al título del page
+ * And:Se ingresa un texto al contenido del page
+ * And: Se da click en el publish
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * Then:Se valida que aparezca el titulo de publicacion exitosa 
+ */
+const runScenario12 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario12/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+    const pagesPage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagesPage.visit());
+    await Promise.resolve(pagesPage.createPage());
+    await page.waitForTimeout(5000);
+    // Close the browser after completing the tests
+    await browser.close();
+
+    console.log("E12-Test Passed ");
+  } catch (e) {
+    console.log(e, "E12-Test Failed");
   }
 };
 
