@@ -1,5 +1,14 @@
 # Pruebas Automatizadas
 
+## Integrantes
+
+|Nombre                   |Correo                      |
+|-------------------------|----------------------------|
+|Julian Padilla Molina    |j.padilla@uniandes.edu.co   |
+|Santiago Fajardo Tellez  |s.fajardot@uniandes.edu.co  |
+|Laura Helena Cabra       |lh.cabra@uniandes.edu.co   |
+|Daniel Hernandez         |df.hernandezp12@uniandes.edu.co  |
+
 ## Semana 5
 
 A continuación, se adjunta los enlaces a los entregables de la wiki:
