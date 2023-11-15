@@ -11,6 +11,9 @@ class MembersPage {
   }
   async visit() {
     try {
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "beforeVisitMembersPage.png",
+      });
       try {
         await this.page.waitForSelector('a[data-test-mobile-nav="members"]');
 
@@ -37,27 +40,39 @@ class MembersPage {
 
   async createMember() {
     try {
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "beforeNewMembersPage.png",
+      });
       // Wait for an element that contains a span with the text "New member"
       await this.page.waitForSelector('a[data-test-new-member-button="true"]');
       await this.page.click('a[data-test-new-member-button="true"]');
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newMemberPage.png",
+      });
       const nameMember = faker.person.firstName();
       await this.page.keyboard.type(nameMember);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "typeInputNameNewMember.png",
+      });
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(faker.internet.email());
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "createMember.png",
+        path: this.screenshotDirectoryEscenario + "typeInputDescriptionNewMember.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "clickSaveButtonNewMember.png",
+      });
       await Promise.resolve(
         this.page.click('a[data-test-link="members-back"]')
       );
       await this.page.waitForSelector("h2.gh-canvas-title");
-
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "membersPage.png",
+        path: this.screenshotDirectoryEscenario + "backMembersListAfterNewMember.png",
       });
+
       const h3Elements = await this.page.$$eval(
         "h3.ma0.pa0.gh-members-list-name",
         (h3s) => h3s.map((h3) => h3.textContent)
@@ -81,18 +96,27 @@ class MembersPage {
   }
 
   async createMemberWithoutMail_Error() {
-    try {
+    try { await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "beforeNewMembersPageForError.png",
+    });
       // Wait for an element that contains a span with the text "New member"
       await this.page.waitForSelector('a[data-test-new-member-button="true"]');
       await this.page.click('a[data-test-new-member-button="true"]');
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newMemberPageForError.png",
+      });
       const nameMember = faker.person.firstName();
       await this.page.keyboard.type(nameMember);
-      await Promise.resolve(this.page.click('button[data-test-button="save"]'));
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "createMember.png",
+        path: this.screenshotDirectoryEscenario + "typeInputNameNewMemberForError.png",
       });
-      await this.page.waitForTimeout(timeoutConfig);
+      await Promise.resolve(this.page.click('button[data-test-button="save"]'));
+     
+      await this.page.waitForTimeout(timeoutConfig); 
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "clickSaveButtonNewMemberForError.png",
+      });
       const pElements = await this.page.$$eval("p.response", (ps) =>
         ps.map((p) => p.textContent)
       );
@@ -117,6 +141,10 @@ class MembersPage {
     }
   }
   async editMember() {
+    
+    await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "beforeEditMembersPage.png",
+    });
     const newEmail = faker.internet.email();
     await this.page.waitForTimeout(timeoutConfig);
     await this.page.evaluate(() => {
@@ -129,24 +157,28 @@ class MembersPage {
       const email = await this.page.$("#member-email");
       await this.page.evaluate(() => {
         document.querySelector("#member-email").value = "";
-      }, this.page);
+      }, this.page); await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "cleanEmailMemberToEdit.png",
+      });
       await this.page.waitForTimeout(timeoutConfig);
       email.type(newEmail);
       await this.page.waitForTimeout(timeoutConfig);
-
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "editMember.png",
+        path: this.screenshotDirectoryEscenario + "typeNewInputEmailEditMember.png",
       });
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "clickSaveButtonEditMember.png",
+      });
       await Promise.resolve(
         this.page.click('a[data-test-link="members-back"]')
       );
       await this.page.waitForSelector("h2.gh-canvas-title");
-
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "editMemberFinalPage.png",
+        path: this.screenshotDirectoryEscenario + "backMembersListAfterEditMember.png",
       });
+
       const memberEncontrado = await this.page.evaluate((newEmail) => {
         const elements = document.querySelectorAll(".gh-members-list-email");
         for (const element of elements) {

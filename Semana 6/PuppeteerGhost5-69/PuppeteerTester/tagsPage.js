@@ -11,6 +11,9 @@ class TagsPage {
   }
   async visit() {
     try {
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "beforeTagsPage.png",
+      });
       if ((await this.page.$(".gh-mobile-nav-bar-more")) !== null) {
         await this.page.click(".gh-mobile-nav-bar-more");
       }
@@ -21,7 +24,7 @@ class TagsPage {
     
 
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "tagsPage.png",
+        path: this.screenshotDirectoryEscenario + "afterTagsPage.png",
       });
     } catch (error) {
       console.error("Visit Tags Page failed:", error.message);
@@ -36,39 +39,50 @@ class TagsPage {
       await this.page.click('a[href="#/tags/new/"]');
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "newTag.png",
+        path: this.screenshotDirectoryEscenario + "createNewTag.png",
       });
       await this.page.waitForSelector("#tag-name", { timeout: timeoutConfig });
 
       const name = await this.page.$("#tag-name");
       await name.type(newTagName);
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "inputNameNewTagsPage.png",
+      });
       await this.page.waitForSelector("#tag-description", { timeout: timeoutConfig });
 
       const description = await this.page.$("#tag-description");
       await description.type(faker.lorem.sentence(5));
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "completeTag.png",
+        path: this.screenshotDirectoryEscenario + "inputDescriptionNewTagsPage.png",
       });
       await this.page.waitForSelector('button[data-test-button="save"]', { timeout: timeoutConfig });
 
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "clickSaveButtonNewTagsPage.png",
+      });
       await this.page.waitForSelector('a[data-test-link="tags-back"]', { timeout: timeoutConfig });
 
       await this.page.click('a[data-test-link="tags-back"]');
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "listAfterNewTagsPage.png",
+      });
       await this.page.waitForSelector('button[data-test-tags-nav="public"]', { timeout: timeoutConfig });
 
       if (isPublic) {
         await this.page.click('button[data-test-tags-nav="public"]');
         await this.page.waitForTimeout(timeoutConfig);
+       
       } else {
         await this.page.click('button[data-test-tags-nav="internal"]');
         await this.page.waitForTimeout(timeoutConfig);
+        
       }
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "listTags.png",
+        path: this.screenshotDirectoryEscenario + "listTagsAfterCreation.png",
       });
       const element = await this.page.evaluate((newTagName) => {
         const elements = document.querySelectorAll(".gh-tag-list-name");
@@ -86,7 +100,7 @@ class TagsPage {
         throw "Create tag fail";
       }
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "createPostsPage.png",
+        path: this.screenshotDirectoryEscenario + "createdTagPage.png",
       });
 
       await this.page.waitForTimeout(timeoutConfig);
@@ -105,16 +119,19 @@ class TagsPage {
       await this.page.click('a[href="#/tags/new/"]');
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "newTag.png",
+        path: this.screenshotDirectoryEscenario + "createNewTagForError.png",
       });
       const description = await this.page.$("#tag-description");
       await description.type(faker.lorem.sentence(5));
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "inputDescriptionTagForError.png",
+      });
       await this.page.waitForSelector('button[data-test-button="save"]', { timeout: timeoutConfig });
 
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "errorTag.png",
+        path: this.screenshotDirectoryEscenario + "saveTagForError.png",
       });
       const actualErrorMessage = await this.page.$eval(".error", (el) =>
         el.textContent.trim()
@@ -126,6 +143,9 @@ class TagsPage {
       );
 
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "tagError.png",
+      });
       return this.page;
     } catch (error) {
       error, console.error("Create tag Error Page failed:", error.message);
@@ -135,13 +155,15 @@ class TagsPage {
   async editTag(newTagName) {
     try {
       await this.page.waitForTimeout(timeoutConfig);
-     
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "firstViewEditTag.png",
+      });
       await this.page.evaluate(() => {
         document.querySelectorAll(".gh-tag-list-name")[0].click();
       }, this.page);
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "editTag.png",
+        path: this.screenshotDirectoryEscenario + "selectTagToEdit.png",
       });
       await this.page.waitForSelector("#tag-name", { timeout: timeoutConfig });
 
@@ -151,6 +173,9 @@ class TagsPage {
 
       }, this.page);
       await name.type(newTagName);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "typeTagNameToEdit.png",
+      });
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "editedTag.png",
@@ -159,16 +184,22 @@ class TagsPage {
 
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "savedEditedTag.png",
+      });
       await this.page.waitForSelector('a[data-test-link="tags-back"]', { timeout: timeoutConfig });
 
       await this.page.click('a[data-test-link="tags-back"]');
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "backToTagList.png",
+      });
       await this.page.waitForSelector('button[data-test-tags-nav="public"]', { timeout: timeoutConfig });
 
       await this.page.click('button[data-test-tags-nav="public"]');
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "listTags.png",
+        path: this.screenshotDirectoryEscenario + "listTagsAfterEdit.png",
       });
       const element = await this.page.evaluate((newTagName) => {
         const elements = document.querySelectorAll(".gh-tag-list-name");
