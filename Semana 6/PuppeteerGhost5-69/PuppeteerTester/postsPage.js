@@ -396,7 +396,7 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "assignedTag.png",
       });
       //Save the update of the post
-      this.page.click('button[title="Settings"]');
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
       this.page.waitForSelector('span[data-test-task-button-state="idle"]', {
         timeout: timeoutConfig,
       });

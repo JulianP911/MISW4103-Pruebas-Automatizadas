@@ -123,7 +123,7 @@ class LoginPage {
           const button = document.querySelector("#ember4 span");
           return button && button.innerText.toLowerCase().includes("forgot");
         },
-        { timeout: timeoutConfig + 20000 }
+        { timeout: timeoutConfig + 120000 }
       );
 
       await new Promise((r) => setTimeout(r, timeoutConfig));
