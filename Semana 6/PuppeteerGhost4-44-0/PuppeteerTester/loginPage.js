@@ -24,6 +24,8 @@ class LoginPage {
    * @returns {Promise<object>} - A Promise resolving to the Puppeteer page object after navigation.
    */
   async visit() {
+    await this.page.waitForTimeout(timeoutConfig);
+
     await this.page.goto(this.ghostUrl);
     await this.page.waitForTimeout(timeoutConfig);
     await this.page.screenshot({

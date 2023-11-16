@@ -18,7 +18,10 @@ class TagsPage {
         await this.page.click(".gh-mobile-nav-bar-more");
       }
       await new Promise((r) => setTimeout(r, timeoutConfig));
-        await this.page.click('a[data-test-nav="tags"]');
+       
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/tags/"]')[0].click();
+      });
 
       
     
@@ -56,28 +59,36 @@ class TagsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "inputDescriptionNewTagsPage.png",
       });
-      await this.page.waitForSelector('button[data-test-button="save"]', { timeout: timeoutConfig });
+      await this.page.waitForSelector('button.gh-btn.gh-btn-primary.gh-btn-icon.ember-view', { timeout: timeoutConfig });
 
-      await Promise.resolve(this.page.click('button[data-test-button="save"]'));
+      await Promise.resolve(this.page.click('button.gh-btn.gh-btn-primary.gh-btn-icon.ember-view'));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "clickSaveButtonNewTagsPage.png",
       });
-      await this.page.waitForSelector('a[data-test-link="tags-back"]', { timeout: timeoutConfig });
+      await this.page.waitForSelector('a[href="#/tags/"]', { timeout: timeoutConfig });
+      
 
-      await this.page.click('a[data-test-link="tags-back"]');
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/tags/"]')[0].click();
+      });
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "listAfterNewTagsPage.png",
       });
-      await this.page.waitForSelector('button[data-test-tags-nav="public"]', { timeout: timeoutConfig });
-
+      await this.page.waitForTimeout(timeoutConfig);
       if (isPublic) {
-        await this.page.click('button[data-test-tags-nav="public"]');
+        await this.page.evaluate(() => {
+        const xpathSelector = "//span[contains(text(), 'Public tags')]";
+        const list = document.evaluate(xpathSelector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        list.click()});
         await this.page.waitForTimeout(timeoutConfig);
        
       } else {
-        await this.page.click('button[data-test-tags-nav="internal"]');
+        await this.page.evaluate(() => {
+          const xpathSelector = "//span[contains(text(), 'Internal tags')]";
+          const list = document.evaluate(xpathSelector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+          list.click()});
         await this.page.waitForTimeout(timeoutConfig);
         
       }
@@ -126,9 +137,9 @@ class TagsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "inputDescriptionTagForError.png",
       });
-      await this.page.waitForSelector('button[data-test-button="save"]', { timeout: timeoutConfig });
+      await this.page.waitForSelector('button.gh-btn.gh-btn-primary.gh-btn-icon.ember-view', { timeout: timeoutConfig });
 
-      await Promise.resolve(this.page.click('button[data-test-button="save"]'));
+      await Promise.resolve(this.page.click('button.gh-btn.gh-btn-primary.gh-btn-icon.ember-view'));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "saveTagForError.png",
@@ -180,23 +191,29 @@ class TagsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "editedTag.png",
       });
-      await this.page.waitForSelector('button[data-test-button="save"]', { timeout: timeoutConfig });
+      await this.page.waitForSelector('button.gh-btn.gh-btn-primary.gh-btn-icon.ember-view', { timeout: timeoutConfig });
 
-      await Promise.resolve(this.page.click('button[data-test-button="save"]'));
+      await Promise.resolve(this.page.click('button.gh-btn.gh-btn-primary.gh-btn-icon.ember-view'));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "savedEditedTag.png",
       });
-      await this.page.waitForSelector('a[data-test-link="tags-back"]', { timeout: timeoutConfig });
+      await this.page.waitForSelector('a[href="#/tags/"]', { timeout: timeoutConfig });
 
-      await this.page.click('a[data-test-link="tags-back"]');
+      
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/tags/"]')[0].click();
+      });
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backToTagList.png",
       });
-      await this.page.waitForSelector('button[data-test-tags-nav="public"]', { timeout: timeoutConfig });
+      await this.page.waitForTimeout(timeoutConfig);
 
-      await this.page.click('button[data-test-tags-nav="public"]');
+      await this.page.evaluate(() => {
+        const xpathSelector = "//span[contains(text(), 'Public tags')]";
+        const list = document.evaluate(xpathSelector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        list.click()});
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "listTagsAfterEdit.png",

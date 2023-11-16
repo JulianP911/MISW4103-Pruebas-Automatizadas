@@ -27,11 +27,11 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  /* await runScenario1();
- await runScenario2();
-  await runScenario3();*/
- await runScenario4();
-  /* await runScenario5();
+  await runScenario1();
+  await runScenario2();
+  await runScenario3();
+  await runScenario4();
+  await runScenario5();
   await runScenario6();
   await runScenario7();
   await runScenario8();
@@ -46,7 +46,7 @@ const runScenarios = async () => {
   await runScenario17();
   await runScenario18();
   await runScenario19();
-  await runScenario20();*/
+  await runScenario20();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -80,9 +80,9 @@ const runScenario1 = async () => {
     await browser.close();
 
     // Perform the assertion after all the asynchronous operations are complete
-    assert.equal(url, ghostUrl+"#/dashboard");
+    assert.equal(url, ghostUrl + "#/dashboard");
     console.log(
-      "E1-Test Passed - Expected: "+ghostUrl+"/#/dashboard, Actual: ",
+      "E1-Test Passed - Expected: " + ghostUrl + "/#/dashboard, Actual: ",
       url,
       "."
     );
