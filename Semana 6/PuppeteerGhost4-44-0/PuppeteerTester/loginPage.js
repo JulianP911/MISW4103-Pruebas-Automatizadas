@@ -45,19 +45,19 @@ class LoginPage {
       });
       // Reset input fields
       await this.page.evaluate(() => {
-        document.querySelector("#identification").value = "";
+        document.querySelector('input[name="identification"]').value = "";
       });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "emptyIdentification.png",
       });
       // Type the email
-      const idField = await this.page.$("#identification");
+      const idField = await this.page.$('input[name="identification"]');
       await idField.type(email);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "emailInput.png",
       });
       // Type the password
-      const passwordField = await this.page.$("#password");
+      const passwordField = await this.page.$('input[name="password"]');
       await passwordField.type(password);
 
       await this.page.screenshot({
@@ -65,8 +65,10 @@ class LoginPage {
       });
 
       // Click on login button
-      await Promise.resolve(this.page.click("#ember5"));
-      await this.page.waitForTimeout(timeoutConfig);
+      await Promise.resolve(
+        this.page.click('button.login.gh-btn.gh-btn-login.gh-btn-block.gh-btn-icon.js-login-button.ember-view')
+      );
+            await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "afterSignIn.png",
@@ -94,13 +96,13 @@ class LoginPage {
       });
       // Reset input fields
       await this.page.evaluate(() => {
-        document.querySelector("#identification").value = "";
+        document.querySelector('input[name="identification"]').value = "";
       });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "emptyId.png",
       });
       // Type the email
-      const idField = await this.page.$("#identification");
+      const idField = await this.page.$('input[name="identification"]');
       await idField.type(email);
 
       await this.page.screenshot({
@@ -108,7 +110,7 @@ class LoginPage {
       });
 
       // Click on forgot button
-      await Promise.resolve(this.page.click("#ember4"));
+      await Promise.resolve(this.page.click("button.forgotten-link.gh-btn.gh-btn-link.gh-btn-icon.ember-view"));
 
       // Wait for the password reset confirmation or error
       await this.page.waitForFunction(
@@ -120,7 +122,7 @@ class LoginPage {
       // Wait for the password reset button to be visible
       await this.page.waitForFunction(
         () => {
-          const button = document.querySelector("#ember4 span");
+          const button = document.querySelector("button.forgotten-link.gh-btn.gh-btn-link.gh-btn-icon.ember-view");
           return button && button.innerText.toLowerCase().includes("forgot");
         },
         { timeout: timeoutConfig + 10000 }
