@@ -27,7 +27,7 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  await runScenario1();
+ await runScenario1();
   await runScenario2();
   await runScenario3();
   await runScenario4();
@@ -509,7 +509,7 @@ const runScenario9 = async () => {
   }
 };
 /**
- * Escenario 10: Como usuario administrador creo un nuevo post para publicarlo en el sitio web
+ * Escenario 10: Como usuario administrador creo un nuevo member
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
