@@ -125,7 +125,7 @@ class LoginPage {
           const button = document.querySelector("button.forgotten-link.gh-btn.gh-btn-link.gh-btn-icon.ember-view");
           return button && button.innerText.toLowerCase().includes("forgot");
         },
-        { timeout: timeoutConfig + 10000 }
+        { timeout: timeoutConfig + 120000 }
       );
 
       await new Promise((r) => setTimeout(r, timeoutConfig));

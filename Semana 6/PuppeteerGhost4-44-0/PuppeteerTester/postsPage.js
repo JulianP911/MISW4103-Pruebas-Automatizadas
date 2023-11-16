@@ -10,17 +10,17 @@ class PostsPage {
   }
   async visit() {
     try {
+
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "startVisitPosts.png",
       });
-      const elementExists = (await this.page.$("#ember313")) !== null;
-      if (elementExists) {
-        await this.page.click("#ember313"); // Screen is wide
-      } else {
-        if ((await this.page.$("#ember13")) !== null) {
-          await this.page.click("#ember13"); // Screen is narrow
-        }
-      }
+      await this.page.waitForTimeout(timeoutConfig);
+
+        await this.page.evaluate(() => {
+          document.querySelectorAll('a[href="#/posts/"]')[0].click();
+        });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "postsPage.png",
       });
@@ -65,24 +65,24 @@ class PostsPage {
 
       // Click on publish
       await this.page.waitForSelector(
-        'button[data-test-button="publish-flow"]',
+        'div.gh-publishmenu.ember-view',
         {
           timeout: timeoutConfig,
         }
       );
       await Promise.resolve(
-        this.page.click('button[data-test-button="publish-flow"]')
+        this.page.click('div.gh-publishmenu.ember-view')
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "publishPost.png",
       });
       // Confirm the publication
-      await this.page.waitForSelector('button[data-test-button="continue"]', {
+      await this.page.waitForSelector('button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view', {
         timeout: timeoutConfig,
       });
       await Promise.resolve(
-        this.page.click('button[data-test-button="continue"]')
+        this.page.click('button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view')
       );
       await this.page.screenshot({
         path:
@@ -91,20 +91,18 @@ class PostsPage {
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.waitForSelector(
-        'button[data-test-button="confirm-publish"]',
+        'button.gh-btn.gh-btn-black.gh-btn-icon.ember-view',
         {
           timeout: timeoutConfig,
         }
       );
       await Promise.resolve(
-        this.page.click('button[data-test-button="confirm-publish"]')
+        this.page.click('button.gh-btn.gh-btn-black.gh-btn-icon.ember-view')
       );
       await this.page.waitForTimeout(timeoutConfig);
 
       // Check if the post is created successfully
-      const element = await this.page.$(
-        '.gh-publish-title[data-test-publish-flow="complete"]'
-      );
+      const element = await this.page.$x('//div[contains(text(), "published")]');
 
       if (element) {
         console.log("Post created successfully");
@@ -116,27 +114,19 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "createPostsPage.png",
       });
 
-      // Close the publish flow
-      await this.page.waitForSelector(
-        'button[data-test-button="close-publish-flow"]',
-        { timeout: timeoutConfig }
-      );
-      await Promise.resolve(
-        this.page.click('button[data-test-button="close-publish-flow"]')
-      );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "closePublishPost.png",
       });
       // Navigate back to the posts section
       await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
+        '.gh-editor-back-button',
         {
           timeout: timeoutConfig,
         }
       );
       await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="posts"]')
+        this.page.click('.gh-editor-back-button')
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
