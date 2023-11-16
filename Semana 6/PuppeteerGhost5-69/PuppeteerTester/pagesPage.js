@@ -63,6 +63,7 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completePage.png",
       });
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(
         this.page.click('button[data-test-button="publish-flow"]')
       );
@@ -195,6 +196,7 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completeScehduledForm.png",
       });
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(
         this.page.click('button[data-test-button="publish-flow"]')
       );

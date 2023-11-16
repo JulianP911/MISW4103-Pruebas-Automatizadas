@@ -40,6 +40,7 @@ class MembersPage {
 
   async createMember() {
     try {
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "beforeNewMembersPage.png",
       });
