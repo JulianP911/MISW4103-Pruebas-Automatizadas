@@ -3,55 +3,57 @@
     {
       "number": "1",
       "steps": [
-        "signInPage",      
+        "signInPage",
         "startLogin",
         "emptyIdentification",
         "emailInput",
-        "passwordInput",    
+        "passwordInput",
         "afterSignIn"
       ]
     },
     {
-        "number": "2",
-        "steps": [
-            "signInPage",      
-            "startLogin",
-            "emptyIdentification",
-            "emailInput",
-            "passwordInput",    
-            "afterSignIn"
-        ]
-      },  
-      {
-        "number": "3",
-        "steps": [
-          "signInPage",          
-          "emptyId",
-          "fillInputs",
-          "forgotPassword",
-          "resetError",
-          "afterForgot"
-        ]
-      }, {
-        "number": "4",
-        "steps": [
-          "signInPage",
-          "startLogin",
-          "emptyIdentification",
-          "emailInput",
-          "passwordInput",
-          "afterSignIn",
-          "startVisitPosts",
-          "postsPage",
-          "postForm",
-          "titlePost",
-          "postCreationPage",
-          "publishPost",          
-          "continuePostCreationPage",
-          "createPostsPage",    
-          "closePublishPost",
-          "backPostsList"]
-      }
+      "number": "2",
+      "steps": [
+        "signInPage",
+        "startLogin",
+        "emptyIdentification",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn"
+      ]
+    },
+    {
+      "number": "3",
+      "steps": [
+        "signInPage",
+        "emptyId",
+        "fillInputs",
+        "forgotPassword",
+        "resetError",
+        "afterForgot"
+      ]
+    },
+    {
+      "number": "4",
+      "steps": [
+        "signInPage",
+        "startLogin",
+        "emptyIdentification",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "startVisitPosts",
+        "postsPage",
+        "postForm",
+        "titlePost",
+        "postCreationPage",
+        "publishPost",
+        "continuePostCreationPage",
+        "createPostsPage",
+        "closePublishPost",
+        "backPostsList"
+      ]
+    }
   ],
   "options": {
     "output": {

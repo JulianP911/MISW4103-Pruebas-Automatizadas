@@ -80,7 +80,7 @@ const runScenario1 = async () => {
     await browser.close();
 
     // Perform the assertion after all the asynchronous operations are complete
-    assert.equal(url, "http://localhost:2368/ghost/#/dashboard");
+    assert.equal(url, ghostUrl+"#/dashboard");
     console.log(
       "E1-Test Passed - Expected: http://localhost:2368/ghost/#/dashboard, Actual: ",
       url,
@@ -736,7 +736,7 @@ const runScenario14 = async () => {
  */
 const runScenario15 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario15/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -822,7 +822,7 @@ const runScenario16 = async () => {
  */
 const runScenario17 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario17/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -865,7 +865,7 @@ const runScenario17 = async () => {
  */
 const runScenario18 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario18/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -963,7 +963,7 @@ const runScenario19 = async () => {
  */
 const runScenario20 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario20/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();

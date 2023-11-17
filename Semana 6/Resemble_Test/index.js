@@ -22,11 +22,11 @@ async function executeTest() {
             `.png`
         ),
         fs.readFileSync(
-          `../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231116T140112/Escenario` +
-            e.number +
-            `/` +
-            e.steps[s] +
-            `.png`
+          `../PuppeteerGhost4-44-0/PuppeteerTester/screenshots/20231117T125204/Escenario` +
+          e.number +
+          `/` +
+          e.steps[s] +
+          `.png`
         ),
         options
       );
@@ -70,7 +70,7 @@ function compareScenarios(e, resInfo) {
       <div class="imgline">
         <div class="imgcontainer">
           <span class="imgname">Ghost V4.44.0</span>
-          <img class="img2" src="../../../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231116T140112/Escenario${
+          <img class="img2" src="../../../PuppeteerGhost4-44-0/PuppeteerTester/screenshots/20231117T125204/Escenario${
             e.number
           }/${e.steps[s]}.png" id="testImage" label="Test">
         </div>
@@ -94,7 +94,6 @@ function compareScenarios(e, resInfo) {
 
   return stepsHTML;
 }
-/*
 function createReport(datetime, resInfo) {
   return `
     <html>
@@ -103,26 +102,7 @@ function createReport(datetime, resInfo) {
             <link href="index.css" type="text/css" rel="stylesheet">
         </head>
         <body>
-            <h1>Report for Ghost
-            </h1>
-            <p>Executed: ${datetime}</p>
-            <div id="visualizer">
-            ${config.scenarios
-              .map(e =>compareScenarios(e, resInfo))
-              }
-            </div>
-        </body>
-    </html>`;
-}*/
-function createReport(datetime, resInfo) {
-  return `
-    <html>
-        <head>
-            <title> VRT Report </title>
-            <link href="index.css" type="text/css" rel="stylesheet">
-        </head>
-        <body>
-            <h1>Report for Ghost</h1>
+            <h1>Report for Ghost Resemble</h1>
             <p>Executed: ${datetime}</p>
             <select id="scenarioFilter">
               <option value="all">All Scenarios</option>
