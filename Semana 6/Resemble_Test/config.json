@@ -1,0 +1,73 @@
+{
+  "scenarios": [
+    {
+      "number": "1",
+      "steps": [
+        "signInPage",      
+        "startLogin",
+        "emptyIdentification",
+        "emailInput",
+        "passwordInput",    
+        "afterSignIn"
+      ]
+    },
+    {
+        "number": "2",
+        "steps": [
+            "signInPage",      
+            "startLogin",
+            "emptyIdentification",
+            "emailInput",
+            "passwordInput",    
+            "afterSignIn"
+        ]
+      },  
+      {
+        "number": "3",
+        "steps": [
+          "signInPage",          
+          "emptyId",
+          "fillInputs",
+          "forgotPassword",
+          "resetError",
+          "afterForgot"
+        ]
+      }, {
+        "number": "4",
+        "steps": [
+          "signInPage",
+          "startLogin",
+          "emptyIdentification",
+          "emailInput",
+          "passwordInput",
+          "afterSignIn",
+          "startVisitPosts",
+          "postsPage",
+          "postForm",
+          "titlePost",
+          "postCreationPage",
+          "publishPost",          
+          "continuePostCreationPage",
+          "createPostsPage",    
+          "closePublishPost",
+          "backPostsList"]
+      }
+  ],
+  "options": {
+    "output": {
+      "errorColor": {
+        "red": 255,
+        "green": 0,
+        "blue": 255
+      },
+      "errorType": "movement",
+      "largeImageThreshold": 1200,
+      "useCrossOrigin": false,
+      "outputDiff": true
+    },
+    "scaleToSameSize": true,
+    "ignore": "antialiasing"
+  },
+  "viewportHeight": 600,
+  "viewportWidth": 800
+}
