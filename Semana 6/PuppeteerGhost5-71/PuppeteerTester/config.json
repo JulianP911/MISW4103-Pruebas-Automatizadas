@@ -2,5 +2,5 @@
     "ghostUrl": "https://ghost5-71-oxma.onrender.com/ghost/",
     "userEmail" :"prueba@prueba.com",
     "userPassword" : "prueba12345",
-    "timeout" : 9000
+    "timeout" : 40000
 }
