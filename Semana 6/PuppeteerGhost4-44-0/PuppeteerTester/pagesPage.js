@@ -25,15 +25,12 @@ class PagesPage {
         await this.page.screenshot({
           path: this.screenshotDirectoryEscenario + "moreNavBar.png",
         });
-        await Promise.resolve(this.page.click('a[data-test-nav="pages"]'));
+        await this.page.evaluate(() => {
+          document.querySelectorAll('a[href="#/pages/"]')[0].click();
+        });
       } catch (error) {
-        try {
-          await this.page.waitForSelector('a[data-test-nav="pages"]');
-
-          await Promise.resolve(this.page.click('a[data-test-nav="pages"]'));
-        } catch (error) {
           throw error;
-        }
+        
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "PagesPage.png",
@@ -48,12 +45,13 @@ class PagesPage {
   async createPage() {
     try {
       // Wait for an element that contains a span with the text "New Page"
-      await this.page.waitForSelector("a[data-test-new-page-button]");
-      await this.page.click("a[data-test-new-page-button]");
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/editor/page/"]')[0].click();
+      });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newPage.png",
       });
-      await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+      await this.page.waitForSelector("textarea.gh-editor-title.ember-text-area.gh-input.ember-view");
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "fillTitle.png",
@@ -64,34 +62,35 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "completePage.png",
       });
       await this.page.waitForTimeout(timeoutConfig);
-      await Promise.resolve(
-        this.page.click('button[data-test-button="publish-flow"]')
-      );
+      await this.page.waitForSelector("div.gh-publishmenu.ember-view", {
+        timeout: timeoutConfig,
+      });
+      await Promise.resolve(this.page.click("div.gh-publishmenu.ember-view"));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "publishClick.png",
       });
-      await this.page.waitForSelector('button[data-test-button="continue"]');
+      await this.page.waitForSelector(
+        "button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view",
+        {
+          timeout: timeoutConfig,
+        }
+      );
       await Promise.resolve(
-        this.page.click('button[data-test-button="continue"]')
+        this.page.click(
+          "button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view"
+        )
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "continuePublish.png",
       });
-      await this.page.waitForSelector(
-        'button[data-test-button="confirm-publish"]'
+      const element = await this.page.$x(
+        '//div[contains(text(), "published")]'
       );
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "confirmNewPage.png",
       });
-      await Promise.resolve(
-        this.page.click('button[data-test-button="confirm-publish"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      const element = await this.page.$(
-        '.gh-publish-title[data-test-publish-flow="complete"]'
-      );
       if (element) {
         console.log("Create page successfully");
       } else {
@@ -100,22 +99,14 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPagesPage.png",
       });
-      this.page.waitForSelector(
-        'button[data-test-button="close-publish-flow"]'
-      );
-
-      await Promise.resolve(
-        this.page.click('button[data-test-button="close-publish-flow"]')
-      );
+      await this.page.waitForSelector(".gh-editor-back-button", {
+        timeout: timeoutConfig,
+      });
+      await Promise.resolve(this.page.click(".gh-editor-back-button"));
       await this.page.waitForTimeout(timeoutConfig);
-      this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]');
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPageForm.png",
       });
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="pages"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPages.png",
       });
@@ -129,12 +120,13 @@ class PagesPage {
   async createDraft(titlePage) {
     try {
       // Wait for an element that contains a span with the text "New Page"
-      await this.page.waitForSelector("a[data-test-new-page-button]");
-      await this.page.click("a[data-test-new-page-button]");
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/editor/page/"]')[0].click();
+      });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newPageDraft.png",
       });
-      await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+      await this.page.waitForSelector("textarea.gh-editor-title.ember-text-area.gh-input.ember-view");
       await this.page.keyboard.type(titlePage);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "titleDraft.png",
@@ -145,11 +137,10 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "completeDraftForm.png",
       });
       await this.page.waitForTimeout(timeoutConfig);
-      this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]');
-
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="pages"]')
-      );
+      await this.page.waitForSelector(".gh-editor-back-button", {
+        timeout: timeoutConfig,
+      });
+      await Promise.resolve(this.page.click(".gh-editor-back-button"));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector("h3.gh-content-entry-title", {
         timeout: timeoutConfig,
@@ -181,12 +172,13 @@ class PagesPage {
   async createPageScheduled() {
     try {
       // Wait for an element that contains a span with the text "New Page"
-      await this.page.waitForSelector("a[data-test-new-page-button]");
-      await this.page.click("a[data-test-new-page-button]");
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/editor/page/"]')[0].click();
+      });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newPageScheduled.png",
       });
-      await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+      await this.page.waitForSelector("textarea.gh-editor-title.ember-text-area.gh-input.ember-view");
       await this.page.keyboard.type(faker.lorem.sentence(2));
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "titleScheduled.png",
@@ -197,46 +189,37 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "completeScehduledForm.png",
       });
       await this.page.waitForTimeout(timeoutConfig);
-      await Promise.resolve(
-        this.page.click('button[data-test-button="publish-flow"]')
-      );
+      await this.page.waitForSelector(".ember-basic-dropdown-trigger", {
+        timeout: timeoutConfig,
+      });
+      await Promise.resolve(this.page.click(".ember-basic-dropdown-trigger"));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "publishScheduled.png",
       });
       await this.page.evaluate(() => {
-        document.querySelector("button.gh-publish-setting-title").click();
-      });
-      await this.page.waitForSelector('div[data-test-radio="schedule"]', {
-        timeout: timeoutConfig,
+        document.querySelectorAll(".gh-publishmenu-radio-label")[1].click();
       });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "settingScheduled.png",
       });
-      await this.page.evaluate(() => {
-        document.querySelector('div[data-test-radio="schedule"]').click();
-      });
+
+      await Promise.resolve(
+        this.page.click(
+          "button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view"
+        )
+      );
       await this.page.waitForTimeout(timeoutConfig);
+    
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "scheduleNewPage.png",
       });
-      await this.page.waitForSelector('button[data-test-button="continue"]');
-      await Promise.resolve(
-        this.page.click('button[data-test-button="continue"]')
-      );
       await this.page.waitForTimeout(timeoutConfig);
-      await this.page.waitForSelector(
-        'button[data-test-button="confirm-publish"]'
-      );
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "confirmNewSceduled.png",
       });
-      await Promise.resolve(
-        this.page.click('button[data-test-button="confirm-publish"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      const element = await this.page.$(
-        '.gh-publish-title[data-test-publish-flow="complete"]'
+      const element = await this.page.$x(
+        '//div[contains(text(), "Scheduled")]'
       );
       if (element) {
         console.log("Page creado exitosamente");
@@ -246,21 +229,12 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPageScheduled.png",
       });
-      this.page.waitForSelector(
-        'button[data-test-button="close-publish-flow"]'
-      );
-
-      await Promise.resolve(
-        this.page.click('button[data-test-button="close-publish-flow"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      this.page.waitForSelector('.gh-btn-editor[data-test-link="pages"]');
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/pages/"]')[0].click();
+      });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backScheduled.png",
       });
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="pages"]')
-      );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backlistScheduled.png",
@@ -286,10 +260,10 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "editPage.png",
       });
-      await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+      await this.page.waitForSelector("textarea.gh-editor-title.ember-text-area.gh-input.ember-view");
       await this.page.evaluate(() => {
         const element = document.querySelector(
-          "textarea[data-test-editor-title-input]"
+          "textarea.gh-editor-title.ember-text-area.gh-input.ember-view"
         );
         element.value = "";
         element.focus();
@@ -298,18 +272,14 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "emptyTitle.png",
       });
       await this.page.keyboard.type(newTitlePage);
+      await this.page.keyboard.press("Tab");
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "editedPage.png",
       });
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="pages"]',
-        { timeout: timeoutConfig }
-      );
-
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="pages"]')
-      );
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/pages/"]')[0].click();
+      });
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector("h3.gh-content-entry-title", {
         timeout: timeoutConfig,

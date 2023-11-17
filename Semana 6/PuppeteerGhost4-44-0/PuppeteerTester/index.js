@@ -27,7 +27,7 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
- await runScenario1();
+  await runScenario1();
   await runScenario2();
   await runScenario3();
   await runScenario4();
@@ -963,7 +963,7 @@ const runScenario19 = async () => {
  */
 const runScenario20 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario20/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();

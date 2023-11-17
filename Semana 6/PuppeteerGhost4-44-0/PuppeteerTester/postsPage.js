@@ -10,7 +10,6 @@ class PostsPage {
   }
   async visit() {
     try {
-
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
@@ -18,9 +17,9 @@ class PostsPage {
       });
       await this.page.waitForTimeout(timeoutConfig);
 
-        await this.page.evaluate(() => {
-          document.querySelectorAll('a[href="#/posts/"]')[0].click();
-        });
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/posts/"]')[0].click();
+      });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "postsPage.png",
       });
@@ -64,25 +63,25 @@ class PostsPage {
       });
 
       // Click on publish
-      await this.page.waitForSelector(
-        'div.gh-publishmenu.ember-view',
-        {
-          timeout: timeoutConfig,
-        }
-      );
-      await Promise.resolve(
-        this.page.click('div.gh-publishmenu.ember-view')
-      );
+      await this.page.waitForSelector("div.gh-publishmenu.ember-view", {
+        timeout: timeoutConfig,
+      });
+      await Promise.resolve(this.page.click("div.gh-publishmenu.ember-view"));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "publishPost.png",
       });
       // Confirm the publication
-      await this.page.waitForSelector('button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view', {
-        timeout: timeoutConfig,
-      });
+      await this.page.waitForSelector(
+        "button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view",
+        {
+          timeout: timeoutConfig,
+        }
+      );
       await Promise.resolve(
-        this.page.click('button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view')
+        this.page.click(
+          "button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view"
+        )
       );
       await this.page.screenshot({
         path:
@@ -91,18 +90,20 @@ class PostsPage {
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.waitForSelector(
-        'button.gh-btn.gh-btn-black.gh-btn-icon.ember-view',
+        "button.gh-btn.gh-btn-black.gh-btn-icon.ember-view",
         {
           timeout: timeoutConfig,
         }
       );
       await Promise.resolve(
-        this.page.click('button.gh-btn.gh-btn-black.gh-btn-icon.ember-view')
+        this.page.click("button.gh-btn.gh-btn-black.gh-btn-icon.ember-view")
       );
       await this.page.waitForTimeout(timeoutConfig);
 
       // Check if the post is created successfully
-      const element = await this.page.$x('//div[contains(text(), "published")]');
+      const element = await this.page.$x(
+        '//div[contains(text(), "published")]'
+      );
 
       if (element) {
         console.log("Post created successfully");
@@ -119,15 +120,10 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "closePublishPost.png",
       });
       // Navigate back to the posts section
-      await this.page.waitForSelector(
-        '.gh-editor-back-button',
-        {
-          timeout: timeoutConfig,
-        }
-      );
-      await Promise.resolve(
-        this.page.click('.gh-editor-back-button')
-      );
+      await this.page.waitForSelector(".gh-editor-back-button", {
+        timeout: timeoutConfig,
+      });
+      await Promise.resolve(this.page.click(".gh-editor-back-button"));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPostsList.png",
@@ -175,12 +171,11 @@ class PostsPage {
       });
 
       // Go back to the list of posts
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: timeoutConfig }
-      );
+      await this.page.waitForSelector("a.ember-view.gh-editor-back-button", {
+        timeout: timeoutConfig,
+      });
       await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="posts"]')
+        this.page.click("a.ember-view.gh-editor-back-button")
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
@@ -249,58 +244,45 @@ class PostsPage {
 
       // Schedule the post
       // Click on post
-      await this.page.waitForSelector(
-        'button[data-test-button="publish-flow"]',
-        {
-          timeout: timeoutConfig,
-        }
-      );
-      await Promise.resolve(
-        this.page.click('button[data-test-button="publish-flow"]')
-      );
+      await this.page.waitForSelector(".ember-basic-dropdown-trigger", {
+        timeout: timeoutConfig,
+      });
+      await Promise.resolve(this.page.click(".ember-basic-dropdown-trigger"));
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "publishScheduled.png",
       });
       // Click on Schedule config
-      await Promise.resolve(
-        this.page.click('div[data-test-setting="publish-at"]')
-      );
-
-      // Click on select date
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.waitForSelector('div[data-test-radio="schedule"]', {
-        timeout: timeoutConfig,
+      await this.page.evaluate(() => {
+        document.querySelectorAll(".gh-publishmenu-radio-label")[1].click();
       });
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "publishAtScheduled.png",
       });
-      await this.page.evaluate(() => {
-        document.querySelector('div[data-test-radio="schedule"]').click();
-      });
-
-      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "schedulePostsPage.png",
       });
 
       // Click on continue with the publication
       await Promise.resolve(
-        this.page.click('button[data-test-button="continue"]')
+        this.page.click(
+          "button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view"
+        )
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "continueScheduled.png",
       });
       await Promise.resolve(
-        this.page.click('button[data-test-button="confirm-publish"]')
+        this.page.click("button.gh-btn.gh-btn-black.gh-btn-icon.ember-view")
       );
-      await this.page.waitForTimeout(timeoutConfig);
+      //await this.page.waitForTimeout(timeoutConfig);
 
       // Check if the post is created successfully
-      const element = await this.page.$(
-        '.gh-publish-title[data-test-publish-flow="complete"]'
-      );
+      const element = await this.page.waitForSelector(".gh-notification-content", {
+        timeout: timeoutConfig,
+      });
 
       if (element) {
         console.log("Post created successfully");
@@ -314,28 +296,14 @@ class PostsPage {
           "finishSchedulePostsPublication.png",
       });
 
-      await this.page.waitForSelector(
-        'button[data-test-button="close-publish-flow"]',
-        { timeout: timeoutConfig }
-      );
-
       // Close the publish flow
-      await Promise.resolve(
-        this.page.click('button[data-test-button="close-publish-flow"]')
-      );
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/posts/"]')[0].click();
+      });
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "closeScheduled.png",
       });
-      // Navigate back to the posts section
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: timeoutConfig }
-      );
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="posts"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backListScheduled.png",
       });
@@ -386,39 +354,35 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "assignedTag.png",
       });
       //Save the update of the post
-      this.page.click('button[title="Settings"]');
-      this.page.waitForSelector('span[data-test-task-button-state="idle"]', {
-        timeout: timeoutConfig,
-      });
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "settingsPostTag.png",
       });
+      await this.page.waitForTimeout(timeoutConfig);
       await Promise.resolve(
-        this.page.click('span[data-test-task-button-state="idle"]')
+        this.page.click('div.gh-publishmenu.ember-view')
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "idlePostTag.png",
       });
-      //Get back to posts
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: timeoutConfig }
-      );
-
       await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="posts"]')
+        this.page.click('button.gh-btn.gh-btn-black.gh-publishmenu-button.gh-btn-icon.ember-view')
       );
       await this.page.waitForTimeout(timeoutConfig);
+      //Get back to posts
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/posts/"]')[0].click();
+      });
       //Filter by the tag that was assigned
-      await this.page.waitForSelector('div[data-test-tag-select="true"]', {
+      await this.page.waitForSelector('div.gh-contentfilter-menu.gh-contentfilter-tag', {
         timeout: timeoutConfig,
       });
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "filterAssignedTag.png",
       });
       await Promise.resolve(
-        this.page.click('div[data-test-tag-select="true"]')
+        this.page.click('div.gh-contentfilter-menu.gh-contentfilter-tag')
       );
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "tagSelect.png",
@@ -484,7 +448,7 @@ class PostsPage {
       });
       await Promise.resolve(
         this.page.click(
-          "button.gh-btn.gh-btn-outline.gh-btn-icon.gh-btn-fullwidth"
+          "button.settings-menu-delete-button"
         )
       );
       await this.page.waitForTimeout(timeoutConfig);
@@ -534,10 +498,11 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "selectPostToEdit.png",
       });
-      await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.waitForSelector("textarea.gh-editor-title.ember-text-area.gh-input.ember-view");
       await this.page.evaluate(() => {
         const element = document.querySelector(
-          "textarea[data-test-editor-title-input]"
+          "textarea.gh-editor-title.ember-text-area.gh-input.ember-view"
         );
         element.value = "";
         element.focus();
@@ -546,18 +511,14 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "emptyTitleEditPost.png",
       });
       await this.page.keyboard.type(newTitlePost);
+      await this.page.keyboard.press("Tab");
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newInfoPost.png",
       });
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: timeoutConfig }
-      );
-
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="posts"]')
-      );
+      await this.page.evaluate(() => {
+        document.querySelectorAll('a[href="#/posts/"]')[0].click();
+      });
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector("h3.gh-content-entry-title", {
         timeout: timeoutConfig,
