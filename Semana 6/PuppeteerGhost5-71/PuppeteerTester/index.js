@@ -80,7 +80,7 @@ const runScenario1 = async () => {
     await browser.close();
 
     // Perform the assertion after all the asynchronous operations are complete
-    assert.equal(url, ghostUrl+"/#/dashboard");
+    assert.equal(url, ghostUrl+"#/dashboard");
     console.log(
       "E1-Test Passed - Expected: http://localhost:2368/ghost/#/dashboard, Actual: ",
       url,
