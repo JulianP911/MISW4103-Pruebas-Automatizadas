@@ -8,7 +8,7 @@ function formatDate(date) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    const formattedDate = `${day}-${month}-${year} ${hours}_${minutes}_${seconds}`;
 
     return formattedDate;
 }
