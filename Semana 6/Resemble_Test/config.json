@@ -1,36 +1,44 @@
 {
   "scenarios": [
     {
-      "number": "1",
+      "number": "13",
       "steps": [
         "signInPage",
         "startLogin",
         "emptyIdentification",
         "emailInput",
         "passwordInput",
-        "afterSignIn"
+        "afterSignIn",
+        "visitPage",
+        "moreNavBar",
+        "PagesPage",
+        "newPageDraft",
+        "titleDraft",
+        "completeDraftForm",
+        "listPages"
       ]
     },
     {
-      "number": "2",
+      "number": "12",
       "steps": [
         "signInPage",
         "startLogin",
         "emptyIdentification",
         "emailInput",
         "passwordInput",
-        "afterSignIn"
-      ]
-    },
-    {
-      "number": "3",
-      "steps": [
-        "signInPage",
-        "emptyId",
-        "fillInputs",
-        "forgotPassword",
-        "resetError",
-        "afterForgot"
+        "afterSignIn",
+        "visitPage",
+        "moreNavBar",
+        "PagesPage",
+        "newPage",
+        "fillTitle",
+        "completePage",
+        "publishClick",
+        "continuePublish",
+        "confirmNewPage",
+        "createPagesPage",
+        "backPageForm",
+        "backPages"
       ]
     },
     {
@@ -52,6 +60,53 @@
         "createPostsPage",
         "closePublishPost",
         "backPostsList"
+      ]
+    },{
+      "number": "18",
+      "steps": [
+        "signInPage",
+        "startLogin",
+        "emptyIdentification",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "visitPage",
+        "moreNavBar",
+        "PagesPage",
+        "newPageDraft",
+        "titleDraft",
+        "completeDraftForm",
+        "listPages",
+        "editPage",
+        "emptyTitle",
+        "editedPage",
+        "finalEditPage"
+      ]
+    },{
+      "number": "20",
+      "steps": [
+        
+        "signInPage",
+        "startLogin",
+        "emptyIdentification",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "startVisitPosts",
+        "postsPage",
+        "postForm",
+        "titlePost",
+        "postCreationPage",
+        "publishPost",
+        "continuePostCreationPage",
+        "createPostsPage",
+        "closePublishPost",
+        "backPostsList",
+        "selectPostToDelete",
+        "settingsDeletePost",
+        "clickDeletePost",
+        "deletePostsPage",
+        "listPosts"
       ]
     }
   ],

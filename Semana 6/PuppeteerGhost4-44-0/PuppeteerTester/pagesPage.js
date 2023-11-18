@@ -88,6 +88,8 @@ class PagesPage {
       const element = await this.page.$x(
         '//div[contains(text(), "published")]'
       );
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "confirmNewPage.png",
       });
@@ -96,6 +98,8 @@ class PagesPage {
       } else {
         throw "Create page failed";
       }
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPagesPage.png",
       });
@@ -104,9 +108,13 @@ class PagesPage {
       });
       await Promise.resolve(this.page.click(".gh-editor-back-button"));
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPageForm.png",
       });
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPages.png",
       });
@@ -281,6 +289,9 @@ class PagesPage {
         document.querySelectorAll('a[href="#/pages/"]')[0].click();
       });
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "finalEditPage.png",
+      });
       await this.page.waitForSelector("h3.gh-content-entry-title", {
         timeout: timeoutConfig,
       });
@@ -300,10 +311,7 @@ class PagesPage {
         throw "no se encontro el titulo del draft en el listado de pages";
       }
 
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "finalEditPage.png",
-      });
+    
       return this.page;
     } catch (error) {
       console.error("Edit draft Pages failed:", error.message);

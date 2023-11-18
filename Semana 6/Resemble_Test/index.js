@@ -15,7 +15,7 @@ async function executeTest() {
     for (s in e.steps) {
       const data = await compareImages(
         fs.readFileSync(
-          `../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231116T140112/Escenario` +
+          `../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231117T180245/Escenario` +
             e.number +
             `/` +
             e.steps[s] +
@@ -76,7 +76,7 @@ function compareScenarios(e, resInfo) {
         </div>
         <div class="imgcontainer">
           <span class="imgname">Ghost V5.71.0</span>
-          <img class="img2" src="../../../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231116T140112/Escenario${
+          <img class="img2" src="../../../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231117T180245/Escenario${
             e.number
           }/${e.steps[s]}.png" id="testImage" label="Test">
         </div>

@@ -502,6 +502,8 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "clickDeletePost.png",
       });
       await Promise.resolve(this.page.click("button.gh-btn-red"));
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "deletePostsPage.png",
       });
@@ -515,6 +517,8 @@ class PostsPage {
         }
         return true;
       }, titlePost);
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "listPosts.png",
       });

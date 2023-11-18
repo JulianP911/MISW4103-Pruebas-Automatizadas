@@ -314,7 +314,9 @@ class PagesPage {
       await this.page.waitForSelector("h3.gh-content-entry-title", {
         timeout: timeoutConfig,
       });
-
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "finalEditPage.png",
+      });
       const h3Elements = await this.page.$$eval(
         "h3.gh-content-entry-title",
         (h3s) => h3s.map((h3) => h3.textContent)
@@ -330,10 +332,7 @@ class PagesPage {
         throw "no se encontro el titulo del draft en el listado de pages";
       }
 
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "finalEditPage.png",
-      });
+    
       return this.page;
     } catch (error) {
       console.error("Edit draft Pages failed:", error.message);

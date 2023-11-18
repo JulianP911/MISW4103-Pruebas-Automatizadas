@@ -113,6 +113,7 @@ class MembersPage {
         path: this.screenshotDirectoryEscenario + "typeInputNameNewMemberForError.png",
       });
       await this.page.waitForTimeout(timeoutConfig); 
+      await this.page.waitForTimeout(timeoutConfig); 
       await Promise.resolve(this.page.click('button[data-test-button="save"]'));
      
       await this.page.waitForTimeout(timeoutConfig); 

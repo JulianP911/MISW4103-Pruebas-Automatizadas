@@ -456,6 +456,8 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "clickDeletePost.png",
       });
       await Promise.resolve(this.page.click("button.gh-btn-red"));
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "deletePostsPage.png",
       });
@@ -469,6 +471,8 @@ class PostsPage {
         }
         return true;
       }, titlePost);
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "listPosts.png",
       });
@@ -536,7 +540,7 @@ class PostsPage {
         }
       }
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "lisPosts.png",
+        path: this.screenshotDirectoryEscenario + "listPosts.png",
       });
       if (!tituloEncontrado) {
         throw "no se encontro el titulo del draft en el listado de posts";
