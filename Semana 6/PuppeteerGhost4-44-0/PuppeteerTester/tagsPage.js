@@ -260,9 +260,6 @@ class TagsPage {
         }
         return null;
       }, tagName);
-      /*await this.page.evaluate(() => {
-        document.querySelectorAll(".gh-tag-list-name")[0].click();
-      }, this.page);*/
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "selectTagToDelete.png",
