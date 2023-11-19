@@ -27,7 +27,7 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  await runScenario1();
+ /* await runScenario1();
   await runScenario2();
   await runScenario3();
   await runScenario4();
@@ -46,7 +46,8 @@ const runScenarios = async () => {
   await runScenario17();
   await runScenario18();
   await runScenario19();
-  await runScenario20();
+  await runScenario20();*/
+  await runScenario23();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -544,8 +545,9 @@ const runScenario10 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
+    const nameMember = faker.person.firstName();
     await Promise.resolve(membersPage.visit());
-    await Promise.resolve(membersPage.createMember());
+    await Promise.resolve(membersPage.createMember(nameMember));
     // Close the browser after completing the tests
     await browser.close();
 
@@ -840,8 +842,9 @@ const runScenario17 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
+    const nameMember = faker.person.firstName();
     await Promise.resolve(membersPage.visit());
-    await Promise.resolve(membersPage.createMember());
+    await Promise.resolve(membersPage.createMember(nameMember));
     await Promise.resolve(membersPage.editMember());
 
     // Close the browser after completing the tests
@@ -991,6 +994,50 @@ const runScenario20 = async () => {
     console.log("E20-Test Passed ");
   } catch (e) {
     console.log(e, "E20-Test Failed");
+  }
+};
+
+/**
+ * Escenario 23: Como usuario administrador elimino un member
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un member
+ * And:Se da click en el botón de Members
+ * And: Se selecciona el member que ha sido creado
+ * And: se da click en el botón de settings
+ * And: Se da click en el botón eliminar member
+ * And: Se da clic en el botón de Eliminar 
+ * Then:Se verifica que en la lista de member ya no se encuentra el member eliminado
+ */
+const runScenario23 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario23/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const membersPage = new MembersPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(membersPage.visit());
+    const nameMember = faker.person.firstName();
+    await Promise.resolve(membersPage.createMember(nameMember));
+    await Promise.resolve(membersPage.deleteMember(nameMember));
+    // Close the browser after completing the tests
+    await browser.close();
+
+    console.log("E23-Test Passed ");
+  } catch (e) {
+    console.log(e, "E23-Test Failed");
   }
 };
 runScenarios();

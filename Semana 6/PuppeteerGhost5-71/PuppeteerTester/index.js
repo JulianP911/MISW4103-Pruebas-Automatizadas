@@ -47,7 +47,7 @@ const runScenarios = async () => {
   await runScenario18();
   await runScenario19();
   await runScenario20();*/
-  await runScenario21();
+  await runScenario23();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -544,9 +544,9 @@ const runScenario10 = async () => {
       page,
       ghostUrl,
       screenshotDirectoryEscenario
-    );
+    ); const nameMember = faker.person.firstName();
     await Promise.resolve(membersPage.visit());
-    await Promise.resolve(membersPage.createMember());
+    await Promise.resolve(membersPage.createMember(nameMember));
     // Close the browser after completing the tests
     await browser.close();
 
@@ -840,9 +840,9 @@ const runScenario17 = async () => {
       page,
       ghostUrl,
       screenshotDirectoryEscenario
-    );
+    ); const nameMember = faker.person.firstName();
     await Promise.resolve(membersPage.visit());
-    await Promise.resolve(membersPage.createMember());
+    await Promise.resolve(membersPage.createMember(nameMember));
     await Promise.resolve(membersPage.editMember());
 
     // Close the browser after completing the tests
@@ -1032,9 +1032,9 @@ const runScenario23 = async () => {
     // Close the browser after completing the tests
     await browser.close();
 
-    console.log("E21-Test Passed ");
+    console.log("E23-Test Passed ");
   } catch (e) {
-    console.log(e, "E21-Test Failed");
+    console.log(e, "E23-Test Failed");
   }
 };
 runScenarios();

@@ -234,7 +234,7 @@ class MembersPage {
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "deletePostsMember.png",
+        path: this.screenshotDirectoryEscenario + "deleteMember.png",
       });
 
       const element = await this.page.evaluate((nameMember) => {
@@ -252,13 +252,13 @@ class MembersPage {
         path: this.screenshotDirectoryEscenario + "listMembers.png",
       });
       if (element) {
-        console.log("Delete Post successfully");
+        console.log("Delete Member successfully");
       } else {
-        throw "Delete post fail";
+        throw "Delete Member fail";
       }
       return this.page;
     } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
+      console.error("Delete Member Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
