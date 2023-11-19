@@ -3,7 +3,7 @@
 Aplicativo para hacer pruebas a Ghost con Puppeteer
 
 ### Prerequisitos
-- Descargar y crear un usuario administrador en ghost (v5.69.1) (Link de cómo instalar: https://ghost.org/docs/install/)
+- Descargar y crear un usuario administrador en ghost (v4.44.0) (Link de cómo instalar: https://ghost.org/docs/install/)
 - Clonar el repositorio de PuppeteerTester
 - Tener instalado un IDE para revisar y configurar el proyecto (se recomienda Visual studio code)
 
@@ -20,7 +20,7 @@ Aplicativo para hacer pruebas a Ghost con Puppeteer
 ### Pasos de ejecución
 - Iniciar Ghost
 `ghost start`
-- Ubicarse en la raiz del proyecto (*\Semana 5\PuppeteerTester) 
+- Ubicarse en la raiz del proyecto (*\Semana 6\PuppeteerGhost4-44-0\PuppeteerTester) 
 - Configurar el archivo config.json de acuerdo a los atributos propios configurados en Ghost
 - Instalar las dependencias del proyecto:
 `npm install`
@@ -33,3 +33,18 @@ Aplicativo para hacer pruebas a Ghost con Puppeteer
 
 ### Resultado de pruebas
 ![image](https://github.com/JulianP911/Pruebas-Automatizadas/assets/142235794/0ca5a6f1-03c9-43d2-b955-a127ab91c40f)
+
+## Consumo de Ghost (Bono)
+Para tener Ghost en un host se opto por usar la plataforma Render, sin embargo al estar en un host gratuito se desactiva despues de 15 min (aprox) de inactividad, es por esto que para poder hacer consumo de este servicio se debe seguir estos pasos:
+- Acceder al host para que inicie la activación: https://docker4-44-0.onrender.com/ghost/
+- Esperar 5 minutos a que la instacia inicie por completo y cree la base de datos
+- Crear un usuario administrador de la aplicación Ghost (recomendamos usar la información que esta en el archivo config.js para no tener que modificar la configuración)
+
+### Pasos de ejecución con Ghost remoto
+- Realizar los pasos previamente descritos para la preparación de Ghost en Render
+- Ubicarse en la raiz del proyecto (*\Semana 6\PuppeteerGhost4-44-0\PuppeteerTester) 
+- Configurar el archivo config.json de acuerdo a los atributos propios configurados en Ghost
+- Instalar las dependencias del proyecto:
+`npm install`
+- ejecutarlo:
+`node index.js`
