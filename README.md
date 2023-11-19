@@ -30,7 +30,7 @@ Para tener Ghost en un host se opto por usar la plataforma Render, sin embargo a
   v4.44.0: https://docker4-44-0.onrender.com/ghost/
   
 - Esperar 5 minutos a que la instacia inicie por completo y cree la base de datos
-- Crear un usuario administrador de la aplicación Ghost (recomendamos usar la información que esta en el archivo config.js para no tener que modificar la configuración)
+- Crear un usuario administrador de la aplicación Ghost (recomendamos usar la información que esta en el archivo [config.js](https://github.com/JulianP911/Pruebas-Automatizadas/blob/main/Semana%206/PuppeteerGhost5-71/PuppeteerTester/config.json) para no tener que modificar la configuración)
   
 **NOTA: Se recomienda hacer la activación justo antes de lanzar la prueba correspondiente, ya que al pasar 15 min inactivo debe realizarse todo el proceso de nuevo
 
