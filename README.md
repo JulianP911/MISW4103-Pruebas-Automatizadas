@@ -13,11 +13,13 @@
 
 A continuación, se adjunta los enlaces a los entregables de la wiki:
 
-[Funcionalidades bajo pruebas](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Funcionalidades-bajo-pruebas-vrt)
+[**Funcionalidades bajo pruebas**](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Funcionalidades-bajo-pruebas-vrt)
 
-[Escenarios de pruebas](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Escenarios-de-pruebas-s6)
+[**Pros - Contras de Backstop y Resemble**](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Pros-%E2%80%90-Contras-de-Backstrop-Resemble)
 
-[Pros ‐ Contras de Backstrop Resemble](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Pros-%E2%80%90-Contras-de-Backstrop-Resemble)
+[**Escenarios de pruebas**](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Escenarios-de-pruebas-s6)
+
+[**Vídeo**](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Video)
 
 ## Consumo de Ghost (Bono)
 Para tener Ghost en un host se opto por usar la plataforma Render, sin embargo al estar en un host gratuito se desactiva despues de 15 min (aprox) de inactividad, es por esto que para poder hacer consumo de este servicio se debe seguir estos pasos:
