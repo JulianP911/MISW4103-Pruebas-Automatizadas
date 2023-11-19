@@ -47,6 +47,7 @@ const runScenarios = async () => {
   await runScenario18();
   await runScenario19();
   await runScenario20();
+  await runScenario21();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -991,6 +992,50 @@ const runScenario20 = async () => {
     console.log("E20-Test Passed ");
   } catch (e) {
     console.log(e, "E20-Test Failed");
+  }
+};
+
+/**
+ * Escenario 21: Como usuario administrador elimino una page
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación y publicación de una page
+ * And:Se da click en el botón de Pages
+ * And: Se selecciona la page que ha sido creado
+ * And: se da click en el botón de settings
+ * And: Se da click en el botón eliminar page
+ * And: Se da clic en el botón de Eliminar
+ * Then:Se verifica que en la lista de pages ya no se encuentra la page eliminada
+ */
+const runScenario21 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario21/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagesPage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagesPage.visit());
+    const titlePage = faker.lorem.sentence(2);
+    await Promise.resolve(pagesPage.createPage(titlePage));
+    await Promise.resolve(pagesPage.deletePage(titlePage));
+
+    // Close the browser after completing the tests
+    await browser.close();
+    console.log("E21-Test Passed ");
+  } catch (e) {
+    console.log(e, "E21-Test Failed");
   }
 };
 runScenarios();
