@@ -4,6 +4,8 @@ const config = require("./config.json");
 const fs = require("fs");
 
 const { viewportHeight, viewportWidth, scenarios, options } = config;
+const timestamp4440='20231117T125204'
+const timestamp5710='20231117T180245'
 
 async function executeTest() {
   if (scenarios.length === 0) {
@@ -15,14 +17,14 @@ async function executeTest() {
     for (s in e.steps) {
       const data = await compareImages(
         fs.readFileSync(
-          `../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231117T180245/Escenario` +
+          `../PuppeteerGhost5-71/PuppeteerTester/screenshots/` +timestamp5710+`/Escenario` +
             e.number +
             `/` +
             e.steps[s] +
             `.png`
         ),
         fs.readFileSync(
-          `../PuppeteerGhost4-44-0/PuppeteerTester/screenshots/20231117T125204/Escenario` +
+          `../PuppeteerGhost4-44-0/PuppeteerTester/screenshots/` +timestamp4440+`/Escenario` +
           e.number +
           `/` +
           e.steps[s] +
@@ -38,21 +40,21 @@ async function executeTest() {
         diffBounds: data.diffBounds,
         analysisTime: data.analysisTime,
       };
-      if (!fs.existsSync(`./results/${datetime}`)) {
-        fs.mkdirSync(`./results/${datetime}`, { recursive: true }); // Create directory recursively
+      if (!fs.existsSync(`./results/report_part2`)) {
+        fs.mkdirSync(`./results/report_part2`, { recursive: true }); // Create directory recursively
       }
 
       fs.writeFileSync(
-        `./results/${datetime}/compare-${e.number}-${s}.png`,
+        `./results/report_part2/compare-${e.number}-${s}.png`,
         data.getBuffer()
       );
     }
   }
   fs.writeFileSync(
-    `./results/${datetime}/report.html`,
+    `./results/report_part2/report.html`,
     createReport(datetime, resultInfo)
   );
-  fs.copyFileSync("./index.css", `./results/${datetime}/index.css`);
+  fs.copyFileSync("./index.css", `./results/report_part2/index.css`);
   console.log(
     "------------------------------------------------------------------------------------"
   );
@@ -64,19 +66,19 @@ function compareScenarios(e, resInfo) {
   const stepsHTML = e.steps.map((_, s) => `
     <div class="scenarios" id="scenario-${e.number}-step-${s}">
       <div class="btitle">
-        <h2>Escenario ${e.number} Step: ${e.steps[s]}</h2>
+        <h2>Escenario ${e.numberVRT} Step: ${e.steps[s]}</h2>
         <p>Data: ${JSON.stringify(resInfo[`${e.number}-${s}`])}</p>
       </div>
       <div class="imgline">
         <div class="imgcontainer">
           <span class="imgname">Ghost V4.44.0</span>
-          <img class="img2" src="../../../PuppeteerGhost4-44-0/PuppeteerTester/screenshots/20231117T125204/Escenario${
+          <img class="img2" src="../../../PuppeteerGhost4-44-0/PuppeteerTester/screenshots/${timestamp4440}/Escenario${
             e.number
           }/${e.steps[s]}.png" id="testImage" label="Test">
         </div>
         <div class="imgcontainer">
           <span class="imgname">Ghost V5.71.0</span>
-          <img class="img2" src="../../../PuppeteerGhost5-71/PuppeteerTester/screenshots/20231117T180245/Escenario${
+          <img class="img2" src="../../../PuppeteerGhost5-71/PuppeteerTester/screenshots/${timestamp5710}/Escenario${
             e.number
           }/${e.steps[s]}.png" id="testImage" label="Test">
         </div>
@@ -106,7 +108,7 @@ function createReport(datetime, resInfo) {
             <p>Executed: ${datetime}</p>
             <select id="scenarioFilter">
               <option value="all">All Scenarios</option>
-              ${config.scenarios.map(e => `<option value="${e.number}">Escenario ${e.number}</option>`).join('')}
+              ${config.scenarios.map(e => `<option value="${e.number}">Escenario ${e.numberVRT}</option>`).join('')}
             </select>
             <div id="visualizer">
               ${config.scenarios.map(e => compareScenarios(e, resInfo)).join('')}

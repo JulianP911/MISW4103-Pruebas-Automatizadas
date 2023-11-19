@@ -2,10 +2,9 @@
   "scenarios": [
     {
       "number": "13",
+      "numberVRT": "6",
       "steps": [
         "signInPage",
-        "startLogin",
-        "emptyIdentification",
         "emailInput",
         "passwordInput",
         "afterSignIn",
@@ -20,10 +19,9 @@
     },
     {
       "number": "12",
+      "numberVRT": "7",
       "steps": [
         "signInPage",
-        "startLogin",
-        "emptyIdentification",
         "emailInput",
         "passwordInput",
         "afterSignIn",
@@ -43,10 +41,9 @@
     },
     {
       "number": "4",
+      "numberVRT": "8",
       "steps": [
         "signInPage",
-        "startLogin",
-        "emptyIdentification",
         "emailInput",
         "passwordInput",
         "afterSignIn",
@@ -61,12 +58,12 @@
         "closePublishPost",
         "backPostsList"
       ]
-    },{
+    },
+    {
       "number": "18",
+      "numberVRT": "9",
       "steps": [
         "signInPage",
-        "startLogin",
-        "emptyIdentification",
         "emailInput",
         "passwordInput",
         "afterSignIn",
@@ -82,13 +79,12 @@
         "editedPage",
         "finalEditPage"
       ]
-    },{
+    },
+    {
       "number": "20",
+      "numberVRT": "10",
       "steps": [
-        
         "signInPage",
-        "startLogin",
-        "emptyIdentification",
         "emailInput",
         "passwordInput",
         "afterSignIn",

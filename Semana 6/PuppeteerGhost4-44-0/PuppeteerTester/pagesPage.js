@@ -42,7 +42,7 @@ class PagesPage {
     }
   }
 
-  async createPage() {
+  async createPage(titlePage) {
     try {
       // Wait for an element that contains a span with the text "New Page"
       await this.page.evaluate(() => {
@@ -52,7 +52,7 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "newPage.png",
       });
       await this.page.waitForSelector("textarea.gh-editor-title.ember-text-area.gh-input.ember-view");
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(titlePage);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "fillTitle.png",
       });
@@ -315,6 +315,69 @@ class PagesPage {
       return this.page;
     } catch (error) {
       console.error("Edit draft Pages failed:", error.message);
+      throw error; // Rethrow the error to propagate it to the calling code
+    }
+  }
+
+  /*Delete the page with the title from the parameter*/
+  async deletePage(titlePage) {
+    try {
+      await this.page.evaluate(async (titlePage) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePage.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, titlePage);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectPageToDelete.png",
+      });
+      await this.page.waitForTimeout(timeoutConfig);
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "settingsDeletePage.png",
+      });
+      await Promise.resolve(
+        this.page.click(
+          "button.settings-menu-delete-button"
+        )
+      );
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "clickDeletePage.png",
+      });
+      await Promise.resolve(this.page.click("button.gh-btn-red"));
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "deletePagesPage.png",
+      });
+
+      const element = await this.page.evaluate((titlePage) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePage.trim()) {
+            return false;
+          }
+        }
+        return true;
+      }, titlePage);
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "listPages.png",
+      });
+      if (element) {
+        console.log("Delete Page successfully");
+      } else {
+        throw "Delete page fail";
+      }
+      return this.page;
+    } catch (error) {
+      console.error("Delete Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
