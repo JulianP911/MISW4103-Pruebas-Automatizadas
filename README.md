@@ -271,12 +271,12 @@ En backstrop es necesario utilizar una nomenclatura especial para el nombramient
     - Filtrar por el escenario deseado o por todos los escenarios.
    
     Allí se encontrará por cada uno de los pasos de los escenario:
-      - Imágen del paso para la versión 4.44
-      - Imágen del paso para la versión 5.71
+      - Porcentajes de diferencia arrojados por la herramienta.
+      - Imágen del paso para la versión 4.44 (Reference)
+      - Imágen del paso para la versión 5.71 (Test)
       - Imagen sobrepuesta de las dos versiones resaltando las diferencias.
-      - Porcentajes de diferencia arrojados por la herramienta
     
-    Importante: Para poder ver el porcentajes de diferencia arrojados por la herramienta habilitarlo mediante el icon de setting en la opción show info.
+    **Importante:** Para poder ver el porcentajes de diferencia arrojados por la herramienta habilitarlo mediante el icono de settings en la opción show info.
         
   - Parte de Resemble (Escenarios 6-10)
     - Filtrar por el escenario deseado o por todos los escenarios.
