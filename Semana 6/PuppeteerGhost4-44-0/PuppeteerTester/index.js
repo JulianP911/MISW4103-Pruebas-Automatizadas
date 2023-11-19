@@ -27,7 +27,7 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
- await runScenario1();
+  await runScenario1();
   await runScenario2();
   await runScenario3();
   await runScenario4();
@@ -46,9 +46,10 @@ const runScenarios = async () => {
   await runScenario17();
   await runScenario18();
   await runScenario19();
-  await runScenario23();
   await runScenario20();
   await runScenario21();
+  await runScenario22();
+  await runScenario23();
 };
 /**
  * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
@@ -1040,7 +1041,50 @@ const runScenario21 = async () => {
   } catch (e) {
     console.log(e, "E21-Test Failed");
   }
+  
+};/**
+* Escenario 22: Como usuario administrador elimino un tag
+* Given: Se ingresa a la página correspondiente a login
+* When: Se realiza la creación de un tag
+* And:Se da click en el botón de Tags
+* And: Se selecciona el tag que ha sido creado
+* And: Se da click en el botón eliminar tag
+* And: Se da clic en el botón de Eliminar 
+* Then:Se verifica que en la lista de tags ya no se encuentra el tag eliminado
+*/
+const runScenario22 = async () => {
+ try {
+   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario22/`;
+   ensureDirectoryExists(screenshotDirectoryEscenario);
+   const browser = await puppeteer.launch({ headless: false });
+   const page = await browser.newPage();
+   const loginPage = new LoginPage(
+     page,
+     ghostUrl,
+     screenshotDirectoryEscenario
+   );
+
+   await loginPage.visit();
+
+   await loginPage.login(userEmail, userPassword);
+   const tagsPage = new TagsPage(
+     page,
+     ghostUrl,
+     screenshotDirectoryEscenario
+   );
+   await Promise.resolve(tagsPage.visit());
+   const nameTag = faker.lorem.sentence(1);
+   await Promise.resolve(tagsPage.createTag(nameTag,true));
+   await Promise.resolve(tagsPage.deleteTag(nameTag));
+   // Close the browser after completing the tests
+   await browser.close();
+
+   console.log("E22-Test Passed ");
+ } catch (e) {
+   console.log(e, "E22-Test Failed");
+ }
 };
+
 /**
  * Escenario 23: Como usuario administrador elimino un member
  * Given: Se ingresa a la página correspondiente a login

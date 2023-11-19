@@ -244,6 +244,63 @@ class TagsPage {
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
+
+  async deleteTag(tagName) {
+    try {
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "firstViewDeleteTag.png",
+      });
+      await this.page.evaluate(async (tagName) => {
+        const elements = document.querySelectorAll(".gh-tag-list-name");
+        for (const element of elements) {
+          if (element.textContent.trim() === tagName.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, tagName);
+      /*await this.page.evaluate(() => {
+        document.querySelectorAll(".gh-tag-list-name")[0].click();
+      }, this.page);*/
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectTagToDelete.png",
+      });
+      
+      await Promise.resolve(this.page.click('button.gh-btn.gh-btn-red.gh-btn-icon'));
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "deleteConfirmationTag.png",
+      });
+
+      await Promise.resolve(this.page.click('button.gh-btn.gh-btn-red.gh-btn-icon.ember-view'));
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "listTags.png",
+      });
+
+      const element = await this.page.evaluate((tagName) => {
+        const elements = document.querySelectorAll(".gh-tag-list-name");
+        for (const element of elements) {
+          if (element.textContent.trim() === tagName.trim()) {
+            return false;
+          }
+        }
+        return true;
+      }, tagName);
+
+      if (element) {
+        console.log("Delete tag successfully");
+      } else {
+        throw "Delete tag fail";
+      }
+      return this.page;
+    } catch (error) {
+      error, console.error("Edit tag Page failed:", error.message);
+      throw error; // Rethrow the error to propagate it to the calling code
+    }
+  }
 }
 
 module.exports = TagsPage;
