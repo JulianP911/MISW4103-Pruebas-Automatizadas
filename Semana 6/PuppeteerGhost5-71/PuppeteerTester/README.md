@@ -3,7 +3,7 @@
 Aplicativo para hacer pruebas a Ghost con Puppeteer
 
 ### Prerequisitos
-- Descargar y crear un usuario administrador en ghost (v5.71.0) (Link de cómo instalar: https://ghost.org/docs/install/)
+- Descargar y crear un usuario administrador en ghost (v5.71.0) (Link de cómo instalar: https://ghost.org/docs/install/) o seguir los pasos descritos abajo para el uso de Ghost en Render
 - Clonar el repositorio de PuppeteerTester
 - Tener instalado un IDE para revisar y configurar el proyecto (se recomienda Visual studio code)
 
@@ -12,7 +12,7 @@ Aplicativo para hacer pruebas a Ghost con Puppeteer
 
 ### Configuración del Aplicativo
 #### Atributos
-- ghostUrl: url en el que esta escuchando ghost (ej: http://localhost:2368/ghost/)
+- ghostUrl: url en el que esta escuchando ghost (ej: https://ghost5-71-oxma.onrender.com/ghost/)
 - userEmail: correo de usuario de ghost previamente creado (ej: prueba@prueba.com)
 - userPassword: contraseña de usuario de ghost previamente creado (ej: prueba12345)
 - timeout: tiempo de espera entre tareas para la correcta renderización de los componentes, este valor varia dependiendo de las características del equipo en el que se ejecute el aplicativo (ej. 10000)
