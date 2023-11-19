@@ -38,7 +38,7 @@ class MembersPage {
     }
   }
 
-  async createMember() {
+  async createMember(nameMember) {
     try {
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
@@ -51,7 +51,7 @@ class MembersPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newMemberPage.png",
       });
-      const nameMember = faker.person.firstName();
+
       await this.page.keyboard.type(nameMember);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "typeInputNameNewMember.png",
@@ -199,6 +199,66 @@ class MembersPage {
       return this.page;
     } catch (error) {
       console.error("Create member faile:", error.message);
+      throw error; // Rethrow the error to propagate it to the calling code
+    }
+  }
+  /*Delete the member with the title from the parameter*/
+  async deleteMember(nameMember) {
+    try {
+      await this.page.evaluate(async (nameMember) => {
+        const elements = document.querySelectorAll(".gh-members-list-name");
+        for (const element of elements) {
+          if (element.textContent.trim() === nameMember.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, nameMember);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectMemberToDelete.png",
+      });
+      await this.page.waitForTimeout(timeoutConfig);
+      await Promise.resolve(this.page.click('button[data-test-button="member-actions"]'));
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "settingsDeleteMember.png",
+      });
+      await Promise.resolve(
+        this.page.click('button[data-test-button="delete-member"]')
+      );
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "clickDeleteMember.png",
+      });
+      await Promise.resolve(this.page.click("button.gh-btn-red"));
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "deletePostsMember.png",
+      });
+
+      const element = await this.page.evaluate((nameMember) => {
+        const elements = document.querySelectorAll(".gh-members-list-name");
+        for (const element of elements) {
+          if (element.textContent.trim() === nameMember.trim()) {
+            return false;
+          }
+        }
+        return true;
+      }, nameMember);
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "listMembers.png",
+      });
+      if (element) {
+        console.log("Delete Post successfully");
+      } else {
+        throw "Delete post fail";
+      }
+      return this.page;
+    } catch (error) {
+      console.error("Visit Post Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
