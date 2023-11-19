@@ -321,6 +321,42 @@ When('I click tag created', async function() {
     await element.click();
 });
 
+When('I click delete tag', async function() {
+    let element = await this.driver.$('.gh-btn-red');
+    await takeCustomScreenshot(this.driver, "clickDeleteMember", null);
+    await element.click();
+});
+
+When('I click settings page', async function() {
+    let element = await this.driver.$('button[title="Settings"]');
+    await takeCustomScreenshot(this.driver, "clickSettingsPage", null);
+    await element.click();
+});
+
+When('I click deleted page', async function() {
+    let element = await this.driver.$('button.settings-menu-delete-button');
+    await takeCustomScreenshot(this.driver, "clickDeletedPage", null);
+    await element.click();
+});
+
+When('I click page published', async function() {
+    let element = await this.driver.$('.gh-content-entry-title');
+    await takeCustomScreenshot(this.driver, "clickPagePublished", null);
+    await element.click();
+});
+
+When('I click member settings', async function() {
+    let element = await this.driver.$('button.gh-btn-action-icon');
+    await takeCustomScreenshot(this.driver, "clickMemberSettings", null);
+    await element.click();
+});
+
+When('I click delete member', async function() {
+    let element = await this.driver.$('span=Delete member');
+    await takeCustomScreenshot(this.driver, "clickDeleteMember", null);
+    await element.click();
+});
+
 Then('I check in dashboard', async function() {
     let element = await this.driver.$('a[href="#/dashboard/"]');
     await takeCustomScreenshot(this.driver, null, "checkInDashboard");
@@ -463,4 +499,22 @@ Then('I see tag edited', async function() {
     let element = await this.driver.$('.gh-tag-list-name').getText();
     await takeCustomScreenshot(this.driver, null, "seeTagEdited");
     expect(element).to.contains("Anfibios");
+});
+
+Then('I confirm delete tag', async function() {
+    let element = await this.driver.$('span=Delete');
+    await takeCustomScreenshot(this.driver, null, "confirmDeleteTag");
+    await element.click();
+});
+
+Then('I confirm delete page', async function() {
+    let element = await this.driver.$('span=Delete');
+    await takeCustomScreenshot(this.driver, null, "confirmDeletePage");
+    await element.click();
+});
+
+Then('I confirm delete member', async function() {
+    let element = await this.driver.$('span=Delete member');
+    await takeCustomScreenshot(this.driver, null, "confirmDeleteMemeber");
+    await element.click();
 });

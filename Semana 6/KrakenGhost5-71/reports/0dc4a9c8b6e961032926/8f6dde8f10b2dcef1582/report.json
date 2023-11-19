@@ -1,0 +1,376 @@
+[
+  {
+    "description": "",
+    "elements": [
+      {
+        "description": "",
+        "id": "editar-tag-en-el-sitio-web-del-usuario-administrador;como-usuario-administrador-edito-un-tag-creado-previamente-(caso-positivo)",
+        "keyword": "Scenario",
+        "line": 4,
+        "name": "Como usuario administrador edito un tag creado previamente (caso positivo)",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "failed",
+              "duration": 1056000000,
+              "error_message": "FetchError: Failed to fetch browser webSocket URL from http://localhost:62563/json/version: request to http://localhost:62563/json/version failed, reason: connect ECONNREFUSED ::1:62563\n    at ClientRequest.<anonymous> (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/node-fetch/lib/index.js:1491:11)\n    at ClientRequest.emit (node:events:527:28)\n    at ClientRequest.emit (node:domain:475:12)\n    at Socket.socketErrorListener (node:_http_client:454:9)\n    at Socket.emit (node:events:527:28)\n    at Socket.emit (node:domain:475:12)\n    at emitErrorNT (node:internal/streams/destroy:151:8)\n    at emitErrorCloseNT (node:internal/streams/destroy:116:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 5,
+            "name": "I navigate to page \"<URL>\"",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/web.js:41"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 6,
+            "name": "I wait for 5 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 7,
+            "name": "I login email \"<USERNAME>\" and password \"<PASSWORD>\"",
+            "match": {
+              "location": "features/web/step_definitions/step.js:6"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I wait for 7 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "I click tags",
+            "match": {
+              "location": "features/web/step_definitions/step.js:139"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 11,
+            "name": "I click new tag",
+            "match": {
+              "location": "features/web/step_definitions/step.js:145"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 12,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 13,
+            "name": "I enter tag name \"Animales\"",
+            "match": {
+              "location": "features/web/step_definitions/step.js:151"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "I enter tag description \"Este tag es para referenciar a los post de animales\"",
+            "match": {
+              "location": "features/web/step_definitions/step.js:157"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 17,
+            "name": "I enter color \"8FC0A9\"",
+            "match": {
+              "location": "features/web/step_definitions/step.js:163"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "I click save",
+            "match": {
+              "location": "features/web/step_definitions/step.js:169"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "I click tags",
+            "match": {
+              "location": "features/web/step_definitions/step.js:139"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 23,
+            "name": "I see tag created before edited",
+            "match": {
+              "location": "features/web/step_definitions/step.js:31"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 25,
+            "name": "I click tag created",
+            "match": {
+              "location": "features/web/step_definitions/step.js:301"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "I click delete tag",
+            "match": {
+              "location": "features/web/step_definitions/step.js:319"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 28,
+            "name": "I wait for 2 seconds",
+            "match": {
+              "location": "node_modules/kraken-node/lib/steps/both.js:73"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 29,
+            "name": "I confirm delete tag",
+            "match": {
+              "location": "features/web/step_definitions/step.js:475"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "failed",
+              "duration": 2000000,
+              "error_message": "TypeError: Cannot read properties of undefined (reading 'deleteSession')\n    at WebClient.<anonymous> (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/WebClient.js:109:59)\n    at step (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/WebClient.js:59:23)\n    at Object.next (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/WebClient.js:40:53)\n    at /Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/WebClient.js:34:71\n    at new Promise (<anonymous>)\n    at __awaiter (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/WebClient.js:30:12)\n    at WebClient.stop (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/WebClient.js:104:16)\n    at WebClient.<anonymous> (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/Client.js:109:51)\n    at step (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/Client.js:67:23)\n    at Object.next (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/Client.js:48:53)\n    at fulfilled (/Users/julianpadilla/Desktop/UniAndes/Pruebas automatizadas/Proyecto/Repositorio/Pruebas-Automatizadas/Semana 6/KrakenGhost5-71/node_modules/kraken-node/lib/clients/Client.js:39:58)"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@user1",
+            "line": 3
+          },
+          {
+            "name": "@web",
+            "line": 3
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "editar-tag-en-el-sitio-web-del-usuario-administrador",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Editar tag en el sitio web del usuario administrador",
+    "tags": [],
+    "uri": "features/22_tagDeleted.feature"
+  }
+]
