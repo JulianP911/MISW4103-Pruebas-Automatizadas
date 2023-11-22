@@ -4,3 +4,4 @@ class TestResponse{
         this.message=message;
     }
 }
+module.exports=TestResponse;

@@ -1,4 +1,5 @@
 const { faker } = require("@faker-js/faker");
+const TestResponse=require("./testResponse.js")
 let config = require("./config.json");
 
 const timeoutConfig = config.timeout;
@@ -38,8 +39,9 @@ class PostsPage {
    * the post is created and confirmed.
    * @throws Will throw an error if the post creation process fails.
    */
-  async createPost(titlePost) {
+  async createPost(titlePost,descriptionPost) {
     try {
+      let ans=new TestResponse(false,"Post created failed");
       // Wait for an element that contains a span with the text "New post"
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -56,7 +58,7 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "titlePost.png",
       });
       // Type content
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPost);
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
@@ -107,9 +109,12 @@ class PostsPage {
       );
 
       if (element) {
-        console.log("Post created successfully");
+        //console.log("Post created successfully");
+        ans=new TestResponse(true,"Post created successfully");
       } else {
-        throw "Post created failed";
+       // throw "Post created failed";
+        ans=new TestResponse(false,"Post created failed");
+
       }
 
       await this.page.screenshot({
@@ -142,10 +147,11 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPostsList.png",
       });
-      return this.page;
+      return ans;
     } catch (error) {
       console.error("Create Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      let ans=new TestResponse(false,"Post created failed");
+      throw ans; // Rethrow the error to propagate it to the calling code
     }
   }
 
@@ -159,8 +165,10 @@ class PostsPage {
    * @throws Will throw an error if the draft post creation process fails or if the
    * created draft post is not found in the list of posts.
    */
-  async createDraft(titlePost) {
+  async createDraft(titlePost,descriptionPost) {
     try {
+      
+      let ans=new TestResponse(false,"Create Draft Post failed");
       // Click on 'New Post'
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -177,7 +185,7 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "postTitleDraft.png",
       });
       // Type the content
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPost);
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
@@ -211,16 +219,22 @@ class PostsPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(titlePost)) {
           titleFound = true;
-          return this.page;
+      ans=new TestResponse(true,"Create Draft Post passed");
+
+          return ans;
         }
       }
 
       if (!titleFound) {
-        throw "The title of the draft was not found in the list of posts";
+        ans=new TestResponse(false,"Create Draft Post failed");
       }
+
+      return ans;
     } catch (error) {
       console.error("Create Draft Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      ans=new TestResponse(false,"Create Draft Post failed");
+
+      return ans;
     }
   }
 
@@ -232,8 +246,9 @@ class PostsPage {
    * the scheduled post is created and confirmed.
    * @throws Will throw an error if the scheduled post creation process validation fails or if any step fails.
    */
-  async createPostScheduled() {
+  async createPostScheduled(titlePost,descriptionPost) {
     try {
+      let ans=new TestResponse(false,"Create Draft Post failed");
       // Click on new post
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -244,13 +259,13 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "scheduledForm.png",
       });
       // Type title
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(titlePost);
       await this.page.keyboard.press("Tab");
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "titleScheduled.png",
       });
       // Type description
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPost);
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
@@ -313,9 +328,11 @@ class PostsPage {
       );
 
       if (element) {
-        console.log("Post created successfully");
+        ans=new TestResponse(true,"Post created successfully");
+       // console.log("Post created successfully");
       } else {
-        throw "No se encontró el componente de creación exitosa";
+        //throw "No se encontró el componente de creación exitosa";
+        ans=new TestResponse(false,"No se encontró el componente de creación exitosa");
       }
 
       await this.page.screenshot({
@@ -349,10 +366,12 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backListScheduled.png",
       });
-      return this.page;
+      return ans;
     } catch (error) {
       console.error("Create Scheduled Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      ans=new TestResponse(false,"Create Scheduled Post failed");
+      
+     return ans;
     }
   }
   /* Add a created tag to a published post*/

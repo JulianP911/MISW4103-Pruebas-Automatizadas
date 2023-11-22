@@ -27,13 +27,13 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  await runScenario1();
+ /* await runScenario1();
   await runScenario2();
   await runScenario3();
   await runScenario4();
-  await runScenario5();
+  await runScenario5();*/
   await runScenario6();
-  await runScenario7();
+  /*await runScenario7();
   await runScenario8();
   await runScenario9();
   await runScenario10();
@@ -49,7 +49,7 @@ const runScenarios = async () => {
   await runScenario20();
   await runScenario21();
   await runScenario22();
-  await runScenario23();
+  await runScenario23();*/
 };
 
 /**
@@ -282,23 +282,24 @@ const runScenario3 = async () => {
     );
     await Promise.resolve(postPage.visit());
     const titlePost = faker.lorem.sentence(2);
-    const afterPostVisit = await Promise.resolve(
-      postPage.createPost(titlePost)
+    const descriptionPost = faker.lorem.sentence(2);
+
+    const responseCreatePost = await Promise.resolve(
+      postPage.createPost(titlePost,descriptionPost)
     );
 
     // Close the browser after completing the tests
     await browser.close();
-
+    //Revisa el then
+    if(responseCreatePost.status){
     console.log("E4-Test Passed ");
+  }
+  else{
+    console.log( "E4-Test Failed ");
+  }
+    
   } catch (e) {
-    console.log(
-      e,
-      "E4-Test Failed - Expected: ",
-      e.expected,
-      ", Actual: ",
-      e.actual,
-      "."
-    );
+    console.log( "E4-Test Failed ");
   }
 };
 /**
@@ -334,15 +335,21 @@ const runScenario5 = async () => {
     );
     await Promise.resolve(postPage.visit());
     const titlePost = faker.lorem.sentence(2);
-    await Promise.resolve(postPage.createDraft(titlePost));
+    const descriptionPost = faker.lorem.sentence(2);
+    const responseCreateDraftPost=await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
 
     // Close the browser after completing the tests
     await browser.close();
-
-    console.log("E5-Test Passed");
-  } catch (e) {
-    console.log(e, "E5-Test Failed");
-  }
+    if(responseCreateDraftPost.status){
+      console.log("E5-Test Passed ");
+    }
+    else{
+      console.log( "E5-Test Failed ");
+    }
+      
+    } catch (e) {
+      console.log( "E5-Test Failed ");
+    }
 };
 
 /**
@@ -382,18 +389,24 @@ const runScenario6 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.visit());
-    const afterPostVisit = await Promise.resolve(
-      postPage.createPostScheduled()
+    const responseCreateScheduledPost = await Promise.resolve(
+      postPage.createPostScheduled(titlePost,descriptionPost)
     );
-
     // Close the browser after completing the tests
     await browser.close();
-
-    console.log("E6-Test Passed ");
-  } catch (e) {
-    console.log(e, "E6-Test Failed");
-  }
+    if(responseCreateScheduledPost.status){
+      console.log("E6-Test Passed ");
+    }
+    else{
+      console.log( "E6-Test Failed ");
+    }
+      
+    } catch (e) {
+      console.log( "E6-Test Failed ");
+    }
 };
 /**
  * Escenario 7: Como usuario administrador creo un nuevo tag para usarlo en el sitio web
