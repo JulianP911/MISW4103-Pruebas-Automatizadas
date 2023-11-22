@@ -151,7 +151,7 @@ class PostsPage {
     } catch (error) {
       console.error("Create Post failed:", error.message);
       let ans=new TestResponse(false,"Post created failed");
-      throw ans; // Rethrow the error to propagate it to the calling code
+      return ans; // Rethrow the error to propagate it to the calling code
     }
   }
 
@@ -374,187 +374,11 @@ class PostsPage {
      return ans;
     }
   }
-  /* Add a created tag to a published post*/
-  async addTagPost(titlePost, nameTag) {
-    try {
-      //Select the post according to the title from parameters
-      await this.page.evaluate(async (titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            await element.click();
-          }
-        }
-        return null;
-      }, titlePost);
-      await this.page.waitForTimeout(timeoutConfig);
-
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "selectPublishedPost.png",
-      });
-      //Add the tag to the post through settings
-      await Promise.resolve(this.page.click('button[title="Settings"]'));
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "settingsPost.png",
-      });
-      await Promise.resolve(this.page.click('div[id="tag-input"]'));
-      const inputTag = await this.page.$(
-        ".ember-power-select-trigger-multiple-input"
-      );
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "inputTagClick.png",
-      });
-      await inputTag.type(nameTag);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "fillTag.png",
-      });
-      await this.page.keyboard.press("Enter");
-
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "assignedTag.png",
-      });
-      //Save the update of the post
-      await Promise.resolve(this.page.click('button[title="Settings"]'));
-      this.page.waitForSelector('span[data-test-task-button-state="idle"]', {
-        timeout: timeoutConfig,
-      });
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "settingsPostTag.png",
-      });
-      await Promise.resolve(
-        this.page.click('span[data-test-task-button-state="idle"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "idlePostTag.png",
-      });
-      //Get back to posts
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: timeoutConfig }
-      );
-
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="posts"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      //Filter by the tag that was assigned
-      await this.page.waitForSelector('div[data-test-tag-select="true"]', {
-        timeout: timeoutConfig,
-      });
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "filterAssignedTag.png",
-      });
-      await Promise.resolve(
-        this.page.click('div[data-test-tag-select="true"]')
-      );
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "tagSelect.png",
-      });
-      await this.page.evaluate(async (nameTag) => {
-        const elements = document.querySelectorAll("li");
-        for (const element of elements) {
-          if (element.textContent.trim() === nameTag.trim()) {
-            await element.click();
-          }
-        }
-        return null;
-      }, nameTag);
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "listFilteredAssignedTag.png",
-      });
-      //Validate that when filtered by the tag the post appear
-      const element = await this.page.evaluate((titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            return element;
-          }
-        }
-        return null;
-      }, titlePost);
-
-      if (element) {
-        console.log("Add Tag successfully");
-      } else {
-        throw "Add Tag failed";
-      }
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "addTagPostsPage.png",
-      });
-      return this.page;
-    } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
-    }
-  }
-  /*Delete the post with the title from the parameter*/
-  async deletePost(titlePost) {
-    try {
-      await this.page.evaluate(async (titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            await element.click();
-          }
-        }
-        return null;
-      }, titlePost);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "selectPostToDelete.png",
-      });
-      await this.page.waitForTimeout(timeoutConfig);
-      await Promise.resolve(this.page.click('button[title="Settings"]'));
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "settingsDeletePost.png",
-      });
-      await Promise.resolve(
-        this.page.click(
-          "button.gh-btn.gh-btn-outline.gh-btn-icon.gh-btn-fullwidth"
-        )
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "clickDeletePost.png",
-      });
-      await Promise.resolve(this.page.click("button.gh-btn-red"));
-      await this.page.waitForTimeout(timeoutConfig);
-
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "deletePostsPage.png",
-      });
-
-      const element = await this.page.evaluate((titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            return false;
-          }
-        }
-        return true;
-      }, titlePost);
-      await this.page.waitForTimeout(timeoutConfig);
-
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "listPosts.png",
-      });
-      if (element) {
-        console.log("Delete Post successfully");
-      } else {
-        throw "Delete post fail";
-      }
-      return this.page;
-    } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
-    }
-  }
-
+  
   async editDraft(titlePost, newTitlePost) {
     try {
+      let ans=new TestResponse(false,"Post created failed");
+
       await this.page.evaluate(async (titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
@@ -604,21 +428,25 @@ class PostsPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(newTitlePost)) {
           tituloEncontrado = true;
-          return;
+          ans=new TestResponse(true,"Edit draft Post success");
+
         }
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "lisPosts.png",
       });
       if (!tituloEncontrado) {
-        throw "no se encontro el titulo del draft en el listado de posts";
+     ans=new TestResponse(false,"no se encontro el titulo del draft en el listado de posts");
+
       }
 
       await this.page.waitForTimeout(timeoutConfig);
-      return this.page;
+      return ans;
     } catch (error) {
       console.error("Edit draft Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+     ans=new TestResponse(false,"no se encontro el titulo del draft en el listado de posts");
+
+     return ans; // Rethrow the error to propagate it to the calling code
     }
   }
 }
