@@ -434,13 +434,13 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "selectPostToEdit.png",
       });
       await this.page.waitForSelector("textarea[data-test-editor-title-input]");
-      
+
       await this.page.evaluate(() => {
         const element = document.querySelector(
           "textarea[data-test-editor-title-input]"
         );
         element.value = "";
-       
+
         element.focus();
       });
       await this.page.screenshot({
@@ -449,12 +449,10 @@ class PostsPage {
       await this.page.keyboard.type(newTitlePost);
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.keyboard.press("Tab");
-        for (let i = 0; i < 50; i++) {
-          await this.page.keyboard.press('Backspace'); // Simulate pressing the Backspace key
-        }
-    
-      
-    
+      for (let i = 0; i < 50; i++) {
+        await this.page.keyboard.press("Backspace"); // Simulate pressing the Backspace key
+      }
+
       await this.page.keyboard.type(newDescriptionPost);
       await this.page.waitForTimeout(timeoutConfig);
 
@@ -473,12 +471,9 @@ class PostsPage {
       );
       if (saved) {
         ans = new TestResponse(true, "Create Draft Post passed");
-
-       
-      }
-      else{
+      } else {
         ans = new TestResponse(false, "Create Draft Post failed");
-       return ans
+        return ans;
       }
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="posts"]',
@@ -492,7 +487,7 @@ class PostsPage {
         );
       } catch {
         ans = new TestResponse(false, "Create Draft Post failed");
-       return ans
+        return ans;
       }
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector(
@@ -538,6 +533,78 @@ class PostsPage {
       );
 
       return ans; // Rethrow the error to propagate it to the calling code
+    }
+  }
+
+  async changeURL(titlePost, newURL) {
+    try {
+      let ans = new TestResponse(false, "Change URL Post failed");
+      //Select the post to chnge the url
+      await this.page.evaluate(async (titlePost) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePost.trim()) {
+            await element.click();
+            break; // Exit the loop once the element is clicked
+          }
+        }
+      }, titlePost);
+
+      await this.page.waitForTimeout(timeoutConfig);
+
+      // Enter Settings
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForSelector(".post-setting-slug");
+
+      // Clear the input field before typing the new URL
+      await this.page.evaluate(() => {
+        const slugInput = document.querySelector(".post-setting-slug");
+        slugInput.value = "";
+      });
+
+      await this.page.type(".post-setting-slug", newURL);
+      await this.page.keyboard.press("Tab");
+
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForTimeout(timeoutConfig);
+
+      const saved = await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim().includes("Draft");
+        },
+        { timeout: timeoutConfig }
+      );
+
+      if (saved) {
+        ans = new TestResponse(true, "Change URL Post passed");
+      } else {
+        return new TestResponse(false, "Change URL Post failed");
+      }
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForSelector(".post-setting-slug");
+      const updatedUrl = await this.page.evaluate(() => {
+        return document.querySelector(".post-setting-slug").value;
+      });
+      if (updatedUrl === newURL) {
+        ans = new TestResponse(true, "Change URL Post passed");
+      } else {
+        return new TestResponse(false, "Change URL Post failed");
+      }
+
+      await Promise.resolve(
+        this.page.click('.gh-btn-editor[data-test-link="posts"]')
+      );
+      return ans;
+    } catch (error) {
+      console.log(error);
+      return new TestResponse(false, "Change URL Post failed");
     }
   }
 }

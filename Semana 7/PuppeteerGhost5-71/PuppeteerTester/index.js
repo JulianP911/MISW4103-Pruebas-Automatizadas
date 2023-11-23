@@ -27,7 +27,7 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  /*await runScenario1();
+  await runScenario1();
   await runScenario2();
   await runScenario3();
   await runScenario4();
@@ -40,12 +40,18 @@ const runScenarios = async () => {
   await runScenario11();
   await runScenario12();
   await runScenario13();
-  await runScenario14();*/
+  await runScenario14();
   await runScenario19();
   await runScenario20();
   await runScenario21();
   await runScenario22();
   await runScenario23();
+  await runScenario24();
+  await runScenario25();
+  await runScenario26();
+  await runScenario27();
+  await runScenario28();
+  await runScenario29();
 
 };
 
@@ -1156,10 +1162,410 @@ const runScenario23 = async () => {
   }
 };
 
+/**
+ * Escenario 24: Como administrador le cambio la url a un post Campo vacio
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario24 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario24/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newUrl =  "";
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.changeURL(titlePost, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+    if (!responseEditPost.status) {
+      console.log("E24-Test Passed ");
+    } else {
+      console.log("E24-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message)
+    console.log("E24-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 25: Como administrador le cambio la url a un post Caracteres especiales
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario25 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario25/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newUrl =  "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.changeURL(titlePost, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+    if (!responseEditPost.status) {
+      console.log("E25-Test Passed ");
+    } else {
+      console.log("E25-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message)
+    console.log("E25-Test Failed ");
+  }
+};
+
+
+/**
+ * Escenario 26: Como administrador le cambio la url a un post Campos muy largos (15000 caracteres)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario26 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario26/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newUrl = faker.lorem.sentences(50).replace(' ','-');
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.changeURL(titlePost, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+    if (!responseEditPost.status) {
+      console.log("E26-Test Passed ");
+    } else {
+      console.log("E26-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message)
+    console.log("E26-Test Failed ");
+  }
+}
+
+/**
+ * Escenario 27: Como administrador le cambio la url a un post Campo correcto
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario27 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario27/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newUrl = faker.lorem.word();
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.changeURL(titlePost, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+    if (responseEditPost.status) {
+      console.log("E27-Test Passed ");
+    } else {
+      console.log("E27-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message)
+    console.log("E27-Test Failed ");
+  }
+}
+
+/**
+ * Escenario 28: Como administrador le asigno a dos post la misma url
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ * And: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que en el segundo post no se cambia exitosamente por la url ingresada y el primero si
+ */
+const runScenario28 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario28/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ * And: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newUrl = faker.lorem.word();
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.changeURL(titlePost, newUrl)
+    );
+
+    const descriptionPost2 = faker.lorem.sentence(2);
+    const titlePost2 = faker.lorem.sentence(2);
+    await Promise.resolve(postPage.createDraft(titlePost2,descriptionPost2));
+    const responseEditPost2 = await Promise.resolve(
+      postPage.changeURL(titlePost2, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que en el segundo post no se cambia exitosamente por la url ingresada y el primero si
+    if ((!responseEditPost2.status)&&responseEditPost.status) {
+      console.log("E28-Test Passed ");
+    } else {
+      console.log("E28-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message)
+    console.log("E28-Test Failed ");
+  }
+}
 
 
 
+/**
+ * Escenario 29: Como administrador le cambio la url a un post por Ghost (Palabra protegida)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle del post
+ * And: Se da click en settings de nuevo
+ *Then:Se valida que la url no sea Ghost es decir no se haya hecho la edición correctamente
+ */
+const runScenario29 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario29/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
 
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newUrl = 'Ghost'
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.changeURL(titlePost, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url no sea Ghost es decir no se haya hecho la edición correctamente
+    if (!responseEditPost.status) {
+      console.log("E29-Test Passed ");
+    } else {
+      console.log("E29-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message)
+    console.log("E29-Test Failed ");
+  }
+}
 
 
 
