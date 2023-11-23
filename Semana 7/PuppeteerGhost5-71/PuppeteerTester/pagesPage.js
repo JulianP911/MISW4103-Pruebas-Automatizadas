@@ -1,5 +1,6 @@
 const { faker } = require("@faker-js/faker");
 let config = require("./config.json");
+const TestResponse = require("./testResponse");
 
 const timeoutConfig = config.timeout;
 
@@ -45,8 +46,9 @@ class PagesPage {
     }
   }
 
-  async createPage(titlePage) {
+  async createPage(titlePage, descriptionPage) {
     try {
+      let ans=new TestResponse(false,"Page created failes");
       // Wait for an element that contains a span with the text "New Page"
       await this.page.waitForSelector("a[data-test-new-page-button]");
       await this.page.click("a[data-test-new-page-button]");
@@ -59,7 +61,7 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "fillTitle.png",
       });
       await this.page.keyboard.press("Tab");
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPage);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completePage.png",
       });
@@ -93,9 +95,10 @@ class PagesPage {
         '.gh-publish-title[data-test-publish-flow="complete"]'
       );
       if (element) {
-        console.log("Create page successfully");
+        ans=new TestResponse(true,"Page created successfully");
       } else {
-        throw "Create page failed";
+        ans=new TestResponse(false,"Page created failed");
+
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPagesPage.png",
@@ -119,15 +122,26 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPages.png",
       });
-      return this.page;
+      return ans;
     } catch (error) {
-      console.error("Create page faile:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      console.error("Create page failed:", error.message);
+      let ans=new TestResponse(false,"Page created failed");
+      return ans; // Rethrow the error to propagate it to the calling code
     }
   }
-
-  async createDraft(titlePage) {
+/**
+   * Creates a draft page with the provided title using the Puppeteer page object.
+   * This function simulates the process of creating a new draft page, filling in details,
+   * and validating its presence in the list of pages.
+   * @param {string} titlePage - The title of the draft page to be created.
+   * @param {string} descriptionPage - The description of the draft page to be created.
+   * @returns {TestResponse} - The result of create a draft.
+   * @throws Will throw an error if the draft page creation process fails or if the
+   * created draft page is not found in the list of pages.
+   */
+  async createDraft(titlePage, descriptionPage) {
     try {
+      let ans = new TestResponse(false, "Create draft page failed");
       // Wait for an element that contains a span with the text "New Page"
       await this.page.waitForSelector("a[data-test-new-page-button]");
       await this.page.click("a[data-test-new-page-button]");
@@ -140,7 +154,7 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "titleDraft.png",
       });
       await this.page.keyboard.press("Tab");
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPage);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completeDraftForm.png",
       });
@@ -161,20 +175,19 @@ class PagesPage {
         "h3.gh-content-entry-title",
         (h3s) => h3s.map((h3) => h3.textContent)
       );
-      let tituloEncontrado = false;
+
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(titlePage)) {
-          tituloEncontrado = true;
-          return;
+          ans = new TestResponse(true, "Create Draft page passed");
+          return ans;
         }
       }
-      if (!tituloEncontrado) {
-        throw "no se encontro el titulo del draft en el listado de pages";
-      }
-      return this.page;
+
+      return new TestResponse(false, "Create Draft page failed");
     } catch (error) {
-      console.error("Create draft page faile:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      console.log("Create Draft page failed:", error.message);
+      let ans = new TestResponse(false, "Create Draft page failed");
+      return ans;
     }
   }
 
