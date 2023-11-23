@@ -190,7 +190,7 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "draftPage.png",
       });
       //check for saved tag
-      await this.page.waitForFunction(
+      const saved = await this.page.waitForFunction(
         () => {
           const element = document.querySelector(
             "[data-test-editor-post-status]"
@@ -199,6 +199,11 @@ class PostsPage {
         },
         { timeout: timeoutConfig }
       );
+      if (saved) {
+        ans = new TestResponse(true, "Create Draft Post passed");
+
+        return ans;
+      }
       try {
         // Go back to the list of posts
         await this.page.waitForSelector(
@@ -260,7 +265,7 @@ class PostsPage {
   async createPostScheduled(titlePost, descriptionPost, scheduleDate) {
     try {
       console.log(scheduleDate);
-      let ans = new TestResponse(false, "Create Draft Post failed");
+      let ans = new TestResponse(false, "Create Scheduled Post failed");
       // Click on new post
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -321,22 +326,23 @@ class PostsPage {
         document.querySelector(
           "[data-test-date-time-picker-date-input]"
         ).value = scheduleDate;
-        document.querySelector(
-          "[data-test-date-time-picker-date-input]"
-        ).focus();
-        
+        document
+          .querySelector("[data-test-date-time-picker-date-input]")
+          .focus();
       }, scheduleDate);
-      await this.page.keyboard.press('Tab');
+      await this.page.keyboard.press("Tab");
       const error = await this.page.evaluate(() => {
-        const errorDiv = document.querySelector('div.gh-date-time-picker-error[data-test-date-time-picker-error]');
+        const errorDiv = document.querySelector(
+          "div.gh-date-time-picker-error[data-test-date-time-picker-error]"
+        );
         return errorDiv ? errorDiv.textContent.trim() : null;
       });
       if (error) {
         ans = new TestResponse(false, error);
-        return ans
+        return ans;
         // console.log("Post created successfully");
-      } 
-      
+      }
+
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "schedulePostsPage.png",
@@ -367,7 +373,7 @@ class PostsPage {
         //throw "No se encontró el componente de creación exitosa";
         ans = new TestResponse(
           false,
-          await this.page.$('[data-test-confirm-error]').value
+          await this.page.$("[data-test-confirm-error]").value
         );
       }
 
@@ -405,13 +411,13 @@ class PostsPage {
       return ans;
     } catch (error) {
       console.error("Create Scheduled Post failed:", error.message);
-     let ans = new TestResponse(false, "Create Scheduled Post failed");
+      let ans = new TestResponse(false, "Create Scheduled Post failed");
 
       return ans;
     }
   }
 
-  async editDraft(titlePost, newTitlePost) {
+  async editDraft(titlePost, newTitlePost, newDescriptionPost) {
     try {
       let ans = new TestResponse(false, "Post created failed");
 
@@ -428,11 +434,13 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "selectPostToEdit.png",
       });
       await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+      
       await this.page.evaluate(() => {
         const element = document.querySelector(
           "textarea[data-test-editor-title-input]"
         );
         element.value = "";
+       
         element.focus();
       });
       await this.page.screenshot({
@@ -440,14 +448,53 @@ class PostsPage {
       });
       await this.page.keyboard.type(newTitlePost);
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.press("Tab");
+        for (let i = 0; i < 50; i++) {
+          await this.page.keyboard.press('Backspace'); // Simulate pressing the Backspace key
+        }
+    
+      
+    
+      await this.page.keyboard.type(newDescriptionPost);
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newInfoPost.png",
       });
+      //check for saved tag
+      const saved = await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim().includes("Draft");
+        },
+        { timeout: timeoutConfig }
+      );
+      if (saved) {
+        ans = new TestResponse(true, "Create Draft Post passed");
+
+        return ans;
+      }
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="posts"]',
         { timeout: timeoutConfig }
       );
-
+      try {
+        // Go back to the list of posts
+        await this.page.waitForSelector(
+          '.gh-btn-editor[data-test-link="posts"]',
+          { timeout: timeoutConfig }
+        );
+      } catch {
+        ans = new TestResponse(false, "Create Draft Post failed");
+        return ans;
+      }
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.waitForSelector(
+        '.gh-btn-editor[data-test-link="posts"]',
+        { timeout: timeoutConfig }
+      );
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
@@ -481,7 +528,7 @@ class PostsPage {
       return ans;
     } catch (error) {
       console.error("Edit draft Post failed:", error.message);
-     let ans = new TestResponse(
+      let ans = new TestResponse(
         false,
         "no se encontro el titulo del draft en el listado de posts"
       );
