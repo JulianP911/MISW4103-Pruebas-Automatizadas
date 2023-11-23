@@ -52,6 +52,9 @@ const runScenarios = async () => {
   await runScenario27();
   await runScenario28();
   await runScenario29();
+  await runScenario30();
+  await runScenario31();
+  await runScenario32();
 
 };
 
@@ -350,7 +353,7 @@ const runScenarios = async () => {
       console.log("E5-Test Failed ");
     }
   } catch (e) {
-    console.log(e.message);
+    ;
     console.log("E5-Test Failed ");
   }
 };
@@ -1220,7 +1223,7 @@ const runScenario24 = async () => {
       console.log("E24-Test Failed ");
     }
   } catch (e) {
-    console.log(e.message)
+    
     console.log("E24-Test Failed ");
   }
 };
@@ -1283,7 +1286,7 @@ const runScenario25 = async () => {
       console.log("E25-Test Failed ");
     }
   } catch (e) {
-    console.log(e.message)
+    
     console.log("E25-Test Failed ");
   }
 };
@@ -1347,7 +1350,7 @@ const runScenario26 = async () => {
       console.log("E26-Test Failed ");
     }
   } catch (e) {
-    console.log(e.message)
+    
     console.log("E26-Test Failed ");
   }
 }
@@ -1410,7 +1413,7 @@ const runScenario27 = async () => {
       console.log("E27-Test Failed ");
     }
   } catch (e) {
-    console.log(e.message)
+    
     console.log("E27-Test Failed ");
   }
 }
@@ -1497,7 +1500,7 @@ const runScenario28 = async () => {
       console.log("E28-Test Failed ");
     }
   } catch (e) {
-    console.log(e.message)
+    
     console.log("E28-Test Failed ");
   }
 }
@@ -1562,15 +1565,189 @@ const runScenario29 = async () => {
       console.log("E29-Test Failed ");
     }
   } catch (e) {
-    console.log(e.message)
+    
     console.log("E29-Test Failed ");
   }
 }
 
 
+/**
+ * Escenario 30: Como administrador le agrego una url de youtube a un post aleatorio iniciando por 'www.youtube.com/'
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa adiciona campo de url youtube
+ * And: Se escribe la url ingresada por parámetro
+ *Then:Se valida que la url no sea aceptada
+ */
+ const runScenario30 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario30/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
 
+    await loginPage.visit();
 
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = "";
+    const titlePost = faker.lorem.sentence(2);
+    const youtubeUrl = 'www.youtube.com/'+faker.lorem.word()
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.addYoutubeUrl(titlePost, youtubeUrl)
+    );
 
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url no sea aceptada
+    if (!responseEditPost.status) {
+      console.log("E30-Test Passed ");
+    } else {
+      console.log("E30-Test Failed ");
+    }
+  } catch (e) {
+    
+    console.log("E30-Test Failed ");
+  }
+}
+/**
+ * Escenario 31: Como administrador le agrego una url de youtube a un post aleatorio iniciando por 'www.youtube.com/'
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa adiciona campo de url youtube
+ * And: Se escribe la url ingresada por parámetro
+ *Then:Se valida que la url no sea aceptada
+ */
+ const runScenario31 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario31/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = "";
+    const titlePost = faker.lorem.sentence(2);
+    const youtubeUrl = faker.lorem.word();
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.addYoutubeUrl(titlePost, youtubeUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url no sea aceptada
+    if (!responseEditPost.status) {
+      console.log("E31-Test Passed ");
+    } else {
+      console.log("E31-Test Failed ");
+    }
+  } catch (e) {
+    
+    console.log("E31-Test Failed ");
+  }
+}
+/**
+ * Escenario 32: Como administrador le agrego una url de youtube a un post url real
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa adiciona campo de url youtube
+ * And: Se escribe la url ingresada por parámetro
+ *Then:Se valida que la url no sea aceptada
+ */
+ const runScenario32 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario32/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = "";
+    const titlePost = faker.lorem.sentence(2);
+    const youtubeUrl = "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.addYoutubeUrl(titlePost, youtubeUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url no sea aceptada
+    if (responseEditPost.status) {
+      console.log("E32-Test Passed ");
+    } else {
+      console.log("E32-Test Failed ");
+    }
+  } catch (e) {
+    
+    console.log("E32-Test Failed ");
+  }
+}
 
 
 //-----------------------VIEJOS-------------------

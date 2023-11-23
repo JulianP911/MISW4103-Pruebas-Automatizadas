@@ -167,6 +167,8 @@ class PostsPage {
   async createDraft(titlePost, descriptionPost) {
     try {
       let ans = new TestResponse(false, "Create Draft Post failed");
+      await this.page.waitForTimeout(timeoutConfig);
+
       // Click on 'New Post'
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -533,6 +535,65 @@ class PostsPage {
       );
 
       return ans; // Rethrow the error to propagate it to the calling code
+    }
+  }
+
+  async addYoutubeUrl(titlePost, url) {
+    try {
+      let ans = new TestResponse(false, "Add url failed");
+
+      await this.page.evaluate(async (titlePost) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePost.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, titlePost);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectPostToAddUrl.png",
+      });
+      await this.page.evaluate(() => {
+        const element = document.querySelector(
+          "textarea[data-test-editor-title-input]"
+        );
+        element.focus();
+      });
+      await this.page.keyboard.press("Tab");
+      await this.page.click('button[aria-label="Add a card"]');
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.click('[data-kg-card-menu-item="YouTube"]');
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.type(url)
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.keyboard.press("Enter");
+      await this.page.waitForTimeout(timeoutConfig);
+
+      const errmsg=await this.page.$('[data-testid="embed-url-error-message"]');
+      if(errmsg)
+      {
+        ans = new TestResponse(false, errmsg.value);
+      }
+      else{
+        ans = new TestResponse(true, "Add url passed");
+      }
+   
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newInfoPost.png",
+      });
+     
+      await this.page.waitForTimeout(timeoutConfig);
+      return ans;
+    } catch (error) {
+      console.error("Add Url Post failed:", error);
+      let ans = new TestResponse(
+        false,
+        "Add Url Post failed"
+      );
+
+      return ans; 
     }
   }
 
