@@ -257,8 +257,9 @@ class PostsPage {
    * the scheduled post is created and confirmed.
    * @throws Will throw an error if the scheduled post creation process validation fails or if any step fails.
    */
-  async createPostScheduled(titlePost, descriptionPost) {
+  async createPostScheduled(titlePost, descriptionPost, scheduleDate) {
     try {
+      console.log(scheduleDate);
       let ans = new TestResponse(false, "Create Draft Post failed");
       // Click on new post
       await this.page.waitForSelector(".view-actions-top-row", {
@@ -316,6 +317,27 @@ class PostsPage {
       });
 
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.evaluate((scheduleDate) => {
+        document.querySelector(
+          "[data-test-date-time-picker-date-input]"
+        ).value = scheduleDate;
+        document.querySelector(
+          "[data-test-date-time-picker-date-input]"
+        ).focus();
+        
+      }, scheduleDate);
+      await this.page.keyboard.press('Tab');
+      const error = await this.page.evaluate(() => {
+        const errorDiv = document.querySelector('div.gh-date-time-picker-error[data-test-date-time-picker-error]');
+        return errorDiv ? errorDiv.textContent.trim() : null;
+      });
+      if (error) {
+        ans = new TestResponse(false, error);
+        return ans
+        // console.log("Post created successfully");
+      } 
+      
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "schedulePostsPage.png",
       });
@@ -345,7 +367,7 @@ class PostsPage {
         //throw "No se encontró el componente de creación exitosa";
         ans = new TestResponse(
           false,
-          "No se encontró el componente de creación exitosa"
+          await this.page.$('[data-test-confirm-error]').value
         );
       }
 
@@ -383,7 +405,7 @@ class PostsPage {
       return ans;
     } catch (error) {
       console.error("Create Scheduled Post failed:", error.message);
-      ans = new TestResponse(false, "Create Scheduled Post failed");
+     let ans = new TestResponse(false, "Create Scheduled Post failed");
 
       return ans;
     }
@@ -459,7 +481,7 @@ class PostsPage {
       return ans;
     } catch (error) {
       console.error("Edit draft Post failed:", error.message);
-      ans = new TestResponse(
+     let ans = new TestResponse(
         false,
         "no se encontro el titulo del draft en el listado de posts"
       );

@@ -37,6 +37,12 @@ const runScenarios = async () => {
   await runScenario8();
   await runScenario9();
   await runScenario10();
+  await runScenario11();
+  await runScenario12();
+  await runScenario13();
+  await runScenario14();
+
+
 };
 
 /**
@@ -618,7 +624,7 @@ const runScenario10 = async () => {
   }
 };
 /**
- * Escenario 6: Como usuario administrador creo un nuevo post con publicación programada
+ * Escenario 11: Como usuario administrador creo un nuevo post con publicación programada Con fecha futura
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
@@ -633,10 +639,10 @@ const runScenario10 = async () => {
  * And: Se da click en posts
  * Then:Se valida que el post este creado
  */
-const runScenario46 = async () => {
+const runScenario11 = async () => {
   try {
     //Create directory to save screenshots
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario11/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -656,22 +662,218 @@ const runScenario46 = async () => {
     );
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
+    const publishDate = faker.date.future().toISOString().split('T')[0];
+  
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
-      postPage.createPostScheduled(titlePost, descriptionPost)
+      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
     );
     // Close the browser after completing the tests
     await browser.close();
     if (responseCreateScheduledPost.status) {
-      console.log("E6-Test Passed ");
+      console.log("E11-Test Passed ");
     } else {
-      console.log("E6-Test Failed ");
+      console.log("E11-Test Failed ");
     }
   } catch (e) {
-    console.log("E6-Test Failed ");
+    console.log("E11-Test Failed ");
+  }
+};
+/**
+ * Escenario 12: Como usuario administrador creo un nuevo post con publicación programada Con fecha pasada
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa una cadena de texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación del post
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * And: Se da click en posts
+ * Then:Se valida que el post este creado
+ */
+const runScenario12 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario12/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
+    const publishDate = faker.date.past().toISOString().split('T')[0];
+  
+    await Promise.resolve(postPage.visit());
+    const responseCreateScheduledPost = await Promise.resolve(
+      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    if (!responseCreateScheduledPost.status) {
+      console.log("E12-Test Passed ");
+    } else {
+      console.log("E12-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E12-Test Failed ");
+  }
+};
+/**
+ * Escenario 13: Como usuario administrador creo un nuevo post con publicación programada Con formato incorrecto
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa una cadena de texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación del post
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * And: Se da click en posts
+ * Then:Se valida que el post este creado
+ */
+const runScenario13 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario13/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
+    const publishDate = faker.date.past().toDateString();
+  
+    await Promise.resolve(postPage.visit());
+    const responseCreateScheduledPost = await Promise.resolve(
+      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que el post no se haya podido crear y el mensaje de error
+
+    if (!responseCreateScheduledPost.status && responseCreateScheduledPost.message.includes('Invalid date format')) {
+      console.log("E13-Test Passed ");
+    } else {
+      console.log("E13-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E13-Test Failed ");
+  }
+};
+/**
+ * Escenario 14: Como usuario administrador creo un nuevo post con publicación programada Con fecha incorrecta (ej. mes >12)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa una cadena de texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación del post
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * And: Se da click en posts
+ * Then:Se valida que el post no se haya podido crear y el mensaje de error
+ */
+const runScenario14 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario14/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
+    const publishDate = "2023-45-45"
+  
+    await Promise.resolve(postPage.visit());
+    const responseCreateScheduledPost = await Promise.resolve(
+      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que el post no se haya podido crear y el mensaje de error
+    if (!responseCreateScheduledPost.status&& responseCreateScheduledPost.message.includes('Invalid date')) {
+      console.log("E14-Test Passed ");
+    } else {
+      console.log("E14-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E14-Test Failed ");
   }
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------VIEJOS-------------------
 /**
  * Escenario 12: Como usuario administrador creo una nueva page para publicarlo en el sitio web
  *
@@ -685,7 +887,7 @@ const runScenario46 = async () => {
  * And: Se da click en Publish page, right now
  * Then:Se valida que aparezca el titulo de publicacion exitosa
  */
-const runScenario12 = async () => {
+const runScenario120 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario12/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -726,7 +928,7 @@ const runScenario12 = async () => {
  * Then: Se valida que aparezaca en el listado de pages el borrador que se acabo de crear
  *
  */
-const runScenario13 = async () => {
+const runScenario130 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario13/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -773,7 +975,7 @@ const runScenario13 = async () => {
  * 
 
  */
-const runScenario14 = async () => {
+const runScenario141 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario14/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
