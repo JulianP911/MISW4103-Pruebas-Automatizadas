@@ -1,5 +1,5 @@
 const { faker } = require("@faker-js/faker");
-const TestResponse=require("./testResponse.js")
+const TestResponse = require("./testResponse.js");
 let config = require("./config.json");
 
 const timeoutConfig = config.timeout;
@@ -39,9 +39,9 @@ class PostsPage {
    * the post is created and confirmed.
    * @throws Will throw an error if the post creation process fails.
    */
-  async createPost(titlePost,descriptionPost) {
+  async createPost(titlePost, descriptionPost) {
     try {
-      let ans=new TestResponse(false,"Post created failed");
+      let ans = new TestResponse(false, "Post created failed");
       // Wait for an element that contains a span with the text "New post"
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -110,11 +110,10 @@ class PostsPage {
 
       if (element) {
         //console.log("Post created successfully");
-        ans=new TestResponse(true,"Post created successfully");
+        ans = new TestResponse(true, "Post created successfully");
       } else {
-       // throw "Post created failed";
-        ans=new TestResponse(false,"Post created failed");
-
+        // throw "Post created failed";
+        ans = new TestResponse(false, "Post created failed");
       }
 
       await this.page.screenshot({
@@ -150,7 +149,7 @@ class PostsPage {
       return ans;
     } catch (error) {
       console.error("Create Post failed:", error.message);
-      let ans=new TestResponse(false,"Post created failed");
+      let ans = new TestResponse(false, "Post created failed");
       return ans; // Rethrow the error to propagate it to the calling code
     }
   }
@@ -165,10 +164,9 @@ class PostsPage {
    * @throws Will throw an error if the draft post creation process fails or if the
    * created draft post is not found in the list of posts.
    */
-  async createDraft(titlePost,descriptionPost) {
+  async createDraft(titlePost, descriptionPost) {
     try {
-      
-      let ans=new TestResponse(false,"Create Draft Post failed");
+      let ans = new TestResponse(false, "Create Draft Post failed");
       // Click on 'New Post'
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -191,18 +189,32 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "draftPage.png",
       });
-
-      // Go back to the list of posts
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
+      //check for saved tag
+      await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim() === "Draft";
+        },
         { timeout: timeoutConfig }
       );
+      try {
+        // Go back to the list of posts
+        await this.page.waitForSelector(
+          '.gh-btn-editor[data-test-link="posts"]',
+          { timeout: timeoutConfig }
+        );
+      } catch {
+        ans = new TestResponse(false, "Create Draft Post failed");
+        return ans;
+      }
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "darftList.png",
+        path: this.screenshotDirectoryEscenario + "draftList.png",
       });
       // Wait for the list of posts to be visible
       await this.page.waitForSelector("h3.gh-content-entry-title", {
@@ -219,21 +231,20 @@ class PostsPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(titlePost)) {
           titleFound = true;
-      ans=new TestResponse(true,"Create Draft Post passed");
+          ans = new TestResponse(true, "Create Draft Post passed");
 
           return ans;
         }
       }
 
       if (!titleFound) {
-        ans=new TestResponse(false,"Create Draft Post failed");
+        ans = new TestResponse(false, "Create Draft Post failed");
       }
 
       return ans;
     } catch (error) {
-      console.error("Create Draft Post failed:", error.message);
-      ans=new TestResponse(false,"Create Draft Post failed");
-
+      console.log("Create Draft Post failed:", error.message);
+      let ans = new TestResponse(false, "Create Draft Post failed");
       return ans;
     }
   }
@@ -246,9 +257,9 @@ class PostsPage {
    * the scheduled post is created and confirmed.
    * @throws Will throw an error if the scheduled post creation process validation fails or if any step fails.
    */
-  async createPostScheduled(titlePost,descriptionPost) {
+  async createPostScheduled(titlePost, descriptionPost) {
     try {
-      let ans=new TestResponse(false,"Create Draft Post failed");
+      let ans = new TestResponse(false, "Create Draft Post failed");
       // Click on new post
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -328,11 +339,14 @@ class PostsPage {
       );
 
       if (element) {
-        ans=new TestResponse(true,"Post created successfully");
-       // console.log("Post created successfully");
+        ans = new TestResponse(true, "Post created successfully");
+        // console.log("Post created successfully");
       } else {
         //throw "No se encontró el componente de creación exitosa";
-        ans=new TestResponse(false,"No se encontró el componente de creación exitosa");
+        ans = new TestResponse(
+          false,
+          "No se encontró el componente de creación exitosa"
+        );
       }
 
       await this.page.screenshot({
@@ -369,15 +383,15 @@ class PostsPage {
       return ans;
     } catch (error) {
       console.error("Create Scheduled Post failed:", error.message);
-      ans=new TestResponse(false,"Create Scheduled Post failed");
-      
-     return ans;
+      ans = new TestResponse(false, "Create Scheduled Post failed");
+
+      return ans;
     }
   }
-  
+
   async editDraft(titlePost, newTitlePost) {
     try {
-      let ans=new TestResponse(false,"Post created failed");
+      let ans = new TestResponse(false, "Post created failed");
 
       await this.page.evaluate(async (titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
@@ -428,25 +442,29 @@ class PostsPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(newTitlePost)) {
           tituloEncontrado = true;
-          ans=new TestResponse(true,"Edit draft Post success");
-
+          ans = new TestResponse(true, "Edit draft Post success");
         }
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "lisPosts.png",
       });
       if (!tituloEncontrado) {
-     ans=new TestResponse(false,"no se encontro el titulo del draft en el listado de posts");
-
+        ans = new TestResponse(
+          false,
+          "no se encontro el titulo del draft en el listado de posts"
+        );
       }
 
       await this.page.waitForTimeout(timeoutConfig);
       return ans;
     } catch (error) {
       console.error("Edit draft Post failed:", error.message);
-     ans=new TestResponse(false,"no se encontro el titulo del draft en el listado de posts");
+      ans = new TestResponse(
+        false,
+        "no se encontro el titulo del draft en el listado de posts"
+      );
 
-     return ans; // Rethrow the error to propagate it to the calling code
+      return ans; // Rethrow the error to propagate it to the calling code
     }
   }
 }

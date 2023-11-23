@@ -27,32 +27,17 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  /*await runScenario1();
- await runScenario2();
- await runScenario3();*/
-   await runScenario4();
-   /*await runScenario5();
-  await runScenario6();*/
-  /*await runScenario7();
+  await runScenario1();
+  await runScenario2();
+  await runScenario3();
+  await runScenario4();
+  await runScenario5();
+  await runScenario6();
+  await runScenario7();
   await runScenario8();
   await runScenario9();
   await runScenario10();
-  await runScenario11();
-  await runScenario12();
-  await runScenario13();
-  await runScenario14();
-  await runScenario15();
-  await runScenario16();
-  await runScenario17();
-  await runScenario18();
-  await runScenario19();
-  await runScenario20();
-  await runScenario21();
-  await runScenario22();
-  await runScenario23();*/
 };
-
-
 
 /**
  * Escenario 1: Como usuario administrador creo un nuevo post para publicarlo en el sitio web con título y descripcion correctos
@@ -68,12 +53,12 @@ const runScenarios = async () => {
  * Then:Se valida que el post este creado
  */ const runScenario1 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario1/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-  
- // Given: Se ingresa a la página correspondiente a login
+
+    // Given: Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -82,16 +67,15 @@ const runScenarios = async () => {
     await loginPage.visit();
     const afterlogin = await loginPage.login(userEmail, userPassword);
 
-    
     /*When: Se da clic en el botón de Posts
-    * And: Se da clic en el botón de New Post
-    * And:Se ingresa una cadena de texto al título del post
-    * And:Se ingresa un texto al contenido del post
-    * And: Se da click en el publish
-    * And: Se da click en Continue, final review
-    * And: Se da click en Publish post, right now
-    * And: Se da click en posts
-    * */
+     * And: Se da clic en el botón de New Post
+     * And:Se ingresa una cadena de texto al título del post
+     * And:Se ingresa un texto al contenido del post
+     * And: Se da click en el publish
+     * And: Se da click en Continue, final review
+     * And: Se da click en Publish post, right now
+     * And: Se da click en posts
+     * */
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -103,25 +87,23 @@ const runScenarios = async () => {
     const descriptionPost = faker.lorem.sentence(2);
 
     const responseCreatePost = await Promise.resolve(
-      postPage.createPost(titlePost,descriptionPost)
+      postPage.createPost(titlePost, descriptionPost)
     );
 
     // Close the browser after completing the tests
     await browser.close();
     //Then:Se valida que el post este creado
-    if(responseCreatePost.status){
-    console.log("E1-Test Passed ");
-  }
-  else{
-    console.log( "E1-Test Failed ");
-  }
-    
+    if (responseCreatePost.status) {
+      console.log("E1-Test Passed ");
+    } else {
+      console.log("E1-Test Failed ");
+    }
   } catch (e) {
-    console.log( "E1-Test Failed ");
+    console.log("E1-Test Failed ");
   }
 };
 /**
- * Escenario 2: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y con descripción 
+ * Escenario 2: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y con descripción
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
  * And: Se da clic en el botón de New Post
@@ -133,12 +115,12 @@ const runScenarios = async () => {
  * Then:Se valida que el post se haya creado
  */ const runScenario2 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario2/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-  
- // Given: Se ingresa a la página correspondiente a login
+
+    // Given: Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -146,15 +128,15 @@ const runScenarios = async () => {
     );
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
-   
+
     /*When: Se da clic en el botón de Posts
-    * And: Se da clic en el botón de New Post
-    * And:Se ingresa un texto al contenido del post
-    * And: Se da click en el publish
-    * And: Se da click en Continue, final review
-    * And: Se da click en Publish post, right now
-    * And: Se da click en posts
-    * */
+     * And: Se da clic en el botón de New Post
+     * And:Se ingresa un texto al contenido del post
+     * And: Se da click en el publish
+     * And: Se da click en Continue, final review
+     * And: Se da click en Publish post, right now
+     * And: Se da click en posts
+     * */
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -166,25 +148,23 @@ const runScenarios = async () => {
     const descriptionPost = faker.lorem.sentence(2);
 
     const responseCreatePost = await Promise.resolve(
-      postPage.createPost(titlePost,descriptionPost)
+      postPage.createPost(titlePost, descriptionPost)
     );
 
     // Close the browser after completing the tests
     await browser.close();
     //Then:Se valida que el post este creado
-    if(responseCreatePost.status){
-    console.log("E2-Test Passed ");
-  }
-  else{
-    console.log( "E2-Test Failed ");
-  }
-    
+    if (responseCreatePost.status) {
+      console.log("E2-Test Passed ");
+    } else {
+      console.log("E2-Test Failed ");
+    }
   } catch (e) {
-    console.log( "E2-Test Failed ");
+    console.log("E2-Test Failed ");
   }
 };
 /**
- * Escenario 3: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y con descripción 
+ * Escenario 3: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y con descripción
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
  * And: Se da clic en el botón de New Post
@@ -193,12 +173,12 @@ const runScenarios = async () => {
  * Then:Se valida que el post no se haya podido crear
  */ const runScenario3 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario3/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-  
- // Given: Se ingresa a la página correspondiente a login
+
+    // Given: Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -206,12 +186,12 @@ const runScenarios = async () => {
     );
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
-   
+
     /*When: Se da clic en el botón de Posts
-    * And: Se da clic en el botón de New Post
-    * And:Se ingresa un texto al contenido del post
-    * And: Se da click en el publish
-    * */
+     * And: Se da clic en el botón de New Post
+     * And:Se ingresa un texto al contenido del post
+     * And: Se da click en el publish
+     * */
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -223,25 +203,23 @@ const runScenarios = async () => {
     const descriptionPost = "";
 
     const responseCreatePost = await Promise.resolve(
-      postPage.createPost(titlePost,descriptionPost)
+      postPage.createPost(titlePost, descriptionPost)
     );
 
     // Close the browser after completing the tests
     await browser.close();
     //Then:Se valida que el post no se haya podido crear
-    if(!responseCreatePost.status){
-    console.log("E3-Test Passed ");
-  }
-  else{
-    console.log( "E3-Test Failed ");
-  }
-    
+    if (!responseCreatePost.status) {
+      console.log("E3-Test Passed ");
+    } else {
+      console.log("E3-Test Failed ");
+    }
   } catch (e) {
-    console.log( "E3-Test Failed ");
+    console.log("E3-Test Failed ");
   }
 };
 /**
- * Escenario 4: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y con descripción 
+ * Escenario 4: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Campos muy largos (15000 caracteres)
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
  * And: Se da clic en el botón de New Post
@@ -254,8 +232,8 @@ const runScenarios = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-  
- // Given: Se ingresa a la página correspondiente a login
+
+    // Given: Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -263,15 +241,15 @@ const runScenarios = async () => {
     );
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
-   
+
     /*When: Se da clic en el botón de Posts
-    * And: Se da clic en el botón de New Post
-    * And:Se ingresa un texto al contenido del post
-    * And: Se da click en el publish
-    * And: Se da click en Continue, final review
-    * And: Se da click en Publish post, right now
-    * And: Se da click en posts
-    * */
+     * And: Se da clic en el botón de New Post
+     * And:Se ingresa un texto al contenido del post
+     * And: Se da click en el publish
+     * And: Se da click en Continue, final review
+     * And: Se da click en Publish post, right now
+     * And: Se da click en posts
+     * */
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -283,25 +261,85 @@ const runScenarios = async () => {
     const descriptionPost = faker.lorem.sentences(50);
 
     const responseCreatePost = await Promise.resolve(
-      postPage.createPost(titlePost,descriptionPost)
+      postPage.createPost(titlePost, descriptionPost)
     );
 
     // Close the browser after completing the tests
     await browser.close();
-    //Then:Se valida que el post este creado
-    if(!responseCreatePost.status){
-    console.log("E4-Test Passed ");
-  }
-  else{
-    console.log( "E4-Test Failed ");
-  }
-    
+    //Then:Se valida que el post no se haya podido crear
+    if (!responseCreatePost.status) {
+      console.log("E4-Test Passed ");
+    } else {
+      console.log("E4-Test Failed ");
+    }
   } catch (e) {
-    console.log( "E4-Test Failed ");
+    console.log("E4-Test Failed ");
   }
 };
 /**
- * Escenario 5: Como usuario administrador creo un nuevo borrador de post para el sitio web
+ * Escenario 5: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Campos solo con caracteres especiales
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en el publish
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish post, right now
+ * And: Se da click en posts
+ * Then:Se valida que el post se haya creado
+ */ const runScenario5 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /*When: Se da clic en el botón de Posts
+     * And: Se da clic en el botón de New Post
+     * And:Se ingresa un texto al contenido del post
+     * And: Se da click en el publish
+     * And: Se da click en Continue, final review
+     * And: Se da click en Publish post, right now
+     * And: Se da click en posts
+     * */
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    //Generación de datos
+    const titlePost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const descriptionPost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+
+    const responseCreatePost = await Promise.resolve(
+      postPage.createPost(titlePost, descriptionPost)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que el post se haya creado
+    if (responseCreatePost.status) {
+      console.log("E5-Test Passed ");
+    } else {
+      console.log("E5-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message);
+    console.log("E5-Test Failed ");
+  }
+};
+/**
+ * Escenario 6: Como usuario administrador creo un nuevo borrador de post para el sitio web Título y descripcion correctos
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
@@ -311,45 +349,274 @@ const runScenarios = async () => {
  * And: Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
  */
-const runScenario5 = async () => {
+const runScenario6 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
-
     await loginPage.visit();
-
     const afterlogin = await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Posts
+     * And: Se da clic en el botón de New Post
+     * And:Se ingresa una cadena de texto al título del post
+     * And:Se ingresa un texto al contenido del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
+    //Generación de datos
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
-    const responseCreateDraftPost=await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+
+    const responseCreatePost = await Promise.resolve(
+      postPage.createDraft(titlePost, descriptionPost)
+    );
 
     // Close the browser after completing the tests
     await browser.close();
-    if(responseCreateDraftPost.status){
-      console.log("E5-Test Passed ");
-    }
-    else{
-      console.log( "E5-Test Failed ");
-    }
-      
-    } catch (e) {
-      console.log( "E5-Test Failed ");
-    }
-};
+    //Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
 
+    if (responseCreatePost.status) {
+      console.log("E6-Test Passed ");
+    } else {
+      console.log("E6-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E6-Test Failed ");
+  }
+};
+/**
+ * Escenario 7: Como usuario administrador creo un nuevo borrador de post para el sitio web Sin titulo y con descripción
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en posts
+ * Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
+ */
+const runScenario7 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario7/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Posts
+     * And: Se da clic en el botón de New Post
+     * And:Se ingresa un texto al contenido del post
+     * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    //Generación de datos
+    const titlePost = "";
+    const descriptionPost = faker.lorem.sentence(2);
+
+    const responseCreatePost = await Promise.resolve(
+      postPage.createDraft(titlePost, descriptionPost)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
+
+    if (responseCreatePost.status) {
+      console.log("E7-Test Passed ");
+    } else {
+      console.log("E7-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E7-Test Failed ");
+  }
+};
+/**
+ * Escenario 8: Como usuario administrador creo un nuevo borrador de post para el sitio web Sin titulo y sin descripción
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And: Se da click en posts
+ * Then:Se valida que no se haya podido crear el borrador
+ */
+const runScenario8 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario8/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Posts
+     * And: Se da clic en el botón de New Post
+     * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    //Generación de datos
+    const titlePost = "";
+    const descriptionPost = "";
+
+    const responseCreatePost = await Promise.resolve(
+      postPage.createDraft(titlePost, descriptionPost)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que el post no se haya podido crear
+    if (!responseCreatePost.status) {
+      console.log("E8-Test Passed ");
+    } else {
+      console.log("E8-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E8-Test Failed ");
+  }
+};
+/**
+ * Escenario 9: Como usuario administrador creo un nuevo borrador de post para el sitio web Campos muy largos (15000 caracteres)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa un texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en posts
+ * Then:Se valida que no se haya podido crear el borrador
+ */
+const runScenario9 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario9/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Posts
+     * And: Se da clic en el botón de New Post
+     * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    //Generación de datos
+    const titlePost = faker.lorem.sentences(50);
+    const descriptionPost = faker.lorem.sentences(50);
+
+    const responseCreatePost = await Promise.resolve(
+      postPage.createDraft(titlePost, descriptionPost)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que el post no se haya podido crear
+    if (!responseCreatePost.status) {
+      console.log("E9-Test Passed ");
+    } else {
+      console.log("E9-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E9-Test Failed ");
+  }
+};
+/**
+ * Escenario 10: Como usuario administrador creo un nuevo borrador de post para el sitio web Campos solo con caracteres especiales
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa un texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en posts
+ * Then:Se valida que se haya podido crear el borrador
+ */
+const runScenario10 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Posts
+     * And: Se da clic en el botón de New Post
+     * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    //Generación de datos
+    const titlePost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const descriptionPost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+
+    const responseCreatePost = await Promise.resolve(
+      postPage.createDraft(titlePost, descriptionPost)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
+    if (responseCreatePost.status) {
+      console.log("E10-Test Passed ");
+    } else {
+      console.log("E10-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E10-Test Failed ");
+  }
+};
 /**
  * Escenario 6: Como usuario administrador creo un nuevo post con publicación programada
  *
@@ -366,7 +633,7 @@ const runScenario5 = async () => {
  * And: Se da click en posts
  * Then:Se valida que el post este creado
  */
-const runScenario6 = async () => {
+const runScenario46 = async () => {
   try {
     //Create directory to save screenshots
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
@@ -391,20 +658,18 @@ const runScenario6 = async () => {
     const descriptionPost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
-      postPage.createPostScheduled(titlePost,descriptionPost)
+      postPage.createPostScheduled(titlePost, descriptionPost)
     );
     // Close the browser after completing the tests
     await browser.close();
-    if(responseCreateScheduledPost.status){
+    if (responseCreateScheduledPost.status) {
       console.log("E6-Test Passed ");
+    } else {
+      console.log("E6-Test Failed ");
     }
-    else{
-      console.log( "E6-Test Failed ");
-    }
-      
-    } catch (e) {
-      console.log( "E6-Test Failed ");
-    }
+  } catch (e) {
+    console.log("E6-Test Failed ");
+  }
 };
 
 /**
@@ -571,19 +836,19 @@ const runScenario15 = async () => {
     const titlePost = faker.lorem.sentence(2);
     const newTitlePost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.createDraft(titlePost));
-    const responseEditPost=await Promise.resolve(postPage.editDraft(titlePost, newTitlePost));
+    const responseEditPost = await Promise.resolve(
+      postPage.editDraft(titlePost, newTitlePost)
+    );
 
     // Close the browser after completing the tests
-   //Revisa el then
-   if(responseEditPost.status){
-    console.log("E15-Test Passed ");
-  }
-  else{
-    console.log( "E15-Test Failed ");
-  }
-    
+    //Revisa el then
+    if (responseEditPost.status) {
+      console.log("E15-Test Passed ");
+    } else {
+      console.log("E15-Test Failed ");
+    }
   } catch (e) {
-    console.log( "E15-Test Failed ");
+    console.log("E15-Test Failed ");
   }
 };
 
