@@ -668,6 +668,73 @@ class PostsPage {
       return new TestResponse(false, "Change URL Post failed");
     }
   }
-}
 
+
+
+async editDate(titlePost, newDate) {
+  try {
+    let ans = new TestResponse(false, "Post created failed");
+
+    await this.page.evaluate(async (titlePost) => {
+      const elements = document.querySelectorAll(".gh-content-entry-title");
+      for (const element of elements) {
+        if (element.textContent.trim() === titlePost.trim()) {
+          await element.click();
+        }
+      }
+      return null;
+    }, titlePost);
+    await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "selectPostToEdit.png",
+    });
+    
+    await this.page.waitForTimeout(timeoutConfig);
+
+    await Promise.resolve(this.page.click('button[title="Settings"]'));
+
+    await this.page.waitForTimeout(timeoutConfig);
+    await this.page.evaluate((newDate) => {
+      document.querySelector(
+        "[data-test-date-time-picker-date-input]"
+      ).value = newDate;
+      document
+        .querySelector("[data-test-date-time-picker-date-input]")
+        .focus();
+    }, newDate);
+    await this.page.keyboard.press("Enter");
+    await this.page.waitForTimeout(timeoutConfig);
+
+    const error = await this.page.evaluate(() => {
+      const errorDiv = document.querySelector(
+        ".gh-date-time-picker-error"
+      );
+      return errorDiv ? errorDiv.textContent.trim() : null;
+    });
+    if (error) {
+      ans = new TestResponse(false, error);
+     }
+     else{
+      ans = new TestResponse(true, "Change date Post passed");
+     }
+    await this.page.waitForTimeout(timeoutConfig);
+
+
+    await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "newInfoPost.png",
+    });
+    
+    await this.page.waitForTimeout(timeoutConfig);
+    await Promise.resolve(this.page.click('button[title="Settings"]'));
+
+    return ans;
+  } catch (error) {
+    console.error("Edit draft Post failed:", error.message);
+    let ans = new TestResponse(
+      false,
+      "Edit draft Post failed"
+    );
+
+    return ans; // Rethrow the error to propagate it to the calling code
+  }
+}}
 module.exports = PostsPage;

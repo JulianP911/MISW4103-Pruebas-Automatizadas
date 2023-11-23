@@ -41,6 +41,10 @@ const runScenarios = async () => {
   await runScenario12();
   await runScenario13();
   await runScenario14();
+  await runScenario15();
+  await runScenario16();
+  await runScenario17();
+  await runScenario18();
   await runScenario19();
   await runScenario20();
   await runScenario21();
@@ -861,6 +865,226 @@ const runScenario14 = async () => {
     }
   } catch (e) {
     console.log("E14-Test Failed ");
+  }
+};
+
+
+/**
+ * Escenario 15: Como administrador le cambio la fecha a un post ya publicado Con fecha futura
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se crea un post y se pública
+ * And: Se elige el post creado
+ * And: Se hace click en settings 
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que no permite actualizar y muestra un mensaje de error
+ */
+const runScenario15 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario15/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
+    const newPublishDate = faker.date.future().toISOString().split('T')[0];
+  
+    await Promise.resolve(postPage.visit());
+   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    const responseCreatePost = await Promise.resolve(
+      postPage.editDate(titlePost, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que el post no se haya podido crear y el mensaje de error
+    if (!responseCreatePost.status) {
+      console.log("E15-Test Passed ");
+    } else {
+      console.log("E15-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E15-Test Failed ");
+  }
+};
+/**
+ * Escenario 16: Como administrador le cambio la fecha a un post ya publicado Con fecha pasada
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se crea un post y se pública
+ * And: Se elige el post creado
+ * And: Se hace click en settings 
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que la fecha se haya podido cambiar
+ */
+const runScenario16 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
+    const newPublishDate = faker.date.past().toISOString().split('T')[0];
+  
+    await Promise.resolve(postPage.visit());
+   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    const responseCreatePost = await Promise.resolve(
+      postPage.editDate(titlePost, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la fecha se haya podido cambiar
+    if (responseCreatePost.status) {
+      console.log("E16-Test Passed ");
+    } else {
+      console.log("E16-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E16-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 17: Como administrador le cambio la fecha a un post ya publicado con formato incorrecto
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se crea un post y se pública
+ * And: Se elige el post creado
+ * And: Se hace click en settings 
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que la fecha se haya podido cambiar
+ */
+const runScenario17 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario17/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
+    const newPublishDate = faker.date.past().toDateString();
+  
+    await Promise.resolve(postPage.visit());
+   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    const responseCreatePost = await Promise.resolve(
+      postPage.editDate(titlePost, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la fecha no se haya podido cambiar
+    if (!responseCreatePost.status) {
+      console.log("E17-Test Passed ");
+    } else {
+      console.log("E17-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E17-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 18: Como administrador le cambio la fecha a un post ya publicado con fecha incorrecta (ej. mes>12)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Posts
+ * And: Se crea un post y se pública
+ * And: Se elige el post creado
+ * And: Se hace click en settings 
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que la fecha se haya podido cambiar
+ */
+const runScenario18 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario18/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = faker.lorem.sentence(2);
+    const newPublishDate = "2023-45-45"
+  
+    await Promise.resolve(postPage.visit());
+   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    const responseCreatePost = await Promise.resolve(
+      postPage.editDate(titlePost, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la fecha no se haya podido cambiar
+    if (!responseCreatePost.status) {
+      console.log("E18-Test Passed ");
+    } else {
+      console.log("E18-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E18-Test Failed ");
   }
 };
 
@@ -1893,7 +2117,7 @@ const runScenario141 = async () => {
  * And: Se da click en pages
  * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
  */
-const runScenario18 = async () => {
+const runScenario180 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario18/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
