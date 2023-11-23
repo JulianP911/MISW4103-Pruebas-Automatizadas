@@ -467,14 +467,18 @@ class PostsPage {
           const element = document.querySelector(
             "[data-test-editor-post-status]"
           );
-          return element && element.textContent.trim().includes("Draft");
+          return element && element.textContent.trim().includes("Saved");
         },
         { timeout: timeoutConfig }
       );
       if (saved) {
         ans = new TestResponse(true, "Create Draft Post passed");
 
-        return ans;
+       
+      }
+      else{
+        ans = new TestResponse(false, "Create Draft Post failed");
+       return ans
       }
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="posts"]',
@@ -488,7 +492,7 @@ class PostsPage {
         );
       } catch {
         ans = new TestResponse(false, "Create Draft Post failed");
-        return ans;
+       return ans
       }
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.waitForSelector(

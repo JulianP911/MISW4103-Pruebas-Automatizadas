@@ -40,11 +40,12 @@ const runScenarios = async () => {
   await runScenario11();
   await runScenario12();
   await runScenario13();
-  await runScenario14();
+  await runScenario14();*/
+  await runScenario19();
   await runScenario20();
-  await runScenario21();*/
-
+  await runScenario21();
   await runScenario22();
+  await runScenario23();
 
 };
 
@@ -855,7 +856,7 @@ const runScenario14 = async () => {
 };
 
 /**
- * Escenario 20: Como usuario administrador edito un post creado previamente de mis borradores Título y descripcion correctos
+ * Escenario 19: Como usuario administrador edito un post creado previamente de mis borradores Título y descripcion correctos
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se realiza la creación de un post
@@ -864,9 +865,9 @@ const runScenario14 = async () => {
  * And: Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
  */
-const runScenario20 = async () => {
+const runScenario19 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario20/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -905,16 +906,16 @@ const runScenario20 = async () => {
 
     //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
     if (responseEditPost.status) {
-      console.log("E20-Test Passed ");
+      console.log("E19-Test Passed ");
     } else {
-      console.log("E20-Test Failed ");
+      console.log("E19-Test Failed ");
     }
   } catch (e) {
-    console.log("E20-Test Failed ");
+    console.log("E19-Test Failed ");
   }
 };
 /**
- * Escenario 21: Como usuario administrador edito un post creado previamente de mis borradores Sin Título y con descripcion 
+ * Escenario 20: Como usuario administrador edito un post creado previamente de mis borradores Sin Título y con descripcion 
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se realiza la creación de un post
@@ -923,9 +924,9 @@ const runScenario20 = async () => {
  * And: Se da click en posts
  * Then:Se valida que el borrador se haya guardado
  */
-const runScenario21 = async () => {
+const runScenario20 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario21/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario20/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -964,17 +965,17 @@ const runScenario21 = async () => {
 
     // Then:Se valida que el borrador se haya guardado
     if (responseEditPost.status) {
-      console.log("E21-Test Passed ");
+      console.log("E20-Test Passed ");
     } else {
-      console.log("E21-Test Failed ");
+      console.log("E20-Test Failed ");
     }
   } catch (e) {
-    console.log("E21-Test Failed ");
+    console.log("E20-Test Failed ");
   }
 };
 
 /**
- * Escenario 22: Como usuario administrador edito un post creado previamente de mis borradores Campos vacíos
+ * Escenario 21: Como usuario administrador edito un post creado previamente de mis borradores Campos vacíos
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se realiza la creación de un post
@@ -983,9 +984,9 @@ const runScenario21 = async () => {
  * And: Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
  */
-const runScenario22 = async () => {
+const runScenario21 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario22/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario21/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -1024,6 +1025,67 @@ const runScenario22 = async () => {
 
     //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
     if (responseEditPost.status) {
+      console.log("E21-Test Passed ");
+    } else {
+      console.log("E21-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E21-Test Failed ");
+  }
+};
+
+
+/**
+ * Escenario 22: Como usuario administrador edito un post creado previamente de mis borradores Campos muy largos (15000 caracteres)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa una nueva cadena de texto al título del post
+ * And: Se da click en posts
+ * Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+ */
+const runScenario22 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario22/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newTitlePost = faker.lorem.sentences(50);
+    const newDescriptionPost = faker.lorem.sentences(50);
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.editDraft(titlePost, newTitlePost,newDescriptionPost)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+    if (!responseEditPost.status) {
       console.log("E22-Test Passed ");
     } else {
       console.log("E22-Test Failed ");
@@ -1034,10 +1096,65 @@ const runScenario22 = async () => {
 };
 
 
+/**
+ * Escenario 23: Como usuario administrador edito un post creado previamente de mis borradores Campos solo con caracteres especiales
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un post
+ * And:Se selecciona el post que ha sido creado
+ * And:Se ingresa una nueva cadena de texto al título del post
+ * And: Se da click en posts
+ * Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+ */
+const runScenario23 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario23/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+// Given: Se ingresa a la página correspondiente a login
+  
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
 
+    await loginPage.visit();
 
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+   /* When: Se realiza la creación de un post
+    * And:Se selecciona el post que ha sido creado
+    * And:Se ingresa una nueva cadena de texto al título del post
+    * And: Se da click en posts*/
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = faker.lorem.sentence(2);
+    const newTitlePost =  "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const newDescriptionPost =  "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const responseEditPost = await Promise.resolve(
+      postPage.editDraft(titlePost, newTitlePost,newDescriptionPost)
+    );
 
+    // Close the browser after completing the tests
+    await browser.close();
 
+    //Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
+    if (responseEditPost.status) {
+      console.log("E23-Test Passed ");
+    } else {
+      console.log("E23-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E23-Test Failed ");
+  }
+};
 
 
 
