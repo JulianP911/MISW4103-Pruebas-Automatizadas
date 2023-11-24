@@ -155,6 +155,15 @@ class PagesPage {
       });
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(descriptionPage);
+      await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim() === "Draft";
+        },
+        { timeout: timeoutConfig }
+      );
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completeDraftForm.png",
       });
@@ -191,8 +200,9 @@ class PagesPage {
     }
   }
 
-  async createPageScheduled() {
+  async createPageScheduled(titlePage, descriptionPage, scheduleDate) {
     try {
+      let ans = new TestResponse(false, "Create Scheduled page failed");
       // Wait for an element that contains a span with the text "New Page"
       await this.page.waitForSelector("a[data-test-new-page-button]");
       await this.page.click("a[data-test-new-page-button]");
@@ -200,12 +210,12 @@ class PagesPage {
         path: this.screenshotDirectoryEscenario + "newPageScheduled.png",
       });
       await this.page.waitForSelector("textarea[data-test-editor-title-input]");
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(titlePage);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "titleScheduled.png",
       });
       await this.page.keyboard.press("Tab");
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPage);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completeScehduledForm.png",
       });
@@ -230,6 +240,26 @@ class PagesPage {
         document.querySelector('div[data-test-radio="schedule"]').click();
       });
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.evaluate((scheduleDate) => {
+        document.querySelector(
+          "[data-test-date-time-picker-date-input]"
+        ).value = scheduleDate;
+        document
+          .querySelector("[data-test-date-time-picker-date-input]")
+          .focus();
+      }, scheduleDate);
+      await this.page.keyboard.press("Tab");
+      const error = await this.page.evaluate(() => {
+        const errorDiv = document.querySelector(
+          "div.gh-date-time-picker-error[data-test-date-time-picker-error]"
+        );
+        return errorDiv ? errorDiv.textContent.trim() : null;
+      });
+      if (error) {
+        ans = new TestResponse(false, error);
+        return ans;
+      }
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "scheduleNewPage.png",
       });
@@ -252,9 +282,12 @@ class PagesPage {
         '.gh-publish-title[data-test-publish-flow="complete"]'
       );
       if (element) {
-        console.log("Page creado exitosamente");
+        ans = new TestResponse(true, "Page created successfully");
       } else {
-        throw "No se encontro componente de creacion exitosa";
+        ans = new TestResponse(
+          false,
+          await this.page.$("[data-test-confirm-error]").value
+        );
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createPageScheduled.png",
@@ -278,15 +311,16 @@ class PagesPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backlistScheduled.png",
       });
-      return this.page;
+      return ans;
     } catch (error) {
-      console.error("Create page faile:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      console.error("Create Scheduled page failed:", error.message);
+      return new TestResponse(false, "Create Scheduled page failed");
     }
   }
 
-  async editDraft(titlePage, newTitlePage) {
+  async editDraft(titlePage, newTitlePage, newDescriptionPage) {
     try {
+      let ans = new TestResponse(false, "Page created failed");
       await this.page.evaluate(async (titlePage) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
@@ -312,13 +346,43 @@ class PagesPage {
       });
       await this.page.keyboard.type(newTitlePage);
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.press("Tab");
+      for (let i = 0; i < 50; i++) {
+        await this.page.keyboard.press("Backspace"); // Simulate pressing the Backspace key
+      }
+      await this.page.keyboard.type(newDescriptionPage);
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "editedPage.png",
       });
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="pages"]',
+
+      //check for saved tag
+      const saved = await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim().includes("Saved");
+        },
         { timeout: timeoutConfig }
       );
+      if (saved) {
+        ans = new TestResponse(true, "Create Draft page passed");
+      } else {
+        ans = new TestResponse(false, "Create Draft page failed");
+        return ans;
+      }
+
+      try {
+        // Go back to the list of pages
+        await this.page.waitForSelector(
+          '.gh-btn-editor[data-test-link="pages"]',
+          { timeout: timeoutConfig }
+        );
+      } catch {
+        ans = new TestResponse(false, "Create Draft Page failed");
+        return ans;
+      }
 
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="pages"]')
@@ -338,18 +402,19 @@ class PagesPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(newTitlePage)) {
           tituloEncontrado = true;
-          return;
+          ans = new TestResponse(true, "Edit draft Page success");
         }
       }
       if (!tituloEncontrado) {
-        throw "no se encontro el titulo del draft en el listado de pages";
+        ans = new TestResponse(false,"no se encontro el titulo del draft en el listado de pages");      
       }
 
     
-      return this.page;
+      return ans;
     } catch (error) {
-      console.error("Edit draft Pages failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      let ans = new TestResponse(false,"no se encontro el titulo del draft en el listado de pages");
+
+      return ans; // Rethrow the error to propagate it to the calling code
     }
   }
 
@@ -415,6 +480,205 @@ class PagesPage {
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
+
+  async changeURL(titlePage, newURL) {
+    try {
+      let ans = new TestResponse(false, "Change URL page failed");
+      //Select the page to chnge the url
+      await this.page.evaluate(async (titlePage) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePage.trim()) {
+            await element.click();
+            break; // Exit the loop once the element is clicked
+          }
+        }
+      }, titlePage);
+
+      await this.page.waitForTimeout(timeoutConfig);
+
+      // Enter Settings
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForSelector(".post-setting-slug");
+
+      // Clear the input field before typing the new URL
+      await this.page.evaluate(() => {
+        const slugInput = document.querySelector(".post-setting-slug");
+        slugInput.value = "";
+      });
+
+      await this.page.type(".post-setting-slug", newURL);
+      await this.page.keyboard.press("Tab");
+
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForTimeout(timeoutConfig);
+
+      const saved = await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim().includes("Draft");
+        },
+        { timeout: timeoutConfig }
+      );
+
+      if (saved) {
+        ans = new TestResponse(true, "Change URL page passed");
+      } else {
+        return new TestResponse(false, "Change URL page failed");
+      }
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForSelector(".post-setting-slug");
+      const updatedUrl = await this.page.evaluate(() => {
+        return document.querySelector(".post-setting-slug").value;
+      });
+      if (updatedUrl === newURL) {
+        ans = new TestResponse(true, "Change URL page passed");
+      } else {
+        return new TestResponse(false, "Change URL page failed");
+      }
+
+      await Promise.resolve(
+        this.page.click('.gh-btn-editor[data-test-link="pages"]')
+      );
+      return ans;
+    } catch (error) {
+      console.log(error);
+      return new TestResponse(false, "Change URL page failed");
+    }
+  }
+
+  async editDate(titlePage, newDate) {
+    try {
+      let ans = new TestResponse(false, "Page edit date failed");
+  
+      await this.page.evaluate(async (titlePage) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePage.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, titlePage);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectPageToEdit.png",
+      });
+      
+      await this.page.waitForTimeout(timeoutConfig);
+  
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+  
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.evaluate((newDate) => {
+        document.querySelector(
+          "[data-test-date-time-picker-date-input]"
+        ).value = newDate;
+        document
+          .querySelector("[data-test-date-time-picker-date-input]")
+          .focus();
+      }, newDate);
+      await this.page.keyboard.press("Enter");
+      await this.page.waitForTimeout(timeoutConfig);
+  
+      const error = await this.page.evaluate(() => {
+        const errorDiv = document.querySelector(
+          ".gh-date-time-picker-error"
+        );
+        return errorDiv ? errorDiv.textContent.trim() : null;
+      });
+      if (error) {
+        ans = new TestResponse(false, error);
+       }
+       else{
+        ans = new TestResponse(true, "Change date page passed");
+       }
+      await this.page.waitForTimeout(timeoutConfig);
+  
+  
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newInfoPage.png",
+      });
+      
+      await this.page.waitForTimeout(timeoutConfig);
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+  
+      return ans;
+    } catch (error) {
+      console.error("Edit date page failed:", error.message);
+      let ans = new TestResponse(
+        false,
+        "Edit date page failed"
+      );
+  
+      return ans; // Rethrow the error to propagate it to the calling code
+    }
+  }
+
+  async addYoutubeUrl(titlePage, url) {
+    try {
+      let ans = new TestResponse(false, "Add url failed");
+
+      await this.page.evaluate(async (titlePage) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePage.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, titlePage);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectPageToAddUrl.png",
+      });
+      await this.page.evaluate(() => {
+        const element = document.querySelector(
+          "textarea[data-test-editor-title-input]"
+        );
+        element.focus();
+      });
+      await this.page.keyboard.press("Tab");
+      await this.page.click('button[aria-label="Add a card"]');
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.click('[data-kg-card-menu-item="YouTube"]');
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.type(url)
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.keyboard.press("Enter");
+      await this.page.waitForTimeout(timeoutConfig);
+
+      const errmsg=await this.page.$('[data-testid="embed-url-error-message"]');
+      if(errmsg)
+      {
+        ans = new TestResponse(false, errmsg.value);
+      }
+      else{
+        ans = new TestResponse(true, "Add url passed");
+      }
+   
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newInfoPage.png",
+      });
+     
+      await this.page.waitForTimeout(timeoutConfig);
+      return ans;
+    } catch (error) {
+      console.error("Add Url page failed:", error);
+      let ans = new TestResponse(
+        false,
+        "Add Url page failed"
+      );
+
+      return ans; 
+    }
+  }
+
 }
 
 module.exports = PagesPage;

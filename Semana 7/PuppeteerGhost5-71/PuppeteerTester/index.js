@@ -59,7 +59,38 @@ const runScenarios = async () => {
   await runScenario30();
   await runScenario31();
   await runScenario32();
-
+  await runScenario33();
+  await runScenario34();
+  await runScenario35();
+  await runScenario36();
+  await runScenario37();
+  await runScenario38();
+  await runScenario39();
+  await runScenario40();
+  await runScenario41();
+  await runScenario42();
+  await runScenario43();
+  await runScenario44();
+  await runScenario45();
+  await runScenario46();
+  await runScenario47();
+  await runScenario48();
+  await runScenario49();
+  await runScenario50();
+  await runScenario51();
+  await runScenario52();
+  await runScenario53();
+  await runScenario54();
+  await runScenario55();
+  await runScenario56();
+  await runScenario57();
+  await runScenario58();
+  await runScenario59();
+  await runScenario60();
+  await runScenario61();
+  await runScenario62();
+  await runScenario63();
+  await runScenario64();
 };
 
 /**
@@ -1973,6 +2004,1949 @@ const runScenario29 = async () => {
   }
 }
 
+/**
+ * Escenario 33: Como usuario administrador creo una nueva page para publicarla en el sitio web con título y descripcion correctos
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa una cadena de texto al título
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en el publish
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish page, right now
+ * And: Se da click en pages
+ * Then:Se valida que la page este creada
+ */
+const runScenario33 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario33/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /*When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And:Se ingresa una cadena de texto al título
+     * And:Se ingresa un texto al contenido
+     * And: Se da click en el publish
+     * And: Se da click en Continue, final review
+     * And: Se da click en Publish page, right now
+     * And: Se da click en pages
+     * */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createPage(titlePage, descriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que la page este creada
+    if (responseCreatePage.status) {
+      console.log("E33-Test Passed ");
+    } else {
+      console.log("E33-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E33-Test Failed ");
+  }
+};
+/**
+ * Escenario 34: Como usuario administrador creo una nueva page para publicarla en el sitio web Sin titulo y con descripción
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa un texto al contenido del page
+ * And: Se da click en el publish
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish page, right now
+ * And: Se da click en pages
+ * Then:Se valida que la page se haya creado
+ */
+const runScenario34 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario34/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /*When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And:Se ingresa un texto al contenido
+     * And: Se da click en el publish
+     * And: Se da click en Continue, final review
+     * And: Se da click en Publish page, right now
+     * And: Se da click en pages
+     * */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = "";
+    const descriptionPage = faker.lorem.sentence(2);
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createPage(titlePage, descriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que la page este creada
+    if (responseCreatePage.status) {
+      console.log("E34-Test Passed ");
+    } else {
+      console.log("E34-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E34-Test Failed ");
+  }
+};
+/**
+ * Escenario 35: Como usuario administrador creo una nueva page para publicarla en el sitio web Sin titulo y sin descripción
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa un texto al contenido
+ * And: Se espera a que aparezca el botón de publish
+ * Then:Se valida que el page no se haya podido crear
+ */
+const runScenario35 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario35/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /*When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And:Se ingresa un texto al contenido
+     * And: Se da click en el publish
+     * */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = "";
+    const descriptionPage = "";
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createPage(titlePage, descriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que la page no se haya podido crear
+    if (!responseCreatePage.status) {
+      console.log("E35-Test Passed ");
+    } else {
+      console.log("E35-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E35-Test Failed ");
+  }
+};
+/**
+ * Escenario 36: Como usuario administrador creo una nueva page para publicarla en el sitio web con campos muy largos (15000 caracteres)
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa un texto al titulo
+ * And:Se ingresa un texto al contenido
+ * Then:Se valida que el page no se haya podido crear
+ */
+const runScenario36 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario36/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /*When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And:Se ingresa un texto al titulo
+     * And:Se ingresa un texto al contenido
+     * */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = faker.lorem.sentences(50);
+    const descriptionPage = faker.lorem.sentences(50);
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createPage(titlePage, descriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que la page no se haya podido publicar
+    if (!responseCreatePage.status) {
+      console.log("E36-Test Passed ");
+    } else {
+      console.log("E436-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E36-Test Failed ");
+  }
+};
+/**
+ * Escenario 37: Como usuario administrador creo una nueva page para publicarlo en el sitio web llenando sus campos con caracteres especiales
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Pages
+ * And:Se ingresa un texto en el titulo de la page
+ * And:Se ingresa un texto al contenido de la page
+ * And: Se da click en el publish
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish pages, right now
+ * And: Se da click en pages
+ * Then:Se valida que la page se haya creado
+ */ const runScenario37 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario37/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /*When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Pages
+     * And:Se ingresa un texto al titulo
+     * And:Se ingresa un texto al contenido
+     * And: Se da click en el publish
+     * And: Se da click en Continue, final review
+     * And: Se da click en Publish page, right now
+     * And: Se da click en pages
+     * */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const descriptionPage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createPage(titlePage, descriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que la page se haya creado
+    if (responseCreatePage.status) {
+      console.log("E37-Test Passed ");
+    } else {
+      console.log("E37-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e.message);
+    console.log("E37-Test Failed ");
+  }
+};
+/**
+ * Escenario 38: Como usuario administrador creo un nuevo borrador de page para el sitio web con título y descripcion correctos
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa una cadena de texto al título
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en pages
+ * Then:Se valida que aparezca en el listado de pages el borrador que se acabo de crear
+ */
+const runScenario38 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario38/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And:Se ingresa una cadena de texto al título
+     * And:Se ingresa un texto al contenido
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createDraft(titlePage, descriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que aparezca en el listado de pages el borrador que se acabo de crear
+
+    if (responseCreatePage.status) {
+      console.log("E38-Test Passed ");
+    } else {
+      console.log("E38-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E38-Test Failed ");
+  }
+};
+/**
+ * Escenario 39: Como usuario administrador creo un nuevo borrador de page para el sitio web Sin titulo y con descripción
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en pages
+ * Then:Se valida que aparezca en el listado de pages el borrador que se acabo de crear
+ */
+const runScenario39 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario39/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And:Se ingresa un texto al contenido
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = "";
+    const descriptionPage = faker.lorem.sentence(2);
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createDraft(titlePage, descriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que aparezca en el listado de pages el borrador que se acabo de crear
+
+    if (responseCreatePage.status) {
+      console.log("E39-Test Passed ");
+    } else {
+      console.log("E39-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E39-Test Failed ");
+  }
+};
+/**
+ * Escenario 40: Como usuario administrador creo un nuevo borrador de page para el sitio web sin titulo y sin descripción
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de pages
+ * And: Se da clic en el botón de New Page
+ * And: Se da click en pages
+ * Then:Se valida que no se haya podido crear el borrador
+ */
+const runScenario40 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario40/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = "";
+    const descriptionPage = "";
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createDraft(titlePage, descriptionPage)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que el page no se haya podido crear
+    if (!responseCreatePage.status) {
+      console.log("E40-Test Passed ");
+    } else {
+      console.log("E40-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E40-Test Failed ");
+  }
+};
+/**
+ * Escenario 41: Como usuario administrador creo un nuevo borrador de page para el sitio web Campos muy largos (15000 caracteres)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa un texto al título
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en pages
+ * Then:Se valida que no se haya podido crear el borrador
+ */
+const runScenario41 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario41/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = faker.lorem.sentences(50);
+    const descriptionPage = faker.lorem.sentences(50);
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createDraft(titlePage, descriptionPage)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que el page no se haya podido crear
+    if (!responseCreatePage.status) {
+      console.log("E41-Test Passed ");
+    } else {
+      console.log("E41-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E41-Test Failed ");
+  }
+};
+/**
+ * Escenario 42: Como usuario administrador creo un nuevo borrador de page para el sitio web llenando los campos con caracteres especiales
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa un texto al título
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en pages
+ * Then:Se valida que se haya podido crear el borrador
+ */
+const runScenario42 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario42/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    // Given: Se ingresa a la página correspondiente a login
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+
+    /* When: Se da clic en el botón de Pages
+     * And: Se da clic en el botón de New Page
+     * And:Se ingresa un texto al título
+     * And:Se ingresa un texto al contenido
+     * And: Se da click en pages
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    //Generación de datos
+    const titlePage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const descriptionPage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+
+    const responseCreatePage = await Promise.resolve(
+      pagePage.createDraft(titlePage, descriptionPage)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que aparezca en el listado de pages el borrador que se acabo de crear
+    if (responseCreatePage.status) {
+      console.log("E10-Test Passed ");
+    } else {
+      console.log("E10-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E10-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 43: Como usuario administrador creo una nueva page con publicación programada Con fecha futura
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa una cadena de texto al título
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación de la page
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish page, right now
+ * And: Se da click en pages
+ * Then:Se valida que el page este creado
+ */
+const runScenario43 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario43/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const publishDate = faker.date.future().toISOString().split("T")[0];
+
+    await Promise.resolve(pagePage.visit());
+    const responseCreateScheduledPage = await Promise.resolve(
+      pagePage.createPageScheduled(titlePage, descriptionPage, publishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    if (responseCreateScheduledPage.status) {
+      console.log("E43-Test Passed ");
+    } else {
+      console.log("E43-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E43-Test Failed ");
+  }
+};
+/**
+ * Escenario 44: Como usuario administrador creo una nueva page con publicación programada Con fecha pasada
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa una cadena de texto al título
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación de la page
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish page, right now
+ * And: Se da click en pages
+ * Then:Se valida que la page este creada
+ */
+const runScenario44 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario44/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const publishDate = faker.date.past().toISOString().split("T")[0];
+
+    await Promise.resolve(pagePage.visit());
+    const responseCreateScheduledPage = await Promise.resolve(
+      pagePage.createPageScheduled(titlePage, descriptionPage, publishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    if (!responseCreateScheduledPage.status) {
+      console.log("E44-Test Passed ");
+    } else {
+      console.log("E44-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E44-Test Failed ");
+  }
+};
+/**
+ * Escenario 45: Como usuario administrador creo una nueva page con publicación programada Con formato incorrecto
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa una cadena de texto al título
+ * And:Se ingresa un texto al contenido
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación del page
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish page, right now
+ * And: Se da click en pages
+ * Then:Se valida que la page este creada
+ */
+const runScenario45 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario45/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const publishDate = faker.date.past().toDateString();
+
+    await Promise.resolve(pagePage.visit());
+    const responseCreateScheduledPage = await Promise.resolve(
+      pagePage.createPageScheduled(titlePage, descriptionPage, publishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la page no se haya podido crear y el mensaje de error
+
+    if (
+      !responseCreateScheduledPage.status &&
+      responseCreateScheduledPage.message.includes("Invalid date format")
+    ) {
+      console.log("E45-Test Passed ");
+    } else {
+      console.log("E45-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E45-Test Failed ");
+  }
+};
+/**
+ * Escenario 46: Como usuario administrador creo una nueva page con publicación programada Con fecha incorrecta (ej. mes >12)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se da clic en el botón de New Page
+ * And:Se ingresa una cadena de texto al título del page
+ * And:Se ingresa un texto al contenido del page
+ * And: Se da click en el publish
+ * And: Se da click en el dropdown de configuración de publicación del page
+ * And: Se da click en la opcion de publicar luego
+ * And: Se da click en Continue, final review
+ * And: Se da click en Publish page, right now
+ * And: Se da click en pages
+ * Then:Se valida que la page no se haya podido crear y el mensaje de error
+ */
+const runScenario46 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario46/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const publishDate = "2023-45-45";
+
+    await Promise.resolve(pagePage.visit());
+    const responseCreateScheduledPage = await Promise.resolve(
+      pagePage.createPageScheduled(titlePage, descriptionPage, publishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la page no se haya podido crear y el mensaje de error
+    if (
+      !responseCreateScheduledPage.status &&
+      responseCreateScheduledPage.message.includes("Invalid date")
+    ) {
+      console.log("E46-Test Passed ");
+    } else {
+      console.log("E46-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E46-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 47: Como usuario administrador edito un page creado previamente de mis borradores Título y descripcion correctos
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona el page que ha sido creado
+ * And:Se ingresa una nueva cadena de texto al título del page
+ * And:Se ingresa una nueva cadena de texto en el contenido de la page
+ * And: Se da click en pages
+ * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+ */
+const runScenario47 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario47/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del page
+     * And:Se ingresa una nueva cadena de texto en el contenido de la page
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newTitlePage = faker.lorem.sentence(2);
+    const newDescriptionPage = faker.lorem.sentence(2);
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+    if (responseEditPage.status) {
+      console.log("E47-Test Passed ");
+    } else {
+      console.log("E47-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E47-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 48: Como usuario administrador edito un page creado previamente de mis borradores sin título y con descripcion
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona el page que ha sido creado
+ * And:Elimino el título de la page
+ * And:Se ingresa una nueva cadena de texto el contenido de la page
+ * And: Se da click en pages
+ * Then:Se valida que el borrador se haya guardado
+ */
+const runScenario48 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario48/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del page
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newTitlePage = "";
+    const newDescriptionPage = faker.lorem.sentence(2);
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    // Then:Se valida que el borrador se haya guardado
+    if (responseEditPage.status) {
+      console.log("E48-Test Passed ");
+    } else {
+      console.log("E48-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E48-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 49: Como usuario administrador edito una page creada previamente de mis borradores con campos vacíos
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona el page que ha sido creado
+ * And:Elimino el título de la page
+ * And:Elimino el contenido de la page
+ * And: Se da click en pages
+ * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+ */
+const runScenario49 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario49/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del page
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newTitlePage = "";
+    const newDescriptionPage = "";
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+    if (responseEditPage.status) {
+      console.log("E49-Test Passed ");
+    } else {
+      console.log("E49-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E49-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 50: Como usuario administrador edito una page creada previamente de mis borradores con campos muy largos (15000 caracteres)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona el page que ha sido creado
+ * And:Se ingresa una nueva cadena de texto al título del page
+ * And: Se da click en pages
+ * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+ */
+const runScenario50 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario50/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del page
+     * And: Se da click en pages*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newTitlePage = faker.lorem.sentences(50);
+    const newDescriptionPage = faker.lorem.sentences(50);
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+    if (!responseEditPage.status) {
+      console.log("E50-Test Passed ");
+    } else {
+      console.log("E50-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E50-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 51: Como usuario administrador edito una page creada previamente de mis borradores con campos con caracteres especiales
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona el page que ha sido creado
+ * And:Se ingresa una nueva cadena de texto al título de la page
+ * And:Se ingresa una nueva cadena de texto en el contenido de la page
+ * And: Se da click en pages
+ * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+ */
+const runScenario51 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario51/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título de la page
+     * And:Se ingresa una nueva cadena de texto en el contenido de la page
+     * And: Se da click en pages
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newTitlePage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const newDescriptionPage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+    if (responseEditPage.status) {
+      console.log("E51-Test Passed ");
+    } else {
+      console.log("E51-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E51-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 52: Como administrador le cambio la url a una page Campo vacio
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de una page
+ * And:Se selecciona la page que ha sido creada
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle de la page
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario52 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario52/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de una page
+     * And:Se selecciona la page que ha sido creada
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle de la page
+     * And: Se da click en settings de nuevo
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newUrl = "";
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.changeURL(titlePage, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+    if (!responseEditPage.status) {
+      console.log("E52-Test Passed ");
+    } else {
+      console.log("E52-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E52-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 53: Como administrador le cambio la url a un page Caracteres especiales
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona la page que ha sido creada
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle de la page
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario53 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario53/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona la page que ha sido creada
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle de la page
+     * And: Se da click en settings de nuevo
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newUrl = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.changeURL(titlePage, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url sea la que se ingresó como nueva
+    if (!responseEditPage.status) {
+      console.log("E53-Test Passed ");
+    } else {
+      console.log("E53-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E53-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 54: Como administrador le cambio la url a una page Campos muy largos (15000 caracteres)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona la page que ha sido creado
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle de la page
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario54 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario54/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona la page que ha sido creada
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle de la page
+     * And: Se da click en settings de nuevo
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newUrl = faker.lorem.sentences(50).replace(" ", "-");
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.changeURL(titlePage, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url sea la que se ingresó como nueva
+    if (!responseEditPage.status) {
+      console.log("E54-Test Passed ");
+    } else {
+      console.log("E54-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E54-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 55: Como administrador le cambio la url a un page Campo correcto
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de una page
+ * And:Se selecciona la page que ha sido creada
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle de la page
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que la url sea la que se ingresó como nueva
+ */
+const runScenario55 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario55/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await loginPage.visit();
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de una page
+     * And:Se selecciona la page que ha sido creada
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle de la page
+     * And: Se da click en settings de nuevo
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newUrl = faker.lorem.word();
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.changeURL(titlePage, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
+    if (responseEditPage.status) {
+      console.log("E55-Test Passed ");
+    } else {
+      console.log("E55-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E55-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 56: Como administrador le asigno a dos pages la misma url
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de una page
+ * And:Se selecciona la page que ha sido creada
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle de la page
+ * And: Se da click en settings de nuevo
+ * And: Se realiza la creación de una page
+ * And:Se selecciona la page que ha sido creada
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle de la page
+ * And: Se da click en settings de nuevo
+ * Then:Se valida que en el segundo page no se cambia exitosamente por la url ingresada y el primero si
+ */
+const runScenario56 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario28/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de una page
+     * And:Se selecciona la page que ha sido creada
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle de la page
+     * And: Se da click en settings de nuevo
+     * And: Se realiza la creación de una page
+     * And:Se selecciona la page que ha sido creada
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle de la page
+     * And: Se da click en settings de nuevo*/
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newUrl = faker.lorem.word();
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.changeURL(titlePage, newUrl)
+    );
+
+    const descriptionPage2 = faker.lorem.sentence(2);
+    const titlePage2 = faker.lorem.sentence(2);
+    await Promise.resolve(pagePage.createDraft(titlePage2, descriptionPage2));
+    const responseEditPage2 = await Promise.resolve(
+      pagePage.changeURL(titlePage2, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que en el segundo page no se cambia exitosamente por la url ingresada y el primero si
+    if (!responseEditPage2.status && responseEditPage.status) {
+      console.log("E56-Test Passed ");
+    } else {
+      console.log("E56-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E56-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 57: Como administrador le cambio la url a un page por Ghost (Palabra protegida)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de una page
+ * And:Se selecciona la page que ha sido creada
+ * And:Se ingresa a settings
+ * And: Se borra la url por defecto
+ * And: Se ingresa una nueva url
+ * And: Se devuelve al detalle de la page
+ * And: Se da click en settings de nuevo
+ *Then:Se valida que la url no sea Ghost es decir no se haya hecho la edición correctamente
+ */
+const runScenario57 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario29/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    /* When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle del page
+     * And: Se da click en settings de nuevo
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = faker.lorem.sentence(2);
+    const newUrl = "Ghost";
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.changeURL(titlePage, newUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url no sea Ghost es decir no se haya hecho la edición correctamente
+    if (!responseEditPage.status) {
+      console.log("E57-Test Passed ");
+    } else {
+      console.log("E57-Test Failed ");
+    }
+  } catch (e) {
+    console.log("E57-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 58: Como administrador le cambio la fecha a una page ya publicado Con fecha futura
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se crea un page y se pública
+ * And: Se elige la page creada
+ * And: Se hace click en settings 
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que no permite actualizar y muestra un mensaje de error
+ */
+const runScenario58 = async () => {
+    try {
+      //Create directory to save screenshots
+      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario58/`;
+      ensureDirectoryExists(screenshotDirectoryEscenario);
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+      const loginPage = new LoginPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+  
+      await loginPage.visit();
+  
+      await loginPage.login(userEmail, userPassword);
+      const pagePage = new PagesPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+      const titlePage = faker.lorem.sentence(2);
+      const descriptionPage = faker.lorem.sentence(2);
+      const newPublishDate = faker.date.future().toISOString().split('T')[0];
+    
+      await Promise.resolve(pagePage.visit());
+     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+      const responseCreatePage = await Promise.resolve(
+        pagePage.editDate(titlePage, newPublishDate)
+      );
+      // Close the browser after completing the tests
+      await browser.close();
+      //Then:Se valida que no permite actualizar y muestra un mensaje de error
+      if (!responseCreatePage.status) {
+        console.log("E58-Test Passed ");
+      } else {
+        console.log("E58-Test Failed ");
+      }
+    } catch (e) {
+      console.log("E58-Test Failed ");
+    }
+  };
+
+  /**
+   * Escenario 59: Como administrador le cambio la fecha a una page ya publicado Con fecha pasada
+   *
+   * Given: Se ingresa a la página correspondiente a login
+   * When: Se da clic en el botón de Pages
+   * And: Se crea un page y se pública
+   * And: Se elige el page creado
+   * And: Se hace click en settings 
+   * And: Se cambia la fecha de publicación
+   * And: Se da click en actualizar
+   * Then:Se valida que la fecha se haya podido cambiar
+   */
+  const runScenario59 = async () => {
+    try {
+      //Create directory to save screenshots
+      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
+      ensureDirectoryExists(screenshotDirectoryEscenario);
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+      const loginPage = new LoginPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+  
+      await loginPage.visit();
+  
+      await loginPage.login(userEmail, userPassword);
+      const pagePage = new PagesPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+      const titlePage = faker.lorem.sentence(2);
+      const descriptionPage = faker.lorem.sentence(2);
+      const newPublishDate = faker.date.past().toISOString().split('T')[0];
+    
+      await Promise.resolve(pagePage.visit());
+     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+      const responseCreatePage = await Promise.resolve(
+        pagePage.editDate(titlePage, newPublishDate)
+      );
+      // Close the browser after completing the tests
+      await browser.close();
+      // Then:Se valida que la fecha se haya podido cambiar
+      if (responseCreatePage.status) {
+        console.log("E59-Test Passed ");
+      } else {
+        console.log("E59-Test Failed ");
+      }
+    } catch (e) {
+      console.log("E59-Test Failed ");
+    }
+  };
+  
+  /**
+   * Escenario 60: Como administrador le cambio la fecha a una page ya publicado con formato incorrecto
+   *
+   * Given: Se ingresa a la página correspondiente a login
+   * When: Se da clic en el botón de Pages
+   * And: Se crea un page y se pública
+   * And: Se elige el page creado
+   * And: Se hace click en settings 
+   * And: Se cambia la fecha de publicación
+   * And: Se da click en actualizar
+   * Then:Se valida que la fecha se haya podido cambiar
+   */
+  const runScenario60 = async () => {
+    try {
+      //Create directory to save screenshots
+      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario60/`;
+      ensureDirectoryExists(screenshotDirectoryEscenario);
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+      const loginPage = new LoginPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+  
+      await loginPage.visit();
+  
+      await loginPage.login(userEmail, userPassword);
+      const pagePage = new PagesPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+      const titlePage = faker.lorem.sentence(2);
+      const descriptionPage = faker.lorem.sentence(2);
+      const newPublishDate = faker.date.past().toDateString();
+    
+      await Promise.resolve(pagePage.visit());
+     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+      const responseCreatePage = await Promise.resolve(
+        pagePage.editDate(titlePage, newPublishDate)
+      );
+      // Close the browser after completing the tests
+      await browser.close();
+      // Then:Se valida que la fecha no se haya podido cambiar
+      if (!responseCreatePage.status) {
+        console.log("E60-Test Passed ");
+      } else {
+        console.log("E60-Test Failed ");
+      }
+    } catch (e) {
+      console.log("E60-Test Failed ");
+    }
+  };
+  
+  /**
+   * Escenario 61: Como administrador le cambio la fecha a un page ya publicada con fecha incorrecta (ej. mes>12)
+   *
+   * Given: Se ingresa a la página correspondiente a login
+   * When: Se da clic en el botón de Pages
+   * And: Se crea un page y se pública
+   * And: Se elige el page creado
+   * And: Se hace click en settings 
+   * And: Se cambia la fecha de publicación
+   * And: Se da click en actualizar
+   * Then:Se valida que la fecha se haya podido cambiar
+   */
+  const runScenario61 = async () => {
+    try {
+      //Create directory to save screenshots
+      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario61/`;
+      ensureDirectoryExists(screenshotDirectoryEscenario);
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+      const loginPage = new LoginPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+  
+      await loginPage.visit();
+  
+      await loginPage.login(userEmail, userPassword);
+      const pagePage = new PagesPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+      const titlePage = faker.lorem.sentence(2);
+      const descriptionPage = faker.lorem.sentence(2);
+      const newPublishDate = "2023-45-45"
+    
+     await Promise.resolve(pagePage.visit());
+     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+      const responseCreatePage = await Promise.resolve(
+        pagePage.editDate(titlePage, newPublishDate)
+      );
+      // Close the browser after completing the tests
+      await browser.close();
+      // Then:Se valida que la fecha no se haya podido cambiar
+      if (!responseCreatePage.status) {
+        console.log("E61-Test Passed ");
+      } else {
+        console.log("E61-Test Failed ");
+      }
+    } catch (e) {
+      console.log("E61-Test Failed ");
+    }
+  };
+
+  
+/**
+ * Escenario 62: Como administrador le agrego una url de youtube a una page aleatorio iniciando por 'www.youtube.com/'
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de una page
+ * And:Se selecciona la page que ha sido creado
+ * And:Se ingresa adiciona campo de url youtube
+ * And: Se escribe la url ingresada por parámetro
+ *Then:Se valida que la url no sea aceptada
+ */
+ const runScenario62 = async () => {
+    try {
+      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario62/`;
+      ensureDirectoryExists(screenshotDirectoryEscenario);
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+  // Given: Se ingresa a la página correspondiente a login
+    
+      const loginPage = new LoginPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+  
+      await loginPage.visit();
+  
+      const afterlogin = await loginPage.login(userEmail, userPassword);
+      /* Given: Se ingresa a la página correspondiente a login
+      * When: Se realiza la creación de una page
+      * And:Se selecciona la page que ha sido creado
+      * And:Se ingresa adiciona campo de url youtube
+      * And: Se escribe la url ingresada por parámetro
+      * */
+      const pagePage = new PagesPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+      await Promise.resolve(pagePage.visit());
+      const descriptionPage = "";
+      const titlePage = faker.lorem.sentence(2);
+      const youtubeUrl = 'www.youtube.com/'+faker.lorem.word()
+      await Promise.resolve(pagePage.createDraft(titlePage,descriptionPage));
+      const responseEditPage = await Promise.resolve(
+        pagePage.addYoutubeUrl(titlePage, youtubeUrl)
+      );
+  
+      // Close the browser after completing the tests
+      await browser.close();
+  
+      //Then:Se valida que la url no sea aceptada
+      if (!responseEditPage.status) {
+        console.log("E62-Test Passed ");
+      } else {
+        console.log("E62-Test Failed ");
+      }
+    } catch (e) {
+      
+      console.log("E62-Test Failed ");
+    }
+  }
+  /**
+   * Escenario 63: Como administrador le agrego una url de youtube a una page aleatorio iniciando
+   *
+   * Given: Se ingresa a la página correspondiente a login
+   * When: Se realiza la creación de un page
+   * And:Se selecciona el page que ha sido creado
+   * And:Se ingresa adiciona campo de url youtube
+   * And: Se escribe la url ingresada por parámetro
+   *Then:Se valida que la url no sea aceptada
+   */
+   const runScenario63 = async () => {
+    try {
+      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario31/`;
+      ensureDirectoryExists(screenshotDirectoryEscenario);
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+  // Given: Se ingresa a la página correspondiente a login
+    
+      const loginPage = new LoginPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+  
+      await loginPage.visit();
+  
+      const afterlogin = await loginPage.login(userEmail, userPassword);
+      
+      /* Given: Se ingresa a la página correspondiente a login
+      * When: Se realiza la creación de un page
+      * And:Se selecciona el page que ha sido creado
+      * And:Se ingresa adiciona campo de url youtube
+      * And: Se escribe la url ingresada por parámetro
+      */ 
+      const pagePage = new PagesPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+      await Promise.resolve(pagePage.visit());
+      const descriptionPage = "";
+      const titlePage = faker.lorem.sentence(2);
+      const youtubeUrl = faker.lorem.word();
+      await Promise.resolve(pagePage.createDraft(titlePage,descriptionPage));
+      const responseEditPage = await Promise.resolve(
+        pagePage.addYoutubeUrl(titlePage, youtubeUrl)
+      );
+  
+      // Close the browser after completing the tests
+      await browser.close();
+  
+      //Then:Se valida que la url no sea aceptada
+      if (!responseEditPage.status) {
+        console.log("E63-Test Passed ");
+      } else {
+        console.log("E63-Test Failed ");
+      }
+    } catch (e) {
+      
+      console.log("E63-Test Failed ");
+    }
+  }
+  /**
+   * Escenario 64: Como administrador le agrego una url de youtube a un page url real
+   *
+   * Given: Se ingresa a la página correspondiente a login
+   * When: Se realiza la creación de un page
+   * And:Se selecciona el page que ha sido creado
+   * And:Se ingresa adiciona campo de url youtube
+   * And: Se escribe la url ingresada por parámetro
+   *Then:Se valida que la url no sea aceptada
+   */
+   const runScenario64 = async () => {
+    try {
+      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario64/`;
+      ensureDirectoryExists(screenshotDirectoryEscenario);
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+  // Given: Se ingresa a la página correspondiente a login
+    
+      const loginPage = new LoginPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+  
+      await loginPage.visit();
+  
+      const afterlogin = await loginPage.login(userEmail, userPassword);
+      /* Given: Se ingresa a la página correspondiente a login
+      * When: Se realiza la creación de un page
+      * And:Se selecciona el page que ha sido creado
+      * And:Se ingresa adiciona campo de url youtube
+      * And: Se escribe la url ingresada por parámetro
+      */
+      const pagePage = new PagesPage(
+        page,
+        ghostUrl,
+        screenshotDirectoryEscenario
+      );
+      await Promise.resolve(pagePage.visit());
+      const descriptionPage = "";
+      const titlePage = faker.lorem.sentence(2);
+      const youtubeUrl = "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
+      await Promise.resolve(pagePage.createDraft(titlePage,descriptionPage));
+      const responseEditPage = await Promise.resolve(
+        pagePage.addYoutubeUrl(titlePage, youtubeUrl)
+      );
+  
+      // Close the browser after completing the tests
+      await browser.close();
+  
+      //Then:Se valida que la url sea aceptada
+      if (responseEditPage.status) {
+        console.log("E64-Test Passed ");
+      } else {
+        console.log("E64-Test Failed ");
+      }
+    } catch (e) {
+      
+      console.log("E64-Test Failed ");
+    }
+  }
 
 //-----------------------VIEJOS-------------------
 /**
