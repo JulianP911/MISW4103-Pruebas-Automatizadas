@@ -388,7 +388,6 @@ const runScenarios = async () => {
       console.log("E5-Test Failed ");
     }
   } catch (e) {
-    ;
     console.log("E5-Test Failed ");
   }
 };
@@ -710,11 +709,11 @@ const runScenario11 = async () => {
     );
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
-    const publishDate = faker.date.future().toISOString().split('T')[0];
-  
+    const publishDate = faker.date.future().toISOString().split("T")[0];
+
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
-      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
+      postPage.createPostScheduled(titlePost, descriptionPost, publishDate)
     );
     // Close the browser after completing the tests
     await browser.close();
@@ -766,11 +765,11 @@ const runScenario12 = async () => {
     );
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
-    const publishDate = faker.date.past().toISOString().split('T')[0];
-  
+    const publishDate = faker.date.past().toISOString().split("T")[0];
+
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
-      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
+      postPage.createPostScheduled(titlePost, descriptionPost, publishDate)
     );
     // Close the browser after completing the tests
     await browser.close();
@@ -823,16 +822,19 @@ const runScenario13 = async () => {
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
     const publishDate = faker.date.past().toDateString();
-  
+
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
-      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
+      postPage.createPostScheduled(titlePost, descriptionPost, publishDate)
     );
     // Close the browser after completing the tests
     await browser.close();
     // Then:Se valida que el post no se haya podido crear y el mensaje de error
 
-    if (!responseCreateScheduledPost.status && responseCreateScheduledPost.message.includes('Invalid date format')) {
+    if (
+      !responseCreateScheduledPost.status &&
+      responseCreateScheduledPost.message.includes("Invalid date format")
+    ) {
       console.log("E13-Test Passed ");
     } else {
       console.log("E13-Test Failed ");
@@ -880,16 +882,19 @@ const runScenario14 = async () => {
     );
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
-    const publishDate = "2023-45-45"
-  
+    const publishDate = "2023-45-45";
+
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
-      postPage.createPostScheduled(titlePost, descriptionPost,publishDate)
+      postPage.createPostScheduled(titlePost, descriptionPost, publishDate)
     );
     // Close the browser after completing the tests
     await browser.close();
     // Then:Se valida que el post no se haya podido crear y el mensaje de error
-    if (!responseCreateScheduledPost.status&& responseCreateScheduledPost.message.includes('Invalid date')) {
+    if (
+      !responseCreateScheduledPost.status &&
+      responseCreateScheduledPost.message.includes("Invalid date")
+    ) {
       console.log("E14-Test Passed ");
     } else {
       console.log("E14-Test Failed ");
@@ -899,7 +904,6 @@ const runScenario14 = async () => {
   }
 };
 
-
 /**
  * Escenario 15: Como administrador le cambio la fecha a un post ya publicado Con fecha futura
  *
@@ -907,7 +911,7 @@ const runScenario14 = async () => {
  * When: Se da clic en el botón de Posts
  * And: Se crea un post y se pública
  * And: Se elige el post creado
- * And: Se hace click en settings 
+ * And: Se hace click en settings
  * And: Se cambia la fecha de publicación
  * And: Se da click en actualizar
  * Then:Se valida que no permite actualizar y muestra un mensaje de error
@@ -935,10 +939,10 @@ const runScenario15 = async () => {
     );
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.future().toISOString().split('T')[0];
-  
+    const newPublishDate = faker.date.future().toISOString().split("T")[0];
+
     await Promise.resolve(postPage.visit());
-   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
     const responseCreatePost = await Promise.resolve(
       postPage.editDate(titlePost, newPublishDate)
     );
@@ -961,7 +965,7 @@ const runScenario15 = async () => {
  * When: Se da clic en el botón de Posts
  * And: Se crea un post y se pública
  * And: Se elige el post creado
- * And: Se hace click en settings 
+ * And: Se hace click en settings
  * And: Se cambia la fecha de publicación
  * And: Se da click en actualizar
  * Then:Se valida que la fecha se haya podido cambiar
@@ -989,10 +993,10 @@ const runScenario16 = async () => {
     );
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.past().toISOString().split('T')[0];
-  
+    const newPublishDate = faker.date.past().toISOString().split("T")[0];
+
     await Promise.resolve(postPage.visit());
-   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
     const responseCreatePost = await Promise.resolve(
       postPage.editDate(titlePost, newPublishDate)
     );
@@ -1016,7 +1020,7 @@ const runScenario16 = async () => {
  * When: Se da clic en el botón de Posts
  * And: Se crea un post y se pública
  * And: Se elige el post creado
- * And: Se hace click en settings 
+ * And: Se hace click en settings
  * And: Se cambia la fecha de publicación
  * And: Se da click en actualizar
  * Then:Se valida que la fecha se haya podido cambiar
@@ -1045,9 +1049,9 @@ const runScenario17 = async () => {
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
     const newPublishDate = faker.date.past().toDateString();
-  
+
     await Promise.resolve(postPage.visit());
-   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
     const responseCreatePost = await Promise.resolve(
       postPage.editDate(titlePost, newPublishDate)
     );
@@ -1071,7 +1075,7 @@ const runScenario17 = async () => {
  * When: Se da clic en el botón de Posts
  * And: Se crea un post y se pública
  * And: Se elige el post creado
- * And: Se hace click en settings 
+ * And: Se hace click en settings
  * And: Se cambia la fecha de publicación
  * And: Se da click en actualizar
  * Then:Se valida que la fecha se haya podido cambiar
@@ -1099,10 +1103,10 @@ const runScenario18 = async () => {
     );
     const titlePost = faker.lorem.sentence(2);
     const descriptionPost = faker.lorem.sentence(2);
-    const newPublishDate = "2023-45-45"
-  
+    const newPublishDate = "2023-45-45";
+
     await Promise.resolve(postPage.visit());
-   await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
     const responseCreatePost = await Promise.resolve(
       postPage.editDate(titlePost, newPublishDate)
     );
@@ -1135,8 +1139,8 @@ const runScenario19 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1146,10 +1150,10 @@ const runScenario19 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1160,9 +1164,9 @@ const runScenario19 = async () => {
     const titlePost = faker.lorem.sentence(2);
     const newTitlePost = faker.lorem.sentence(2);
     const newDescriptionPost = faker.lorem.sentence(2);
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
-      postPage.editDraft(titlePost, newTitlePost,newDescriptionPost)
+      postPage.editDraft(titlePost, newTitlePost, newDescriptionPost)
     );
 
     // Close the browser after completing the tests
@@ -1179,7 +1183,7 @@ const runScenario19 = async () => {
   }
 };
 /**
- * Escenario 20: Como usuario administrador edito un post creado previamente de mis borradores Sin Título y con descripcion 
+ * Escenario 20: Como usuario administrador edito un post creado previamente de mis borradores Sin Título y con descripcion
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se realiza la creación de un post
@@ -1194,8 +1198,8 @@ const runScenario20 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1205,10 +1209,10 @@ const runScenario20 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1219,9 +1223,9 @@ const runScenario20 = async () => {
     const titlePost = faker.lorem.sentence(2);
     const newTitlePost = "";
     const newDescriptionPost = faker.lorem.sentence(2);
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
-      postPage.editDraft(titlePost, newTitlePost,newDescriptionPost)
+      postPage.editDraft(titlePost, newTitlePost, newDescriptionPost)
     );
 
     // Close the browser after completing the tests
@@ -1254,8 +1258,8 @@ const runScenario21 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1265,10 +1269,10 @@ const runScenario21 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1279,9 +1283,9 @@ const runScenario21 = async () => {
     const titlePost = faker.lorem.sentence(2);
     const newTitlePost = "";
     const newDescriptionPost = "";
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
-      postPage.editDraft(titlePost, newTitlePost,newDescriptionPost)
+      postPage.editDraft(titlePost, newTitlePost, newDescriptionPost)
     );
 
     // Close the browser after completing the tests
@@ -1297,7 +1301,6 @@ const runScenario21 = async () => {
     console.log("E21-Test Failed ");
   }
 };
-
 
 /**
  * Escenario 22: Como usuario administrador edito un post creado previamente de mis borradores Campos muy largos (15000 caracteres)
@@ -1315,8 +1318,8 @@ const runScenario22 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1326,10 +1329,10 @@ const runScenario22 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1340,9 +1343,9 @@ const runScenario22 = async () => {
     const titlePost = faker.lorem.sentence(2);
     const newTitlePost = faker.lorem.sentences(50);
     const newDescriptionPost = faker.lorem.sentences(50);
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
-      postPage.editDraft(titlePost, newTitlePost,newDescriptionPost)
+      postPage.editDraft(titlePost, newTitlePost, newDescriptionPost)
     );
 
     // Close the browser after completing the tests
@@ -1358,7 +1361,6 @@ const runScenario22 = async () => {
     console.log("E22-Test Failed ");
   }
 };
-
 
 /**
  * Escenario 23: Como usuario administrador edito un post creado previamente de mis borradores Campos solo con caracteres especiales
@@ -1376,8 +1378,8 @@ const runScenario23 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1387,10 +1389,10 @@ const runScenario23 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1399,11 +1401,11 @@ const runScenario23 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newTitlePost =  "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    const newDescriptionPost =  "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const newTitlePost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const newDescriptionPost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
-      postPage.editDraft(titlePost, newTitlePost,newDescriptionPost)
+      postPage.editDraft(titlePost, newTitlePost, newDescriptionPost)
     );
 
     // Close the browser after completing the tests
@@ -1439,8 +1441,8 @@ const runScenario24 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1450,10 +1452,10 @@ const runScenario24 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1462,8 +1464,8 @@ const runScenario24 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl =  "";
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const newUrl = "";
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
     );
@@ -1478,7 +1480,6 @@ const runScenario24 = async () => {
       console.log("E24-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E24-Test Failed ");
   }
 };
@@ -1502,8 +1503,8 @@ const runScenario25 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1513,10 +1514,10 @@ const runScenario25 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1525,8 +1526,8 @@ const runScenario25 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl =  "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const newUrl = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
     );
@@ -1541,11 +1542,9 @@ const runScenario25 = async () => {
       console.log("E25-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E25-Test Failed ");
   }
 };
-
 
 /**
  * Escenario 26: Como administrador le cambio la url a un post Campos muy largos (15000 caracteres)
@@ -1566,8 +1565,8 @@ const runScenario26 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1577,10 +1576,10 @@ const runScenario26 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1589,8 +1588,8 @@ const runScenario26 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl = faker.lorem.sentences(50).replace(' ','-');
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const newUrl = faker.lorem.sentences(50).replace(" ", "-");
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
     );
@@ -1605,10 +1604,9 @@ const runScenario26 = async () => {
       console.log("E26-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E26-Test Failed ");
   }
-}
+};
 
 /**
  * Escenario 27: Como administrador le cambio la url a un post Campo correcto
@@ -1629,8 +1627,8 @@ const runScenario27 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1640,10 +1638,10 @@ const runScenario27 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1653,7 +1651,7 @@ const runScenario27 = async () => {
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
     const newUrl = faker.lorem.word();
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
     );
@@ -1668,10 +1666,9 @@ const runScenario27 = async () => {
       console.log("E27-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E27-Test Failed ");
   }
-}
+};
 
 /**
  * Escenario 28: Como administrador le asigno a dos post la misma url
@@ -1699,8 +1696,8 @@ const runScenario28 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1710,20 +1707,20 @@ const runScenario28 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
- * And: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle del post
+     * And: Se da click en settings de nuevo
+     * And: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa a settings
+     * And: Se borra la url por defecto
+     * And: Se ingresa una nueva url
+     * And: Se devuelve al detalle del post
+     * And: Se da click en settings de nuevo*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1733,14 +1730,14 @@ const runScenario28 = async () => {
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
     const newUrl = faker.lorem.word();
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
     );
 
     const descriptionPost2 = faker.lorem.sentence(2);
     const titlePost2 = faker.lorem.sentence(2);
-    await Promise.resolve(postPage.createDraft(titlePost2,descriptionPost2));
+    await Promise.resolve(postPage.createDraft(titlePost2, descriptionPost2));
     const responseEditPost2 = await Promise.resolve(
       postPage.changeURL(titlePost2, newUrl)
     );
@@ -1749,18 +1746,15 @@ const runScenario28 = async () => {
     await browser.close();
 
     //Then:Se valida que en el segundo post no se cambia exitosamente por la url ingresada y el primero si
-    if ((!responseEditPost2.status)&&responseEditPost.status) {
+    if (!responseEditPost2.status && responseEditPost.status) {
       console.log("E28-Test Passed ");
     } else {
       console.log("E28-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E28-Test Failed ");
   }
-}
-
-
+};
 
 /**
  * Escenario 29: Como administrador le cambio la url a un post por Ghost (Palabra protegida)
@@ -1781,8 +1775,8 @@ const runScenario29 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1792,10 +1786,10 @@ const runScenario29 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1804,8 +1798,8 @@ const runScenario29 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl = 'Ghost'
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const newUrl = "Ghost";
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
     );
@@ -1820,11 +1814,9 @@ const runScenario29 = async () => {
       console.log("E29-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E29-Test Failed ");
   }
-}
-
+};
 
 /**
  * Escenario 30: Como administrador le agrego una url de youtube a un post aleatorio iniciando por 'www.youtube.com/'
@@ -1836,14 +1828,14 @@ const runScenario29 = async () => {
  * And: Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
- const runScenario30 = async () => {
+const runScenario30 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario30/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1853,10 +1845,10 @@ const runScenario29 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1865,8 +1857,8 @@ const runScenario29 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = "";
     const titlePost = faker.lorem.sentence(2);
-    const youtubeUrl = 'www.youtube.com/'+faker.lorem.word()
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const youtubeUrl = "www.youtube.com/" + faker.lorem.word();
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.addYoutubeUrl(titlePost, youtubeUrl)
     );
@@ -1881,10 +1873,9 @@ const runScenario29 = async () => {
       console.log("E30-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E30-Test Failed ");
   }
-}
+};
 /**
  * Escenario 31: Como administrador le agrego una url de youtube a un post aleatorio iniciando por 'www.youtube.com/'
  *
@@ -1895,14 +1886,14 @@ const runScenario29 = async () => {
  * And: Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
- const runScenario31 = async () => {
+const runScenario31 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario31/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1912,10 +1903,10 @@ const runScenario29 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1925,7 +1916,7 @@ const runScenario29 = async () => {
     const descriptionPost = "";
     const titlePost = faker.lorem.sentence(2);
     const youtubeUrl = faker.lorem.word();
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.addYoutubeUrl(titlePost, youtubeUrl)
     );
@@ -1940,10 +1931,9 @@ const runScenario29 = async () => {
       console.log("E31-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E31-Test Failed ");
   }
-}
+};
 /**
  * Escenario 32: Como administrador le agrego una url de youtube a un post url real
  *
@@ -1954,14 +1944,14 @@ const runScenario29 = async () => {
  * And: Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
- const runScenario32 = async () => {
+const runScenario32 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario32/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-// Given: Se ingresa a la página correspondiente a login
-  
+    // Given: Se ingresa a la página correspondiente a login
+
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1971,10 +1961,10 @@ const runScenario29 = async () => {
     await loginPage.visit();
 
     const afterlogin = await loginPage.login(userEmail, userPassword);
-   /* When: Se realiza la creación de un post
-    * And:Se selecciona el post que ha sido creado
-    * And:Se ingresa una nueva cadena de texto al título del post
-    * And: Se da click en posts*/
+    /* When: Se realiza la creación de un post
+     * And:Se selecciona el post que ha sido creado
+     * And:Se ingresa una nueva cadena de texto al título del post
+     * And: Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1983,8 +1973,9 @@ const runScenario29 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = "";
     const titlePost = faker.lorem.sentence(2);
-    const youtubeUrl = "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
-    await Promise.resolve(postPage.createDraft(titlePost,descriptionPost));
+    const youtubeUrl =
+      "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
+    await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.addYoutubeUrl(titlePost, youtubeUrl)
     );
@@ -1999,10 +1990,9 @@ const runScenario29 = async () => {
       console.log("E32-Test Failed ");
     }
   } catch (e) {
-    
     console.log("E32-Test Failed ");
   }
-}
+};
 
 /**
  * Escenario 33: Como usuario administrador creo una nueva page para publicarla en el sitio web con título y descripcion correctos
@@ -3549,220 +3539,219 @@ const runScenario57 = async () => {
  * When: Se da clic en el botón de Pages
  * And: Se crea un page y se pública
  * And: Se elige la page creada
- * And: Se hace click en settings 
+ * And: Se hace click en settings
  * And: Se cambia la fecha de publicación
  * And: Se da click en actualizar
  * Then:Se valida que no permite actualizar y muestra un mensaje de error
  */
 const runScenario58 = async () => {
-    try {
-      //Create directory to save screenshots
-      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario58/`;
-      ensureDirectoryExists(screenshotDirectoryEscenario);
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-      const loginPage = new LoginPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-  
-      await loginPage.visit();
-  
-      await loginPage.login(userEmail, userPassword);
-      const pagePage = new PagesPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-      const titlePage = faker.lorem.sentence(2);
-      const descriptionPage = faker.lorem.sentence(2);
-      const newPublishDate = faker.date.future().toISOString().split('T')[0];
-    
-      await Promise.resolve(pagePage.visit());
-     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
-      const responseCreatePage = await Promise.resolve(
-        pagePage.editDate(titlePage, newPublishDate)
-      );
-      // Close the browser after completing the tests
-      await browser.close();
-      //Then:Se valida que no permite actualizar y muestra un mensaje de error
-      if (!responseCreatePage.status) {
-        console.log("E58-Test Passed ");
-      } else {
-        console.log("E58-Test Failed ");
-      }
-    } catch (e) {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario58/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const newPublishDate = faker.date.future().toISOString().split("T")[0];
+
+    await Promise.resolve(pagePage.visit());
+    await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+    const responseCreatePage = await Promise.resolve(
+      pagePage.editDate(titlePage, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then:Se valida que no permite actualizar y muestra un mensaje de error
+    if (!responseCreatePage.status) {
+      console.log("E58-Test Passed ");
+    } else {
       console.log("E58-Test Failed ");
     }
-  };
+  } catch (e) {
+    console.log("E58-Test Failed ");
+  }
+};
 
-  /**
-   * Escenario 59: Como administrador le cambio la fecha a una page ya publicado Con fecha pasada
-   *
-   * Given: Se ingresa a la página correspondiente a login
-   * When: Se da clic en el botón de Pages
-   * And: Se crea un page y se pública
-   * And: Se elige el page creado
-   * And: Se hace click en settings 
-   * And: Se cambia la fecha de publicación
-   * And: Se da click en actualizar
-   * Then:Se valida que la fecha se haya podido cambiar
-   */
-  const runScenario59 = async () => {
-    try {
-      //Create directory to save screenshots
-      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
-      ensureDirectoryExists(screenshotDirectoryEscenario);
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-      const loginPage = new LoginPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-  
-      await loginPage.visit();
-  
-      await loginPage.login(userEmail, userPassword);
-      const pagePage = new PagesPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-      const titlePage = faker.lorem.sentence(2);
-      const descriptionPage = faker.lorem.sentence(2);
-      const newPublishDate = faker.date.past().toISOString().split('T')[0];
-    
-      await Promise.resolve(pagePage.visit());
-     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
-      const responseCreatePage = await Promise.resolve(
-        pagePage.editDate(titlePage, newPublishDate)
-      );
-      // Close the browser after completing the tests
-      await browser.close();
-      // Then:Se valida que la fecha se haya podido cambiar
-      if (responseCreatePage.status) {
-        console.log("E59-Test Passed ");
-      } else {
-        console.log("E59-Test Failed ");
-      }
-    } catch (e) {
+/**
+ * Escenario 59: Como administrador le cambio la fecha a una page ya publicado Con fecha pasada
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se crea un page y se pública
+ * And: Se elige el page creado
+ * And: Se hace click en settings
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que la fecha se haya podido cambiar
+ */
+const runScenario59 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const newPublishDate = faker.date.past().toISOString().split("T")[0];
+
+    await Promise.resolve(pagePage.visit());
+    await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+    const responseCreatePage = await Promise.resolve(
+      pagePage.editDate(titlePage, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la fecha se haya podido cambiar
+    if (responseCreatePage.status) {
+      console.log("E59-Test Passed ");
+    } else {
       console.log("E59-Test Failed ");
     }
-  };
-  
-  /**
-   * Escenario 60: Como administrador le cambio la fecha a una page ya publicado con formato incorrecto
-   *
-   * Given: Se ingresa a la página correspondiente a login
-   * When: Se da clic en el botón de Pages
-   * And: Se crea un page y se pública
-   * And: Se elige el page creado
-   * And: Se hace click en settings 
-   * And: Se cambia la fecha de publicación
-   * And: Se da click en actualizar
-   * Then:Se valida que la fecha se haya podido cambiar
-   */
-  const runScenario60 = async () => {
-    try {
-      //Create directory to save screenshots
-      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario60/`;
-      ensureDirectoryExists(screenshotDirectoryEscenario);
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-      const loginPage = new LoginPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-  
-      await loginPage.visit();
-  
-      await loginPage.login(userEmail, userPassword);
-      const pagePage = new PagesPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-      const titlePage = faker.lorem.sentence(2);
-      const descriptionPage = faker.lorem.sentence(2);
-      const newPublishDate = faker.date.past().toDateString();
-    
-      await Promise.resolve(pagePage.visit());
-     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
-      const responseCreatePage = await Promise.resolve(
-        pagePage.editDate(titlePage, newPublishDate)
-      );
-      // Close the browser after completing the tests
-      await browser.close();
-      // Then:Se valida que la fecha no se haya podido cambiar
-      if (!responseCreatePage.status) {
-        console.log("E60-Test Passed ");
-      } else {
-        console.log("E60-Test Failed ");
-      }
-    } catch (e) {
+  } catch (e) {
+    console.log("E59-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 60: Como administrador le cambio la fecha a una page ya publicado con formato incorrecto
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se crea un page y se pública
+ * And: Se elige el page creado
+ * And: Se hace click en settings
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que la fecha se haya podido cambiar
+ */
+const runScenario60 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario60/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const newPublishDate = faker.date.past().toDateString();
+
+    await Promise.resolve(pagePage.visit());
+    await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+    const responseCreatePage = await Promise.resolve(
+      pagePage.editDate(titlePage, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la fecha no se haya podido cambiar
+    if (!responseCreatePage.status) {
+      console.log("E60-Test Passed ");
+    } else {
       console.log("E60-Test Failed ");
     }
-  };
-  
-  /**
-   * Escenario 61: Como administrador le cambio la fecha a un page ya publicada con fecha incorrecta (ej. mes>12)
-   *
-   * Given: Se ingresa a la página correspondiente a login
-   * When: Se da clic en el botón de Pages
-   * And: Se crea un page y se pública
-   * And: Se elige el page creado
-   * And: Se hace click en settings 
-   * And: Se cambia la fecha de publicación
-   * And: Se da click en actualizar
-   * Then:Se valida que la fecha se haya podido cambiar
-   */
-  const runScenario61 = async () => {
-    try {
-      //Create directory to save screenshots
-      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario61/`;
-      ensureDirectoryExists(screenshotDirectoryEscenario);
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-      const loginPage = new LoginPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-  
-      await loginPage.visit();
-  
-      await loginPage.login(userEmail, userPassword);
-      const pagePage = new PagesPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-      const titlePage = faker.lorem.sentence(2);
-      const descriptionPage = faker.lorem.sentence(2);
-      const newPublishDate = "2023-45-45"
-    
-     await Promise.resolve(pagePage.visit());
-     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
-      const responseCreatePage = await Promise.resolve(
-        pagePage.editDate(titlePage, newPublishDate)
-      );
-      // Close the browser after completing the tests
-      await browser.close();
-      // Then:Se valida que la fecha no se haya podido cambiar
-      if (!responseCreatePage.status) {
-        console.log("E61-Test Passed ");
-      } else {
-        console.log("E61-Test Failed ");
-      }
-    } catch (e) {
+  } catch (e) {
+    console.log("E60-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 61: Como administrador le cambio la fecha a un page ya publicada con fecha incorrecta (ej. mes>12)
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se da clic en el botón de Pages
+ * And: Se crea un page y se pública
+ * And: Se elige el page creado
+ * And: Se hace click en settings
+ * And: Se cambia la fecha de publicación
+ * And: Se da click en actualizar
+ * Then:Se valida que la fecha se haya podido cambiar
+ */
+const runScenario61 = async () => {
+  try {
+    //Create directory to save screenshots
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario61/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = faker.lorem.sentence(2);
+    const newPublishDate = "2023-45-45";
+
+    await Promise.resolve(pagePage.visit());
+    await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
+    const responseCreatePage = await Promise.resolve(
+      pagePage.editDate(titlePage, newPublishDate)
+    );
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then:Se valida que la fecha no se haya podido cambiar
+    if (!responseCreatePage.status) {
+      console.log("E61-Test Passed ");
+    } else {
       console.log("E61-Test Failed ");
     }
-  };
+  } catch (e) {
+    console.log("E61-Test Failed ");
+  }
+};
 
-  
 /**
  * Escenario 62: Como administrador le agrego una url de youtube a una page aleatorio iniciando por 'www.youtube.com/'
  *
@@ -3773,356 +3762,176 @@ const runScenario58 = async () => {
  * And: Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
- const runScenario62 = async () => {
-    try {
-      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario62/`;
-      ensureDirectoryExists(screenshotDirectoryEscenario);
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-  // Given: Se ingresa a la página correspondiente a login
-    
-      const loginPage = new LoginPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-  
-      await loginPage.visit();
-  
-      const afterlogin = await loginPage.login(userEmail, userPassword);
-      /* Given: Se ingresa a la página correspondiente a login
-      * When: Se realiza la creación de una page
-      * And:Se selecciona la page que ha sido creado
-      * And:Se ingresa adiciona campo de url youtube
-      * And: Se escribe la url ingresada por parámetro
-      * */
-      const pagePage = new PagesPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-      await Promise.resolve(pagePage.visit());
-      const descriptionPage = "";
-      const titlePage = faker.lorem.sentence(2);
-      const youtubeUrl = 'www.youtube.com/'+faker.lorem.word()
-      await Promise.resolve(pagePage.createDraft(titlePage,descriptionPage));
-      const responseEditPage = await Promise.resolve(
-        pagePage.addYoutubeUrl(titlePage, youtubeUrl)
-      );
-  
-      // Close the browser after completing the tests
-      await browser.close();
-  
-      //Then:Se valida que la url no sea aceptada
-      if (!responseEditPage.status) {
-        console.log("E62-Test Passed ");
-      } else {
-        console.log("E62-Test Failed ");
-      }
-    } catch (e) {
-      
+const runScenario62 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario62/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    /* Given: Se ingresa a la página correspondiente a login
+     * When: Se realiza la creación de una page
+     * And:Se selecciona la page que ha sido creado
+     * And:Se ingresa adiciona campo de url youtube
+     * And: Se escribe la url ingresada por parámetro
+     * */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = "";
+    const titlePage = faker.lorem.sentence(2);
+    const youtubeUrl = "www.youtube.com/" + faker.lorem.word();
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.addYoutubeUrl(titlePage, youtubeUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url no sea aceptada
+    if (!responseEditPage.status) {
+      console.log("E62-Test Passed ");
+    } else {
       console.log("E62-Test Failed ");
     }
+  } catch (e) {
+    console.log("E62-Test Failed ");
   }
-  /**
-   * Escenario 63: Como administrador le agrego una url de youtube a una page aleatorio iniciando
-   *
-   * Given: Se ingresa a la página correspondiente a login
-   * When: Se realiza la creación de un page
-   * And:Se selecciona el page que ha sido creado
-   * And:Se ingresa adiciona campo de url youtube
-   * And: Se escribe la url ingresada por parámetro
-   *Then:Se valida que la url no sea aceptada
-   */
-   const runScenario63 = async () => {
-    try {
-      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario31/`;
-      ensureDirectoryExists(screenshotDirectoryEscenario);
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-  // Given: Se ingresa a la página correspondiente a login
-    
-      const loginPage = new LoginPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-  
-      await loginPage.visit();
-  
-      const afterlogin = await loginPage.login(userEmail, userPassword);
-      
-      /* Given: Se ingresa a la página correspondiente a login
-      * When: Se realiza la creación de un page
-      * And:Se selecciona el page que ha sido creado
-      * And:Se ingresa adiciona campo de url youtube
-      * And: Se escribe la url ingresada por parámetro
-      */ 
-      const pagePage = new PagesPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-      await Promise.resolve(pagePage.visit());
-      const descriptionPage = "";
-      const titlePage = faker.lorem.sentence(2);
-      const youtubeUrl = faker.lorem.word();
-      await Promise.resolve(pagePage.createDraft(titlePage,descriptionPage));
-      const responseEditPage = await Promise.resolve(
-        pagePage.addYoutubeUrl(titlePage, youtubeUrl)
-      );
-  
-      // Close the browser after completing the tests
-      await browser.close();
-  
-      //Then:Se valida que la url no sea aceptada
-      if (!responseEditPage.status) {
-        console.log("E63-Test Passed ");
-      } else {
-        console.log("E63-Test Failed ");
-      }
-    } catch (e) {
-      
+};
+/**
+ * Escenario 63: Como administrador le agrego una url de youtube a una page aleatorio iniciando
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona el page que ha sido creado
+ * And:Se ingresa adiciona campo de url youtube
+ * And: Se escribe la url ingresada por parámetro
+ *Then:Se valida que la url no sea aceptada
+ */
+const runScenario63 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario31/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+
+    /* Given: Se ingresa a la página correspondiente a login
+     * When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa adiciona campo de url youtube
+     * And: Se escribe la url ingresada por parámetro
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = "";
+    const titlePage = faker.lorem.sentence(2);
+    const youtubeUrl = faker.lorem.word();
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.addYoutubeUrl(titlePage, youtubeUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url no sea aceptada
+    if (!responseEditPage.status) {
+      console.log("E63-Test Passed ");
+    } else {
       console.log("E63-Test Failed ");
     }
+  } catch (e) {
+    console.log("E63-Test Failed ");
   }
-  /**
-   * Escenario 64: Como administrador le agrego una url de youtube a un page url real
-   *
-   * Given: Se ingresa a la página correspondiente a login
-   * When: Se realiza la creación de un page
-   * And:Se selecciona el page que ha sido creado
-   * And:Se ingresa adiciona campo de url youtube
-   * And: Se escribe la url ingresada por parámetro
-   *Then:Se valida que la url no sea aceptada
-   */
-   const runScenario64 = async () => {
-    try {
-      const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario64/`;
-      ensureDirectoryExists(screenshotDirectoryEscenario);
-      const browser = await puppeteer.launch({ headless: false });
-      const page = await browser.newPage();
-  // Given: Se ingresa a la página correspondiente a login
-    
-      const loginPage = new LoginPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-  
-      await loginPage.visit();
-  
-      const afterlogin = await loginPage.login(userEmail, userPassword);
-      /* Given: Se ingresa a la página correspondiente a login
-      * When: Se realiza la creación de un page
-      * And:Se selecciona el page que ha sido creado
-      * And:Se ingresa adiciona campo de url youtube
-      * And: Se escribe la url ingresada por parámetro
-      */
-      const pagePage = new PagesPage(
-        page,
-        ghostUrl,
-        screenshotDirectoryEscenario
-      );
-      await Promise.resolve(pagePage.visit());
-      const descriptionPage = "";
-      const titlePage = faker.lorem.sentence(2);
-      const youtubeUrl = "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
-      await Promise.resolve(pagePage.createDraft(titlePage,descriptionPage));
-      const responseEditPage = await Promise.resolve(
-        pagePage.addYoutubeUrl(titlePage, youtubeUrl)
-      );
-  
-      // Close the browser after completing the tests
-      await browser.close();
-  
-      //Then:Se valida que la url sea aceptada
-      if (responseEditPage.status) {
-        console.log("E64-Test Passed ");
-      } else {
-        console.log("E64-Test Failed ");
-      }
-    } catch (e) {
-      
+};
+/**
+ * Escenario 64: Como administrador le agrego una url de youtube a un page url real
+ *
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un page
+ * And:Se selecciona el page que ha sido creado
+ * And:Se ingresa adiciona campo de url youtube
+ * And: Se escribe la url ingresada por parámetro
+ *Then:Se valida que la url no sea aceptada
+ */
+const runScenario64 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario64/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    // Given: Se ingresa a la página correspondiente a login
+
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+
+    await loginPage.visit();
+
+    const afterlogin = await loginPage.login(userEmail, userPassword);
+    /* Given: Se ingresa a la página correspondiente a login
+     * When: Se realiza la creación de un page
+     * And:Se selecciona el page que ha sido creado
+     * And:Se ingresa adiciona campo de url youtube
+     * And: Se escribe la url ingresada por parámetro
+     */
+    const pagePage = new PagesPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(pagePage.visit());
+    const descriptionPage = "";
+    const titlePage = faker.lorem.sentence(2);
+    const youtubeUrl =
+      "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
+    await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
+    const responseEditPage = await Promise.resolve(
+      pagePage.addYoutubeUrl(titlePage, youtubeUrl)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+
+    //Then:Se valida que la url sea aceptada
+    if (responseEditPage.status) {
+      console.log("E64-Test Passed ");
+    } else {
       console.log("E64-Test Failed ");
     }
-  }
-
-//-----------------------VIEJOS-------------------
-/**
- * Escenario 12: Como usuario administrador creo una nueva page para publicarlo en el sitio web
- *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título del page
- * And:Se ingresa un texto al contenido del page
- * And: Se da click en el publish
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * Then:Se valida que aparezca el titulo de publicacion exitosa
- */
-const runScenario120 = async () => {
-  try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario12/`;
-    ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    const loginPage = new LoginPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-    await loginPage.visit();
-    await loginPage.login(userEmail, userPassword);
-    const pagesPage = new PagesPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-    await Promise.resolve(pagesPage.visit());
-    await Promise.resolve(pagesPage.createPage());
-    // Close the browser after completing the tests
-    await browser.close();
-
-    console.log("E12-Test Passed ");
   } catch (e) {
-    console.log(e, "E12-Test Failed");
-  }
-};
-
-/**
- * Escenario 13: Como usuario administrador creo una nueva page para publicarlo en el sitio web
- *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And: Se ingresa una cadena de texto al título del page
- * And: Se ingresa un texto al contenido del page
- * And: Se da click en pages
- * Then: Se valida que aparezaca en el listado de pages el borrador que se acabo de crear
- *
- */
-const runScenario130 = async () => {
-  try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario13/`;
-    ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    const loginPage = new LoginPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-    await loginPage.visit();
-    await loginPage.login(userEmail, userPassword);
-    const pagesPage = new PagesPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-    const titlePage = faker.lorem.sentence(2);
-    await Promise.resolve(pagesPage.visit());
-    await Promise.resolve(pagesPage.createDraft(titlePage));
-    // Close the browser after completing the tests
-    await browser.close();
-
-    console.log("E13-Test Passed ");
-  } catch (e) {
-    console.log(e, "E13-Test Failed");
-  }
-};
-
-/**
- * Escenario 14: Como usuario administrador creo una page con publicación programada
- *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título del page
- * And:Se ingresa un texto al contenido del page
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación dela page
- * And: Se da click en la opcion de publicar luego
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * Then:Se valida que aparezca el titulo de publicacion exitosa 
- * 
-
- */
-const runScenario141 = async () => {
-  try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario14/`;
-    ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    const loginPage = new LoginPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-    await loginPage.visit();
-    await loginPage.login(userEmail, userPassword);
-    const pagesPage = new PagesPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-    await Promise.resolve(pagesPage.visit());
-    await Promise.resolve(pagesPage.createPageScheduled());
-    // Close the browser after completing the tests
-    await browser.close();
-
-    console.log("E14-Test Passed ");
-  } catch (e) {
-    console.log(e, "E14-Test Failed");
-  }
-};
-
-
-
-/**
- * Escenario 18: Como usuario administrador edito un page creado previamente de mis borradores
- *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de una page
- * And:Se selecciona la page que ha sido creada
- * And:Se ingresa una nueva cadena de texto al título de la page
- * And: Se da click en pages
- * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
- */
-const runScenario180 = async () => {
-  try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario18/`;
-    ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    const loginPage = new LoginPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-
-    await loginPage.visit();
-
-    await loginPage.login(userEmail, userPassword);
-    const pagesPage = new PagesPage(
-      page,
-      ghostUrl,
-      screenshotDirectoryEscenario
-    );
-    await Promise.resolve(pagesPage.visit());
-    const titlePage = faker.lorem.sentence(2);
-    const newTitlePage = faker.lorem.sentence(2);
-    await Promise.resolve(pagesPage.createDraft(titlePage));
-    await Promise.resolve(pagesPage.editDraft(titlePage, newTitlePage));
-
-    // Close the browser after completing the tests
-    await browser.close();
-
-    console.log("E18-Test Passed");
-  } catch (e) {
-    console.log(e, "E18-Test Failed");
+    console.log("E64-Test Failed ");
   }
 };
 

@@ -451,6 +451,8 @@ class PostsPage {
       await this.page.keyboard.type(newTitlePost);
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.keyboard.press("Tab");
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.press('End');
       for (let i = 0; i < 50; i++) {
         await this.page.keyboard.press("Backspace"); // Simulate pressing the Backspace key
       }
