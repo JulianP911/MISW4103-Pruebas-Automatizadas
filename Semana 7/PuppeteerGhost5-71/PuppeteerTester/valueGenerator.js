@@ -6,15 +6,23 @@ const LIST_YOUTUBE_FILE = "./mockarooCSV/youtubeList.csv";
 const LONG_STRINGS_FILE = "./mockarooCSV/longStrings.csv";
 const CAR_LIST_FILE = "./mockarooCSV/carList.csv";
 const DESCRIPTIONS_FILE = "./mockarooCSV/descriptions.csv";
+const TITLE_DESCRIPTION =
+  "https://my.api.mockaroo.com/title_description.json?key=8d863b40";
+const NO_TITLE_DESCRIPTION =
+  "https://my.api.mockaroo.com/title_description_blank_title.json?key=8d863b40";
+const NO_TITLE_DESCRIPTION_EDIT =
+  "https://my.api.mockaroo.com/title_description_blank_title_edit.json?key=8d863b40";
+const TITLE_DESCRIPTION_EDIT =
+  "https://my.api.mockaroo.com/title_description_edit.json?key=8d863b40";
+
 const restrictedWords = ["ghost"];
-class ValueGenerator{
-    constructor(){
-    }
+class ValueGenerator {
+  constructor() {}
   generateString = () => {
     return faker.lorem.sentences(2);
   };
 
-  generateSpecialCharacters= () => {
+  generateSpecialCharacters = () => {
     return this.readFile(RANDOM_CHARACTERS_FILE)[
       faker.number.int(linesQuantity)
     ];
@@ -32,24 +40,20 @@ class ValueGenerator{
   };
 
   generateYoutubeUrlInvalid = () => {
-    return this.readFile(RANDOM_YOUTUBE_FILE)[
-        faker.number.int(linesQuantity)
-      ];
+    return this.readFile(RANDOM_YOUTUBE_FILE)[faker.number.int(linesQuantity)];
   };
 
   generateLongString = () => {
-    return this.readFile(LONG_STRINGS_FILE)[
-        faker.number.int(linesQuantity)
-      ];
+    return this.readFile(LONG_STRINGS_FILE)[faker.number.int(linesQuantity)];
   };
 
-  getEmptyString=()=>{
+  getEmptyString = () => {
     return "";
-  }
+  };
 
-  getRestrictedWord=()=>{
-    return restrictedWords[faker.number.int(restrictedWords.length)-1];
-  }
+  getRestrictedWord = () => {
+    return restrictedWords[faker.number.int(restrictedWords.length) - 1];
+  };
 
   generateWord = () => {
     return faker.lorem.word();
@@ -57,26 +61,32 @@ class ValueGenerator{
 
   generateDateWrongMonth = () => {
     return "2023-45-45";
-  }
+  };
 
-  getURLYoutube = () =>{
-    return this.readFile(LIST_YOUTUBE_FILE)[
-        faker.number.int(linesQuantity)
-      ];
-  }
+  getURLYoutube = () => {
+    return this.readFile(LIST_YOUTUBE_FILE)[faker.number.int(linesQuantity)];
+  };
 
-  getRandomTitle = () =>{
-    return this.readFile(CAR_LIST_FILE)[
-        faker.number.int(linesQuantity)
-      ];
-  }
+  getRandomTitle = () => {
+    return this.readFile(CAR_LIST_FILE)[faker.number.int(linesQuantity)];
+  };
 
-  getRandomDescription = () =>{
-    return this.readFile(DESCRIPTIONS_FILE)[
-        faker.number.int(linesQuantity)
-      ];
-  }
+  getRandomDescription = () => {
+    return this.readFile(DESCRIPTIONS_FILE)[faker.number.int(linesQuantity)];
+  };
 
+  getTitleDescription = async () => {
+    return await this.generateDataAPI(TITLE_DESCRIPTION);
+   };
+  getTitleDescriptionEdit = async () => {
+    return await this.generateDataAPI(TITLE_DESCRIPTION_EDIT);
+  };
+  getBlankTitleDescription = async () => {
+    return await this.generateDataAPI(NO_TITLE_DESCRIPTION);
+  };
+  getBlankTitleDescriptionEdit = async () => {
+    return await this.generateDataAPI(NO_TITLE_DESCRIPTION_EDIT);
+  };
   readFile = (fileName) => {
     const fs = require("fs");
     const file = fs.readFileSync(fileName, "utf-8");
@@ -87,5 +97,19 @@ class ValueGenerator{
     return lines;
   };
 
+  generateDataAPI = async (url) => {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error("Network response was not ok.");
+      }
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+      throw error;
+    }
+  };
 }
-module.exports=ValueGenerator;
+module.exports = ValueGenerator;

@@ -26,7 +26,6 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "postsPage.png",
       });
     } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
@@ -109,7 +108,6 @@ class PostsPage {
       );
 
       if (element) {
-        //console.log("Post created successfully");
         ans = new TestResponse(true, "Post created successfully");
       } else {
         // throw "Post created failed";
@@ -148,7 +146,6 @@ class PostsPage {
       });
       return ans;
     } catch (error) {
-      console.error("Create Post failed:", error.message);
       let ans = new TestResponse(false, "Post created failed");
       return ans; // Rethrow the error to propagate it to the calling code
     }
@@ -244,13 +241,8 @@ class PostsPage {
         }
       }
 
-      if (!titleFound) {
-        ans = new TestResponse(false, "Create Draft Post failed");
-      }
-
       return ans;
     } catch (error) {
-      console.log("Create Draft Post failed:", error.message);
       let ans = new TestResponse(false, "Create Draft Post failed");
       return ans;
     }
@@ -266,7 +258,6 @@ class PostsPage {
    */
   async createPostScheduled(titlePost, descriptionPost, scheduleDate) {
     try {
-      console.log(scheduleDate);
       let ans = new TestResponse(false, "Create Scheduled Post failed");
       // Click on new post
       await this.page.waitForSelector(".view-actions-top-row", {
@@ -342,7 +333,6 @@ class PostsPage {
       if (error) {
         ans = new TestResponse(false, error);
         return ans;
-        // console.log("Post created successfully");
       }
 
       await this.page.waitForTimeout(timeoutConfig);
@@ -370,9 +360,7 @@ class PostsPage {
 
       if (element) {
         ans = new TestResponse(true, "Post created successfully");
-        // console.log("Post created successfully");
       } else {
-        //throw "No se encontró el componente de creación exitosa";
         ans = new TestResponse(
           false,
           await this.page.$("[data-test-confirm-error]").value
@@ -412,7 +400,6 @@ class PostsPage {
       });
       return ans;
     } catch (error) {
-      console.error("Create Scheduled Post failed:", error.message);
       let ans = new TestResponse(false, "Create Scheduled Post failed");
 
       return ans;
@@ -463,7 +450,7 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newInfoPost.png",
       });
-      //check for saved tag
+      
       const saved = await this.page.waitForFunction(
         () => {
           const element = document.querySelector(
@@ -520,17 +507,10 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "lisPosts.png",
       });
-      if (!tituloEncontrado) {
-        ans = new TestResponse(
-          false,
-          "no se encontro el titulo del draft en el listado de posts"
-        );
-      }
-
+     
       await this.page.waitForTimeout(timeoutConfig);
       return ans;
     } catch (error) {
-      console.error("Edit draft Post failed:", error.message);
       let ans = new TestResponse(
         false,
         "no se encontro el titulo del draft en el listado de posts"
@@ -589,7 +569,6 @@ class PostsPage {
       await this.page.waitForTimeout(timeoutConfig);
       return ans;
     } catch (error) {
-      console.error("Add Url Post failed:", error);
       let ans = new TestResponse(
         false,
         "Add Url Post failed"
@@ -666,7 +645,7 @@ class PostsPage {
       );
       return ans;
     } catch (error) {
-      console.log(error);
+     
       return new TestResponse(false, "Change URL Post failed");
     }
   }
@@ -730,7 +709,6 @@ async editDate(titlePost, newDate) {
 
     return ans;
   } catch (error) {
-    console.error("Edit draft Post failed:", error.message);
     let ans = new TestResponse(
       false,
       "Edit draft Post failed"

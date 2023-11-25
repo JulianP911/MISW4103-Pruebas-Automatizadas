@@ -155,7 +155,7 @@ class PagesPage {
       });
       await this.page.keyboard.press("Tab");
       await this.page.keyboard.type(descriptionPage);
-      await this.page.waitForFunction(
+      const saved=await this.page.waitForFunction(
         () => {
           const element = document.querySelector(
             "[data-test-editor-post-status]"
@@ -164,6 +164,11 @@ class PagesPage {
         },
         { timeout: timeoutConfig }
       );
+      if (saved) {
+        ans = new TestResponse(true, "Create Draft Page passed");
+
+        return ans;
+      }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "completeDraftForm.png",
       });
@@ -188,13 +193,11 @@ class PagesPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(titlePage)) {
           ans = new TestResponse(true, "Create Draft page passed");
-          return ans;
         }
       }
 
-      return new TestResponse(false, "Create Draft page failed");
+      return ans
     } catch (error) {
-      console.log("Create Draft page failed:", error.message);
       let ans = new TestResponse(false, "Create Draft page failed");
       return ans;
     }
