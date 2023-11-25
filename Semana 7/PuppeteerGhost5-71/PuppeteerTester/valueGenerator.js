@@ -4,6 +4,8 @@ const RANDOM_CHARACTERS_FILE = "./mockarooCSV/randomCharacters.csv";
 const RANDOM_YOUTUBE_FILE = "./mockarooCSV/youtubeRandom.csv";
 const LIST_YOUTUBE_FILE = "./mockarooCSV/youtubeList.csv";
 const LONG_STRINGS_FILE = "./mockarooCSV/longStrings.csv";
+const CAR_LIST_FILE = "./mockarooCSV/carList.csv";
+const DESCRIPTIONS_FILE = "./mockarooCSV/descriptions.csv";
 const restrictedWords = ["ghost"];
 class ValueGenerator{
     constructor(){
@@ -59,6 +61,18 @@ class ValueGenerator{
 
   getURLYoutube = () =>{
     return this.readFile(LIST_YOUTUBE_FILE)[
+        faker.number.int(linesQuantity)
+      ];
+  }
+
+  getRandomTitle = () =>{
+    return this.readFile(CAR_LIST_FILE)[
+        faker.number.int(linesQuantity)
+      ];
+  }
+
+  getRandomDescription = () =>{
+    return this.readFile(DESCRIPTIONS_FILE)[
         faker.number.int(linesQuantity)
       ];
   }

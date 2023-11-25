@@ -3898,7 +3898,7 @@ const runScenario64 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     /* Given: Se ingresa a la página correspondiente a login
      * When: Se realiza la creación de un page
      * And:Se selecciona el page que ha sido creado
