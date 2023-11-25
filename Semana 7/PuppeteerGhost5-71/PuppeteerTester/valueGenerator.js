@@ -1,9 +1,9 @@
 const { faker } = require("@faker-js/faker");
 const linesQuantity = 29;
 const RANDOM_CHARACTERS_FILE = "./mockarooCSV/randomCharacters.csv";
-//const RANDOM_CHARACTERS_FILE = "./mockarooCSV/randomCharacters.csv";
-//const RANDOM_CHARACTERS_FILE = "./mockarooCSV/randomCharacters.csv";
-
+const RANDOM_YOUTUBE_FILE = "./mockarooCSV/youtubeRandom.csv";
+const LIST_YOUTUBE_FILE = "./mockarooCSV/youtubeList.csv";
+const restrictedWords = ["ghost"];
 class ValueGenerator{
     constructor(){
     }
@@ -29,16 +29,36 @@ class ValueGenerator{
   };
 
   generateYoutubeUrlInvalid = () => {
-    //mokaroo
+    return this.readFile(RANDOM_YOUTUBE_FILE)[
+        faker.number.int(linesQuantity)
+      ];
   };
 
   generateLongString = () => {
     //mokaroo
   };
 
+  getEmptyString=()=>{
+    return "";
+  }
+
+  getRestrictedWord=()=>{
+    return restrictedWords[faker.number.int(restrictedWords.length)-1];
+  }
+
   generateWord = () => {
     return faker.lorem.word();
   };
+
+  generateDateWrongMonth = () => {
+    return "2023-45-45";
+  }
+
+  getURLYoutube = () =>{
+    return this.readFile(LIST_YOUTUBE_FILE)[
+        faker.number.int(linesQuantity)
+      ];
+  }
 
   readFile = (fileName) => {
     const fs = require("fs");

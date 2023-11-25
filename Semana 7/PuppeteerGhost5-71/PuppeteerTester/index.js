@@ -1,18 +1,16 @@
-const assert = require("assert");
 const puppeteer = require("puppeteer");
 const { faker } = require("@faker-js/faker");
 const fs = require("fs");
 const LoginPage = require("./loginPage");
 const PostsPage = require("./postsPage");
-const TagsPage = require("./tagsPage");
-const MembersPage = require("./membersPage");
 const PagesPage = require("./pagesPage");
 let config = require("./config.json");
+const ValueGenerator = require("./valueGenerator");
 
 const ghostUrl = config.ghostUrl;
 const userEmail = config.userEmail;
 const userPassword = config.userPassword;
-
+const valueGenerator=new ValueGenerator();
 // Create a directory with a timestamp
 const timestamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0];
 const screenshotDirectory = `./screenshots/${timestamp}/`;
@@ -198,8 +196,8 @@ const runScenarios = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = "";
-    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = valueGenerator.getEmptyString();
+    const descriptionPost = valueGenerator.generateString();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createPost(titlePost, descriptionPost)
@@ -218,11 +216,10 @@ const runScenarios = async () => {
   }
 };
 /**
- * Escenario 3: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y con descripción
+ * Escenario 3: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y sin descripción
  * Given: Se ingresa a la página correspondiente a login
  * When: Se da clic en el botón de Posts
  * And: Se da clic en el botón de New Post
- * And:Se ingresa un texto al contenido del post
  * And: Se espera a que aparezca el botón de publish
  * Then:Se valida que el post no se haya podido crear
  */ const runScenario3 = async () => {
@@ -243,7 +240,6 @@ const runScenarios = async () => {
 
     /*When: Se da clic en el botón de Posts
      * And: Se da clic en el botón de New Post
-     * And:Se ingresa un texto al contenido del post
      * And: Se da click en el publish
      * */
     const postPage = new PostsPage(
@@ -253,8 +249,8 @@ const runScenarios = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = "";
-    const descriptionPost = "";
+    const titlePost = valueGenerator.getEmptyString();
+    const descriptionPost = valueGenerator.getEmptyString();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createPost(titlePost, descriptionPost)
@@ -372,8 +368,8 @@ const runScenarios = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    const descriptionPost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const titlePost = valueGenerator.generateSpecialCharacters();
+    const descriptionPost = valueGenerator.generateSpecialCharacters();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createPost(titlePost, descriptionPost)
@@ -487,8 +483,8 @@ const runScenario7 = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = "";
-    const descriptionPost = faker.lorem.sentence(2);
+    const titlePost = valueGenerator.getEmptyString();
+    const descriptionPost = valueGenerator.generateString();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createDraft(titlePost, descriptionPost)
@@ -542,8 +538,8 @@ const runScenario8 = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = "";
-    const descriptionPost = "";
+    const titlePost = valueGenerator.getEmptyString();
+    const descriptionPost = valueGenerator.getEmptyString();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createDraft(titlePost, descriptionPost)
@@ -585,7 +581,7 @@ const runScenario9 = async () => {
       screenshotDirectoryEscenario
     );
     await loginPage.visit();
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
 
     /* When: Se da clic en el botón de Posts
      * And: Se da clic en el botón de New Post
@@ -643,8 +639,11 @@ const runScenario10 = async () => {
     const afterlogin = await loginPage.login(userEmail, userPassword);
 
     /* When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And: Se da click en posts*/
+ * And: Se da clic en el botón de New Post
+ * And:Se ingresa un texto al título del post
+ * And:Se ingresa un texto al contenido del post
+ * And: Se da click en posts
+ * */
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -652,8 +651,8 @@ const runScenario10 = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    const descriptionPost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const titlePost = valueGenerator.generateSpecialCharacters();
+    const descriptionPost = valueGenerator.generateSpecialCharacters();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createDraft(titlePost, descriptionPost)
@@ -707,9 +706,9 @@ const runScenario11 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const publishDate = faker.date.future().toISOString().split("T")[0];
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const publishDate = valueGenerator.generateFutureDate();
 
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
@@ -763,9 +762,9 @@ const runScenario12 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const publishDate = faker.date.past().toISOString().split("T")[0];
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const publishDate = valueGenerator.generatePastDate();
 
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
@@ -813,15 +812,15 @@ const runScenario13 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     const postPage = new PostsPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const publishDate = faker.date.past().toDateString();
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const publishDate = valueGenerator.generateStringDate();
 
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
@@ -874,15 +873,15 @@ const runScenario14 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     const postPage = new PostsPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const publishDate = "2023-45-45";
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const publishDate = valueGenerator.generateDateWrongMonth();
 
     await Promise.resolve(postPage.visit());
     const responseCreateScheduledPost = await Promise.resolve(
@@ -931,15 +930,15 @@ const runScenario15 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     const postPage = new PostsPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.future().toISOString().split("T")[0];
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const newPublishDate = valueGenerator.generateFutureDate();
 
     await Promise.resolve(postPage.visit());
     await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
@@ -991,9 +990,9 @@ const runScenario16 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.past().toISOString().split("T")[0];
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const newPublishDate = valueGenerator.generatePastDate();
 
     await Promise.resolve(postPage.visit());
     await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
@@ -1040,15 +1039,15 @@ const runScenario17 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     const postPage = new PostsPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.past().toDateString();
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const newPublishDate = valueGenerator.generateStringDate();
 
     await Promise.resolve(postPage.visit());
     await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
@@ -1095,15 +1094,15 @@ const runScenario18 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     const postPage = new PostsPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePost = faker.lorem.sentence(2);
-    const descriptionPost = faker.lorem.sentence(2);
-    const newPublishDate = "2023-45-45";
+    const titlePost = valueGenerator.generateString();
+    const descriptionPost = valueGenerator.generateString();
+    const newPublishDate = valueGenerator.generateDateWrongMonth();
 
     await Promise.resolve(postPage.visit());
     await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
@@ -1221,7 +1220,7 @@ const runScenario20 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newTitlePost = "";
+    const newTitlePost = valueGenerator.getEmptyString();
     const newDescriptionPost = faker.lorem.sentence(2);
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
@@ -1281,8 +1280,8 @@ const runScenario21 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newTitlePost = "";
-    const newDescriptionPost = "";
+    const newTitlePost = valueGenerator.getEmptyString();
+    const newDescriptionPost = valueGenerator.getEmptyString();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.editDraft(titlePost, newTitlePost, newDescriptionPost)
@@ -1401,8 +1400,8 @@ const runScenario23 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newTitlePost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    const newDescriptionPost = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const newTitlePost = valueGenerator.generateSpecialCharacters();
+    const newDescriptionPost = valueGenerator.generateSpecialCharacters();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.editDraft(titlePost, newTitlePost, newDescriptionPost)
@@ -1464,7 +1463,7 @@ const runScenario24 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl = "";
+    const newUrl = valueGenerator.getEmptyString();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
@@ -1526,7 +1525,7 @@ const runScenario25 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const newUrl = valueGenerator.generateSpecialCharacters();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
@@ -1650,7 +1649,7 @@ const runScenario27 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl = faker.lorem.word();
+    const newUrl = valueGenerator.generateWord();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
@@ -1785,7 +1784,7 @@ const runScenario29 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     /* When: Se realiza la creación de un post
      * And:Se selecciona el post que ha sido creado
      * And:Se ingresa una nueva cadena de texto al título del post
@@ -1798,7 +1797,7 @@ const runScenario29 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = faker.lorem.sentence(2);
     const titlePost = faker.lorem.sentence(2);
-    const newUrl = "Ghost";
+    const newUrl = valueGenerator.getRestrictedWord();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
@@ -1857,7 +1856,7 @@ const runScenario30 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = "";
     const titlePost = faker.lorem.sentence(2);
-    const youtubeUrl = "www.youtube.com/" + faker.lorem.word();
+    const youtubeUrl = valueGenerator.generateYoutubeUrlInvalid();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.addYoutubeUrl(titlePost, youtubeUrl)
@@ -1877,7 +1876,7 @@ const runScenario30 = async () => {
   }
 };
 /**
- * Escenario 31: Como administrador le agrego una url de youtube a un post aleatorio iniciando por 'www.youtube.com/'
+ * Escenario 31: Como administrador le agrego una cadena aleatoria a un post en el campo url
  *
  * Given: Se ingresa a la página correspondiente a login
  * When: Se realiza la creación de un post
@@ -1915,7 +1914,7 @@ const runScenario31 = async () => {
     await Promise.resolve(postPage.visit());
     const descriptionPost = "";
     const titlePost = faker.lorem.sentence(2);
-    const youtubeUrl = faker.lorem.word();
+    const youtubeUrl = valueGenerator.generateWord();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.addYoutubeUrl(titlePost, youtubeUrl)
@@ -1960,7 +1959,7 @@ const runScenario32 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     /* When: Se realiza la creación de un post
      * And:Se selecciona el post que ha sido creado
      * And:Se ingresa una nueva cadena de texto al título del post
@@ -1971,10 +1970,9 @@ const runScenario32 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const descriptionPost = "";
+    const descriptionPost = valueGenerator.getEmptyString();
     const titlePost = faker.lorem.sentence(2);
-    const youtubeUrl =
-      "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
+    const youtubeUrl = valueGenerator.getURLYoutube();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.addYoutubeUrl(titlePost, youtubeUrl)
@@ -2101,8 +2099,8 @@ const runScenario34 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = "";
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.getEmptyString();
+    const descriptionPage = valueGenerator.generateString();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createPage(titlePage, descriptionPage)
@@ -2157,8 +2155,8 @@ const runScenario35 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = "";
-    const descriptionPage = "";
+    const titlePage = valueGenerator.getEmptyString();
+    const descriptionPage = valueGenerator.getEmptyString();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createPage(titlePage, descriptionPage)
@@ -2276,8 +2274,8 @@ const runScenario36 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    const descriptionPage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const titlePage = valueGenerator.generateSpecialCharacters();
+    const descriptionPage = valueGenerator.generateSpecialCharacters();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createPage(titlePage, descriptionPage)
@@ -2392,8 +2390,8 @@ const runScenario39 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = "";
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.getEmptyString();
+    const descriptionPage = valueGenerator.generateString();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createDraft(titlePage, descriptionPage)
@@ -2447,8 +2445,8 @@ const runScenario40 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = "";
-    const descriptionPage = "";
+    const titlePage = valueGenerator.getEmptyString();
+    const descriptionPage = valueGenerator.getEmptyString();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createDraft(titlePage, descriptionPage)
@@ -2560,8 +2558,8 @@ const runScenario42 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    const descriptionPage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const titlePage = valueGenerator.generateSpecialCharacters();
+    const descriptionPage = valueGenerator.generateSpecialCharacters();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createDraft(titlePage, descriptionPage)
@@ -2618,7 +2616,7 @@ const runScenario43 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const publishDate = faker.date.future().toISOString().split("T")[0];
+    const publishDate = valueGenerator.generateFutureDate();
 
     await Promise.resolve(pagePage.visit());
     const responseCreateScheduledPage = await Promise.resolve(
@@ -2674,7 +2672,7 @@ const runScenario44 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const publishDate = faker.date.past().toISOString().split("T")[0];
+    const publishDate = valueGenerator.generatePastDate();
 
     await Promise.resolve(pagePage.visit());
     const responseCreateScheduledPage = await Promise.resolve(
@@ -2730,7 +2728,7 @@ const runScenario45 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const publishDate = faker.date.past().toDateString();
+    const publishDate = valueGenerator.generateStringDate();
 
     await Promise.resolve(pagePage.visit());
     const responseCreateScheduledPage = await Promise.resolve(
@@ -2791,7 +2789,7 @@ const runScenario46 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const publishDate = "2023-45-45";
+    const publishDate = valueGenerator.generateDateWrongMonth();
 
     await Promise.resolve(pagePage.visit());
     const responseCreateScheduledPage = await Promise.resolve(
@@ -2915,7 +2913,7 @@ const runScenario48 = async () => {
     await Promise.resolve(pagePage.visit());
     const descriptionPage = faker.lorem.sentence(2);
     const titlePage = faker.lorem.sentence(2);
-    const newTitlePage = "";
+    const newTitlePage = valueGenerator.getEmptyString();
     const newDescriptionPage = faker.lorem.sentence(2);
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
@@ -2976,8 +2974,8 @@ const runScenario49 = async () => {
     await Promise.resolve(pagePage.visit());
     const descriptionPage = faker.lorem.sentence(2);
     const titlePage = faker.lorem.sentence(2);
-    const newTitlePage = "";
-    const newDescriptionPage = "";
+    const newTitlePage = valueGenerator.getEmptyString();
+    const newDescriptionPage = valueGenerator.getEmptyString();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
@@ -3099,8 +3097,8 @@ const runScenario51 = async () => {
     await Promise.resolve(pagePage.visit());
     const descriptionPage = faker.lorem.sentence(2);
     const titlePage = faker.lorem.sentence(2);
-    const newTitlePage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
-    const newDescriptionPage = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const newTitlePage = valueGenerator.generateSpecialCharacters();
+    const newDescriptionPage = valueGenerator.generateSpecialCharacters();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
@@ -3166,7 +3164,7 @@ const runScenario52 = async () => {
     await Promise.resolve(pagePage.visit());
     const descriptionPage = faker.lorem.sentence(2);
     const titlePage = faker.lorem.sentence(2);
-    const newUrl = "";
+    const newUrl = valueGenerator.getEmptyString();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.changeURL(titlePage, newUrl)
@@ -3232,7 +3230,7 @@ const runScenario53 = async () => {
     await Promise.resolve(pagePage.visit());
     const descriptionPage = faker.lorem.sentence(2);
     const titlePage = faker.lorem.sentence(2);
-    const newUrl = "!@#$%^&*()_-+=[]{};:,.<>?/|~";
+    const newUrl = valueGenerator.generateSpecialCharacters();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.changeURL(titlePage, newUrl)
@@ -3512,7 +3510,7 @@ const runScenario57 = async () => {
     await Promise.resolve(pagePage.visit());
     const descriptionPage = faker.lorem.sentence(2);
     const titlePage = faker.lorem.sentence(2);
-    const newUrl = "Ghost";
+    const newUrl = valueGenerator.getRestrictedWord();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.changeURL(titlePage, newUrl)
@@ -3567,7 +3565,7 @@ const runScenario58 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.future().toISOString().split("T")[0];
+    const newPublishDate = valueGenerator.generateFutureDate();
 
     await Promise.resolve(pagePage.visit());
     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
@@ -3622,7 +3620,7 @@ const runScenario59 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.past().toISOString().split("T")[0];
+    const newPublishDate = valueGenerator.generatePastDate();
 
     await Promise.resolve(pagePage.visit());
     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
@@ -3677,7 +3675,7 @@ const runScenario60 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const newPublishDate = faker.date.past().toDateString();
+    const newPublishDate = valueGenerator.generateStringDate();
 
     await Promise.resolve(pagePage.visit());
     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
@@ -3732,7 +3730,7 @@ const runScenario61 = async () => {
     );
     const titlePage = faker.lorem.sentence(2);
     const descriptionPage = faker.lorem.sentence(2);
-    const newPublishDate = "2023-45-45";
+    const newPublishDate = valueGenerator.generateDateWrongMonth();
 
     await Promise.resolve(pagePage.visit());
     await Promise.resolve(pagePage.createPage(titlePage, descriptionPage));
@@ -3791,9 +3789,9 @@ const runScenario62 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(pagePage.visit());
-    const descriptionPage = "";
+    const descriptionPage = valueGenerator.getEmptyString();
     const titlePage = faker.lorem.sentence(2);
-    const youtubeUrl = "www.youtube.com/" + faker.lorem.word();
+    const youtubeUrl = valueGenerator.generateYoutubeUrlInvalid();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.addYoutubeUrl(titlePage, youtubeUrl)
@@ -3852,9 +3850,9 @@ const runScenario63 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(pagePage.visit());
-    const descriptionPage = "";
+    const descriptionPage = valueGenerator.getEmptyString();
     const titlePage = faker.lorem.sentence(2);
-    const youtubeUrl = faker.lorem.word();
+    const youtubeUrl = valueGenerator.generateWord();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.addYoutubeUrl(titlePage, youtubeUrl)
@@ -3912,10 +3910,9 @@ const runScenario64 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(pagePage.visit());
-    const descriptionPage = "";
-    const titlePage = faker.lorem.sentence(2);
-    const youtubeUrl =
-      "https://www.youtube.com/watch?v=-KBrCHtyc6c&list=RD-KBrCHtyc6c&start_radio=1";
+    const descriptionPage = valueGenerator.getEmptyString();
+    const titlePage = valueGenerator.generateString();
+    const youtubeUrl = valueGenerator.getURLYoutube();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.addYoutubeUrl(titlePage, youtubeUrl)
