@@ -3,6 +3,7 @@ const linesQuantity = 29;
 const RANDOM_CHARACTERS_FILE = "./mockarooCSV/randomCharacters.csv";
 const RANDOM_YOUTUBE_FILE = "./mockarooCSV/youtubeRandom.csv";
 const LIST_YOUTUBE_FILE = "./mockarooCSV/youtubeList.csv";
+const LONG_STRINGS_FILE = "./mockarooCSV/longStrings.csv";
 const restrictedWords = ["ghost"];
 class ValueGenerator{
     constructor(){
@@ -35,7 +36,9 @@ class ValueGenerator{
   };
 
   generateLongString = () => {
-    //mokaroo
+    return this.readFile(LONG_STRINGS_FILE)[
+        faker.number.int(linesQuantity)
+      ];
   };
 
   getEmptyString=()=>{

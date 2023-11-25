@@ -307,8 +307,8 @@ const runScenarios = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = faker.lorem.sentences(50);
-    const descriptionPost = faker.lorem.sentences(50);
+    const titlePost = valueGenerator.generateLongString();
+    const descriptionPost = valueGenerator.generateLongString();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createPost(titlePost, descriptionPost)
@@ -412,7 +412,7 @@ const runScenario6 = async () => {
       screenshotDirectoryEscenario
     );
     await loginPage.visit();
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
 
     /* When: Se da clic en el botón de Posts
      * And: Se da clic en el botón de New Post
@@ -470,7 +470,7 @@ const runScenario7 = async () => {
       screenshotDirectoryEscenario
     );
     await loginPage.visit();
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
 
     /* When: Se da clic en el botón de Posts
      * And: Se da clic en el botón de New Post
@@ -526,7 +526,7 @@ const runScenario8 = async () => {
       screenshotDirectoryEscenario
     );
     await loginPage.visit();
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
 
     /* When: Se da clic en el botón de Posts
      * And: Se da clic en el botón de New Post
@@ -593,8 +593,8 @@ const runScenario9 = async () => {
     );
     await Promise.resolve(postPage.visit());
     //Generación de datos
-    const titlePost = faker.lorem.sentences(50);
-    const descriptionPost = faker.lorem.sentences(50);
+    const titlePost = valueGenerator.generateLongString();
+    const descriptionPost = valueGenerator.generateLongString();
 
     const responseCreatePost = await Promise.resolve(
       postPage.createDraft(titlePost, descriptionPost)
@@ -700,7 +700,7 @@ const runScenario11 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1278,8 +1278,8 @@ const runScenario21 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const descriptionPost = faker.lorem.sentence(2);
-    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = valueGenerator.generateString();
+    const titlePost = valueGenerator.generateString();
     const newTitlePost = valueGenerator.getEmptyString();
     const newDescriptionPost = valueGenerator.getEmptyString();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
@@ -1308,6 +1308,7 @@ const runScenario21 = async () => {
  * When: Se realiza la creación de un post
  * And:Se selecciona el post que ha sido creado
  * And:Se ingresa una nueva cadena de texto al título del post
+ * * And:Se ingresa una nueva cadena de texto al contenido del post
  * And: Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
  */
@@ -1327,7 +1328,7 @@ const runScenario22 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     /* When: Se realiza la creación de un post
      * And:Se selecciona el post que ha sido creado
      * And:Se ingresa una nueva cadena de texto al título del post
@@ -1450,7 +1451,7 @@ const runScenario24 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     /* When: Se realiza la creación de un post
      * And:Se selecciona el post que ha sido creado
      * And:Se ingresa una nueva cadena de texto al título del post
@@ -1647,8 +1648,8 @@ const runScenario27 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const descriptionPost = faker.lorem.sentence(2);
-    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = valueGenerator.generateString();
+    const titlePost = valueGenerator.generateString();
     const newUrl = valueGenerator.generateWord();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
@@ -1705,7 +1706,7 @@ const runScenario28 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     /* When: Se realiza la creación de un post
      * And:Se selecciona el post que ha sido creado
      * And:Se ingresa a settings
@@ -1726,16 +1727,16 @@ const runScenario28 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const descriptionPost = faker.lorem.sentence(2);
-    const titlePost = faker.lorem.sentence(2);
-    const newUrl = faker.lorem.word();
+    const descriptionPost = valueGenerator.generateString();
+    const titlePost = valueGenerator.generateString();
+    const newUrl = valueGenerator.generateWord();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
       postPage.changeURL(titlePost, newUrl)
     );
 
-    const descriptionPost2 = faker.lorem.sentence(2);
-    const titlePost2 = faker.lorem.sentence(2);
+    const descriptionPost2 = valueGenerator.generateString();
+    const titlePost2 = valueGenerator.generateString();
     await Promise.resolve(postPage.createDraft(titlePost2, descriptionPost2));
     const responseEditPost2 = await Promise.resolve(
       postPage.changeURL(titlePost2, newUrl)
@@ -1901,7 +1902,7 @@ const runScenario31 = async () => {
 
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
+    await loginPage.login(userEmail, userPassword);
     /* When: Se realiza la creación de un post
      * And:Se selecciona el post que ha sido creado
      * And:Se ingresa una nueva cadena de texto al título del post
@@ -1912,8 +1913,8 @@ const runScenario31 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(postPage.visit());
-    const descriptionPost = "";
-    const titlePost = faker.lorem.sentence(2);
+    const descriptionPost = valueGenerator.getEmptyString();
+    const titlePost = valueGenerator.generateString();
     const youtubeUrl = valueGenerator.generateWord();
     await Promise.resolve(postPage.createDraft(titlePost, descriptionPost));
     const responseEditPost = await Promise.resolve(
@@ -2211,8 +2212,8 @@ const runScenario36 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = faker.lorem.sentences(50);
-    const descriptionPage = faker.lorem.sentences(50);
+    const titlePage = valueGenerator.generateLongString();
+    const descriptionPage = valueGenerator.generateLongString();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createPage(titlePage, descriptionPage)
@@ -2500,8 +2501,8 @@ const runScenario41 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     //Generación de datos
-    const titlePage = faker.lorem.sentences(50);
-    const descriptionPage = faker.lorem.sentences(50);
+    const titlePage = valueGenerator.generateLongString();
+    const descriptionPage = valueGenerator.generateLongString();
 
     const responseCreatePage = await Promise.resolve(
       pagePage.createDraft(titlePage, descriptionPage)
@@ -2614,8 +2615,8 @@ const runScenario43 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePage = faker.lorem.sentence(2);
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
+    const descriptionPage = valueGenerator.generateString();
     const publishDate = valueGenerator.generateFutureDate();
 
     await Promise.resolve(pagePage.visit());
@@ -2670,8 +2671,8 @@ const runScenario44 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePage = faker.lorem.sentence(2);
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
+    const descriptionPage = valueGenerator.generateString();
     const publishDate = valueGenerator.generatePastDate();
 
     await Promise.resolve(pagePage.visit());
@@ -2726,8 +2727,8 @@ const runScenario45 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePage = faker.lorem.sentence(2);
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
+    const descriptionPage = valueGenerator.generateString();
     const publishDate = valueGenerator.generateStringDate();
 
     await Promise.resolve(pagePage.visit());
@@ -3032,10 +3033,10 @@ const runScenario50 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(pagePage.visit());
-    const descriptionPage = faker.lorem.sentence(2);
-    const titlePage = faker.lorem.sentence(2);
-    const newTitlePage = faker.lorem.sentences(50);
-    const newDescriptionPage = faker.lorem.sentences(50);
+    const descriptionPage = valueGenerator.generateString();
+    const titlePage =valueGenerator.generateString();
+    const newTitlePage = valueGenerator.generateLongString();
+    const newDescriptionPage =  valueGenerator.generateLongString();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.editDraft(titlePage, newTitlePage, newDescriptionPage)
@@ -3294,7 +3295,7 @@ const runScenario54 = async () => {
     await Promise.resolve(pagePage.visit());
     const descriptionPage = faker.lorem.sentence(2);
     const titlePage = faker.lorem.sentence(2);
-    const newUrl = faker.lorem.sentences(50).replace(" ", "-");
+    const newUrl = valueGenerator.generateLongString();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.changeURL(titlePage, newUrl)
@@ -3356,8 +3357,8 @@ const runScenario55 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(pagePage.visit());
-    const descriptionPage = faker.lorem.sentence(2);
-    const titlePage = faker.lorem.sentence(2);
+    const descriptionPage = valueGenerator.generateString();
+    const titlePage = valueGenerator.generateString();
     const newUrl = faker.lorem.word();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
@@ -3435,16 +3436,16 @@ const runScenario56 = async () => {
       screenshotDirectoryEscenario
     );
     await Promise.resolve(pagePage.visit());
-    const descriptionPage = faker.lorem.sentence(2);
-    const titlePage = faker.lorem.sentence(2);
-    const newUrl = faker.lorem.word();
+    const descriptionPage = valueGenerator.generateString();
+    const titlePage = valueGenerator.generateString();
+    const newUrl = valueGenerator.generateWord();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
       pagePage.changeURL(titlePage, newUrl)
     );
 
-    const descriptionPage2 = faker.lorem.sentence(2);
-    const titlePage2 = faker.lorem.sentence(2);
+    const descriptionPage2 = valueGenerator.generateString();
+    const titlePage2 = valueGenerator.generateString();
     await Promise.resolve(pagePage.createDraft(titlePage2, descriptionPage2));
     const responseEditPage2 = await Promise.resolve(
       pagePage.changeURL(titlePage2, newUrl)
@@ -3563,8 +3564,8 @@ const runScenario58 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePage = faker.lorem.sentence(2);
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
+    const descriptionPage = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generateFutureDate();
 
     await Promise.resolve(pagePage.visit());
@@ -3618,8 +3619,8 @@ const runScenario59 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePage = faker.lorem.sentence(2);
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
+    const descriptionPage = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generatePastDate();
 
     await Promise.resolve(pagePage.visit());
@@ -3673,8 +3674,8 @@ const runScenario60 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    const titlePage = faker.lorem.sentence(2);
-    const descriptionPage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
+    const descriptionPage = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generateStringDate();
 
     await Promise.resolve(pagePage.visit());
@@ -3790,7 +3791,7 @@ const runScenario62 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     const descriptionPage = valueGenerator.getEmptyString();
-    const titlePage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
     const youtubeUrl = valueGenerator.generateYoutubeUrlInvalid();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
@@ -3851,7 +3852,7 @@ const runScenario63 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     const descriptionPage = valueGenerator.getEmptyString();
-    const titlePage = faker.lorem.sentence(2);
+    const titlePage = valueGenerator.generateString();
     const youtubeUrl = valueGenerator.generateWord();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
@@ -3911,7 +3912,7 @@ const runScenario64 = async () => {
     );
     await Promise.resolve(pagePage.visit());
     const descriptionPage = valueGenerator.getEmptyString();
-    const titlePage = valueGenerator.generateString();
+    const titlePage = faker.lorem.sentence(2);
     const youtubeUrl = valueGenerator.getURLYoutube();
     await Promise.resolve(pagePage.createDraft(titlePage, descriptionPage));
     const responseEditPage = await Promise.resolve(
