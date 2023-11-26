@@ -53,7 +53,7 @@ Para tener Ghost en un host se opto por usar la plataforma Render, sin embargo a
 ### Pasos de ejecución local
 - Iniciar Ghost
 `ghost start`
-- Ubicarse en la raiz del proyecto (*\Semana 6\PuppeterGhost5-71\PuppeteerTester) 
+- Ubicarse en la raiz del proyecto (*\Semana 7\PuppeterGhost5-71\PuppeteerTester) 
 - Configurar el archivo config.json de acuerdo a los atributos propios configurados en Ghost
 - Instalar las dependencias del proyecto:
 `npm install`
@@ -62,7 +62,7 @@ Para tener Ghost en un host se opto por usar la plataforma Render, sin embargo a
   
 ### Pasos de ejecución con Ghost remoto
 - Realizar los pasos previamente descritos para la preparación de Ghost en Render
-- Ubicarse en la raiz del proyecto (*\Semana 6\PuppeterGhost5-71\PuppeteerTester) 
+- Ubicarse en la raiz del proyecto (*\Semana 7\PuppeterGhost5-71\PuppeteerTester) 
 - Configurar el archivo config.json de acuerdo a los atributos propios configurados en Ghost
 - Instalar las dependencias del proyecto:
 `npm install`
@@ -98,7 +98,7 @@ En el archivo de properties.json configurar los siguientes atributos:
 ### Pasos de ejecución local
 - Iniciar Ghost
 `ghost start`
-- Ubicarse en la raiz del proyecto (*\Semana 6\KrakenGhost5-71) 
+- Ubicarse en la raiz del proyecto (*\Semana 7\KrakenGhost5-71) 
 - Configurar el archivo properties.json de acuerdo a los atributos propios configurados en Ghost
 - Instalar las dependencias del proyecto:
 `npm install` o `sudo npm install`
@@ -107,7 +107,7 @@ En el archivo de properties.json configurar los siguientes atributos:
 
 ### Pasos de ejecución con Ghost remoto
 - Realizar los pasos previamente descritos para la preparación de Ghost en Render
-- Ubicarse en la raiz del proyecto (*\Semana 6\KrakenGhost5-71) 
+- Ubicarse en la raiz del proyecto (*\Semana 7\KrakenGhost5-71) 
 - Configurar el archivo properties.json de acuerdo a los atributos propios configurados en Ghost
 - Instalar las dependencias del proyecto:
 `npm install` o `sudo npm install`
