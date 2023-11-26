@@ -14,6 +14,7 @@
 A continuación, se adjunta los enlaces a los entregables de la wiki:
 
 [**Generación de escenarios**](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Generaci%C3%B3n-124-escenarios)
+
 [**Estrategia de generación de datos**](https://github.com/JulianP911/Pruebas-Automatizadas/wiki/Estrategia-de-generaci%C3%B3n-de-datos)
 
 ## Consumo de Ghost 
