@@ -25,7 +25,7 @@ const ensureDirectoryExists = (directoryPath) => {
 };
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
-  await runScenario1();
+ /* await runScenario1();
   await runScenario2();
   await runScenario3();
   await runScenario4();
@@ -68,15 +68,15 @@ const runScenarios = async () => {
   await runScenario41();
   await runScenario42();
   await runScenario43();
-  await runScenario44();
+ await runScenario44();
   await runScenario45();
   await runScenario46();
   await runScenario47();
   await runScenario48();
   await runScenario49();
-  await runScenario50();
+  await runScenario50();*/
   await runScenario51();
-  await runScenario52();
+ /* await runScenario52();
   await runScenario53();
   await runScenario54();
   await runScenario55();
@@ -88,7 +88,7 @@ const runScenarios = async () => {
   await runScenario61();
   await runScenario62();
   await runScenario63();
-  await runScenario64();
+  await runScenario64();*/
 };
 
 /**

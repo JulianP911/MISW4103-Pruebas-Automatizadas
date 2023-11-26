@@ -405,7 +405,7 @@ class PagesPage {
       );
       let tituloEncontrado = false;
       for (let i = 0; i < h3Elements.length; i++) {
-        if (h3Elements[i].includes(newTitlePage)) {
+        if (h3Elements[i].includes(newTitlePage.trim())) {
           tituloEncontrado = true;
           ans = new TestResponse(true, "Edit draft Page success");
         }
