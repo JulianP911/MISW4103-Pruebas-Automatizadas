@@ -1,5 +1,5 @@
 const assert = require("assert");
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const { faker } = require("@faker-js/faker");
 const fs = require("fs");
 const LoginPage = require("./loginPage");
@@ -8,6 +8,7 @@ const TagsPage = require("./tagsPage");
 const MembersPage = require("./membersPage");
 const PagesPage = require("./pagesPage");
 let config = require("./config.json");
+const SettingsPage = require("./settingsPage");
 
 const ghostUrl = config.ghostUrl;
 const userEmail = config.userEmail;
@@ -26,82 +27,86 @@ const ensureDirectoryExists = (directoryPath) => {
   }
 };
 ensureDirectoryExists(screenshotDirectory);
-const runScenarios = async () => {
-  await runScenario1();
- /* await runScenario2();
-  await runScenario3();
-  await runScenario4();
-  await runScenario5();
-  await runScenario6();
+const runScenariovs = async () => {
   await runScenario7();
-  await runScenario8();
-  await runScenario9();
-  await runScenario10();
-  await runScenario11();
-  await runScenario12();
-  await runScenario13();
-  await runScenario14();
-  await runScenario15();
-  await runScenario16();
-  await runScenario17();
-  await runScenario18();
-  await runScenario19();
-  await runScenario20();
-  await runScenario21();
-  await runScenario22();
-  await runScenario23();*/
 };
 
 /**
- * Escenario 1: Como usuario administrador realizo el inicio sesión en Ghost (positivo)
+ * Escenario 7: Como usuario administrador creo un Newsletter para el site en Ghost
  *
  * Given: Se ingresa a la página correspondiente a login
- * When: Se ingresa un correo valido
- * And: Se ingresa una contraseña valida
- * And: Se da clic en el botón de iniciar de sesión
- * Then: Se verifica que se encuentre en el dashboard
+ * When: Se ingresa a settings
+ * And: Se da click en Newsletter
+ * And: Se da click en add Newsletter
+ * And: Se ingresa un titulo y descripción válidos
+ * And: Se da click en crear
+ * Then: Se verifica que se encuentre el Newsletter creado en la lista
  */
-const runScenario1 = async () => {
+const runScenario7 = async () => {
   try {
-    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario1/`;
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario7/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
-    const browser = await puppeteer.launch({  product: 'webkit', headless: false });
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
     const page = await browser.newPage();
     const loginPage = new LoginPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
-
+    //Given: Se ingresa a la página correspondiente a login
     await loginPage.visit();
 
-    const afterlogin = await loginPage.login(userEmail, userPassword);
-
-    // Get the URL from the page after login
-    const url = afterlogin.url();
-
-    // Close the browser after completing the tests
-    await browser.close();
-
-    // Perform the assertion after all the asynchronous operations are complete
-    assert.equal(url, ghostUrl+"#/dashboard");
-    console.log(
-      "E1-Test Passed - Expected: http://localhost:2368/ghost/#/dashboard, Actual: ",
-      url,
-      "."
+    await loginPage.login(userEmail, userPassword);
+    /* When: Se ingresa a settings
+     * And: Se da click en Newsletter
+     * And: Se da click en add Newsletter
+     * And: Se ingresa un titulo y descripción válidos
+     * And: Se da click en crear */
+    const settingsPage = new SettingsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
     );
+    await Promise.resolve(settingsPage.visit());
+    await Promise.resolve(settingsPage.createNewsletter());
+    
+    // Close the browser after completing the tests
+   // await browser.close();
+    // Then: Se verifica que se encuentre el Newsletter creado en la lista
+    if (responseCreateNewsletter.status) {
+      console.log("E5-Test Passed ");
+    } else {
+      console.log("E5-Test Failed ");
+    }
   } catch (e) {
-    // Close the browser after completing the tests
-console.log(e.message)
-    console.log(
-      "E1-Test Failed - Expected: ",
-      e.expected,
-      ", Actual: ",
-      e.actual,
-      "."
-    );
+    console.log("E5-Test Failed ");
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//---------------Viejos----------------------------
+
 /**
  * Escenario 2: Como usuario administrador realizo el inicio sesión en Ghost (negativo)
  *
@@ -111,7 +116,7 @@ console.log(e.message)
  * And: Se da clic en el botón de iniciar de sesión
  * Then: Se valida el mensaje de error
  */
-const runScenario2 = async () => {
+const runScenariov2 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario2/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -180,7 +185,7 @@ const runScenario2 = async () => {
  * And: Se da clic en el botón de olvide contraseña
  * Then: Se valida el mensaje de error
  */
-const runScenario3 = async () => {
+const runScenariov3 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario3/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -260,7 +265,7 @@ const runScenario3 = async () => {
  * And: Se da click en Publish post, right now
  * And: Se da click en posts
  * Then:Se valida que el post este creado
- */ const runScenario4 = async () => {
+ */ const runScenariov4 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario4/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -312,7 +317,7 @@ const runScenario3 = async () => {
  * And: Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
  */
-const runScenario5 = async () => {
+const runScenariov5 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario5/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -361,7 +366,7 @@ const runScenario5 = async () => {
  * And: Se da click en posts
  * Then:Se valida que el post este creado
  */
-const runScenario6 = async () => {
+const runScenariov6 = async () => {
   try {
     //Create directory to save screenshots
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario6/`;
@@ -408,7 +413,7 @@ const runScenario6 = async () => {
  * And: Se da click en published Tags
  * Then:Se valida que el post este creado
  */
-const runScenario7 = async () => {
+const runScenariov7 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario7/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -446,7 +451,7 @@ const runScenario7 = async () => {
  * And: Se da click en Save
  * Then:Debe aparecer un mensaje de error exigiéndome un nombre de tag
  */
-const runScenario8 = async () => {
+const runScenariov8 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario8/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -484,7 +489,7 @@ const runScenario8 = async () => {
  * And: Se da click en internal Tags
  * Then:Se valida que el post este creado
  */
-const runScenario9 = async () => {
+const runScenariov9 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario9/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -528,7 +533,7 @@ const runScenario9 = async () => {
  * And: Se da click en posts
  * Then:Se valida que el post este creado
  */
-const runScenario10 = async () => {
+const runScenariov10 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -547,7 +552,8 @@ const runScenario10 = async () => {
       page,
       ghostUrl,
       screenshotDirectoryEscenario
-    ); const nameMember = faker.person.firstName();
+    );
+    const nameMember = faker.person.firstName();
     await Promise.resolve(membersPage.visit());
     await Promise.resolve(membersPage.createMember(nameMember));
     // Close the browser after completing the tests
@@ -569,7 +575,7 @@ const runScenario10 = async () => {
  * And: Se da click en Guardar
  * Then:Se valida que aparezca error por no ingresar un correo
  */
-const runScenario11 = async () => {
+const runScenariov11 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario11/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -611,7 +617,7 @@ const runScenario11 = async () => {
  * And: Se da click en Publish page, right now
  * Then:Se valida que aparezca el titulo de publicacion exitosa
  */
-const runScenario12 = async () => {
+const runScenariov12 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario12/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -652,7 +658,7 @@ const runScenario12 = async () => {
  * Then: Se valida que aparezaca en el listado de pages el borrador que se acabo de crear
  *
  */
-const runScenario13 = async () => {
+const runScenariov13 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario13/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -699,7 +705,7 @@ const runScenario13 = async () => {
  * 
 
  */
-const runScenario14 = async () => {
+const runScenariov14 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario14/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -738,7 +744,7 @@ const runScenario14 = async () => {
  * And: Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador con el nuevo titulo dado
  */
-const runScenario15 = async () => {
+const runScenariov15 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario15/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -783,7 +789,7 @@ const runScenario15 = async () => {
  * And: Se da click en Tags
  * Then:Se valida que el tag que ha sido creado previamente se le ha modificado el titulo
  */
-const runScenario16 = async () => {
+const runScenariov16 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario16/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -824,7 +830,7 @@ const runScenario16 = async () => {
  * And: Se da clic en el botón de Members
  * Then:Se verifica que el cambio en el campo de correo realizado al member
  */
-const runScenario17 = async () => {
+const runScenariov17 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario17/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -843,7 +849,8 @@ const runScenario17 = async () => {
       page,
       ghostUrl,
       screenshotDirectoryEscenario
-    ); const nameMember = faker.person.firstName();
+    );
+    const nameMember = faker.person.firstName();
     await Promise.resolve(membersPage.visit());
     await Promise.resolve(membersPage.createMember(nameMember));
     await Promise.resolve(membersPage.editMember());
@@ -867,7 +874,7 @@ const runScenario17 = async () => {
  * And: Se da click en pages
  * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
  */
-const runScenario18 = async () => {
+const runScenariov18 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario18/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -917,7 +924,7 @@ const runScenario18 = async () => {
  * And: Se selecciona el tag asignado
  * Then:Se verifica que al filtrar aparezca el post al cual se le asigno el tag
  */
-const runScenario19 = async () => {
+const runScenariov19 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario19/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -965,7 +972,7 @@ const runScenario19 = async () => {
  * And: Se da clic en el botón de Eliminar
  * Then:Se verifica que en la lista de post ya no se encuentra el post eliminado
  */
-const runScenario20 = async () => {
+const runScenariov20 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario20/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -1009,7 +1016,7 @@ const runScenario20 = async () => {
  * And: Se da clic en el botón de Eliminar
  * Then:Se verifica que en la lista de pages ya no se encuentra la page eliminada
  */
-const runScenario21 = async () => {
+const runScenariov21 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario21/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -1040,50 +1047,45 @@ const runScenario21 = async () => {
   } catch (e) {
     console.log(e, "E21-Test Failed");
   }
-  
 };
 
 /**
-* Escenario 22: Como usuario administrador elimino un tag
-* Given: Se ingresa a la página correspondiente a login
-* When: Se realiza la creación de un tag
-* And:Se da click en el botón de Tags
-* And: Se selecciona el tag que ha sido creado
-* And: Se da click en el botón eliminar tag
-* And: Se da clic en el botón de Eliminar 
-* Then:Se verifica que en la lista de tags ya no se encuentra el tag eliminado
-*/
-const runScenario22 = async () => {
- try {
-   const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario22/`;
-   ensureDirectoryExists(screenshotDirectoryEscenario);
-   const browser = await puppeteer.launch({ headless: false });
-   const page = await browser.newPage();
-   const loginPage = new LoginPage(
-     page,
-     ghostUrl,
-     screenshotDirectoryEscenario
-   );
+ * Escenario 22: Como usuario administrador elimino un tag
+ * Given: Se ingresa a la página correspondiente a login
+ * When: Se realiza la creación de un tag
+ * And:Se da click en el botón de Tags
+ * And: Se selecciona el tag que ha sido creado
+ * And: Se da click en el botón eliminar tag
+ * And: Se da clic en el botón de Eliminar
+ * Then:Se verifica que en la lista de tags ya no se encuentra el tag eliminado
+ */
+const runScenariov22 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario22/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
 
-   await loginPage.visit();
+    await loginPage.visit();
 
-   await loginPage.login(userEmail, userPassword);
-   const tagsPage = new TagsPage(
-     page,
-     ghostUrl,
-     screenshotDirectoryEscenario
-   );
-   await Promise.resolve(tagsPage.visit());
-   const nameTag = faker.lorem.sentence(1);
-   await Promise.resolve(tagsPage.createTag(nameTag,true));
-   await Promise.resolve(tagsPage.deleteTag(nameTag));
-   // Close the browser after completing the tests
-   await browser.close();
+    await loginPage.login(userEmail, userPassword);
+    const tagsPage = new TagsPage(page, ghostUrl, screenshotDirectoryEscenario);
+    await Promise.resolve(tagsPage.visit());
+    const nameTag = faker.lorem.sentence(1);
+    await Promise.resolve(tagsPage.createTag(nameTag, true));
+    await Promise.resolve(tagsPage.deleteTag(nameTag));
+    // Close the browser after completing the tests
+    await browser.close();
 
-   console.log("E22-Test Passed ");
- } catch (e) {
-   console.log(e, "E22-Test Failed");
- }
+    console.log("E22-Test Passed ");
+  } catch (e) {
+    console.log(e, "E22-Test Failed");
+  }
 };
 
 /**
@@ -1094,10 +1096,10 @@ const runScenario22 = async () => {
  * And: Se selecciona el member que ha sido creado
  * And: se da click en el botón de settings
  * And: Se da click en el botón eliminar member
- * And: Se da clic en el botón de Eliminar 
+ * And: Se da clic en el botón de Eliminar
  * Then:Se verifica que en la lista de member ya no se encuentra el member eliminado
  */
-const runScenario23 = async () => {
+const runScenariov23 = async () => {
   try {
     const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario23/`;
     ensureDirectoryExists(screenshotDirectoryEscenario);
@@ -1129,4 +1131,4 @@ const runScenario23 = async () => {
     console.log(e, "E23-Test Failed");
   }
 };
-runScenarios();
+runScenariovs();
