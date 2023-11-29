@@ -1,6 +1,6 @@
 const { faker } = require("@faker-js/faker");
 let config = require("./config.json");
-
+const TestResponse = require("./testResponse");
 const timeoutConfig = config.timeout;
 const assert = require("assert");
 class SettingsPage {
@@ -17,14 +17,16 @@ class SettingsPage {
       if ((await this.page.$(".gh-mobile-nav-bar-more")) !== null) {
         await this.page.click(".gh-mobile-nav-bar-more");
       }
-      await new Promise((r) => setTimeout(r, timeoutConfig+timeoutConfig+timeoutConfig));
-    
+      await new Promise((r) =>
+        setTimeout(r, timeoutConfig + timeoutConfig + timeoutConfig)
+      );
+
       await this.page.evaluate(() => {
         const settingsLink = document.querySelector('a[href="#/settings/"]');
         if (settingsLink) {
           settingsLink.click();
         } else {
-          console.error('Settings link not found');
+          console.error("Settings link not found");
         }
       });
 
@@ -39,7 +41,8 @@ class SettingsPage {
 
   async createNewsletter() {
     try {
-      await this.page.waitForTimeout(timeoutConfig+timeoutConfig);
+      await this.page.waitForTimeout(timeoutConfig + timeoutConfig);
+      let ans = new TestResponse(false, "Create newsletter failed");
 
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createNewNewsletter.png",
@@ -50,42 +53,58 @@ class SettingsPage {
       await this.page.evaluate(() => {
         const elements = document.querySelectorAll("span");
         for (const element of elements) {
-          if (element.textContent.trim() === 'Add newsletter') {
+          if (element.textContent.trim() === "Add newsletter") {
             console.log(element.textContent);
-            element.click()
+            element.click();
           }
-          
         }
       });
-    await this.page.keyboard.type(faker.lorem.sentence())
-    const createBtn=await this.page.$('button.cursor-pointer.bg-black.text-white')
-    createBtn.click();
-    await this.page.waitForTimeout(timeoutConfig);
-    await this.page.evaluate(() => {
+      const newsletterTitle = faker.lorem.sentence();
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.keyboard.type(newsletterTitle);
+      const createBtn = await this.page.$(
+        "button.cursor-pointer.bg-black.text-white"
+      );
+      createBtn.click();
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.evaluate(() => {
         const elements = document.querySelectorAll("span");
         for (const element of elements) {
-          if (element.textContent.trim() === 'Save') {
-            element.click()
+          if (element.textContent.trim() === "Save") {
+            element.click();
           }
-          
         }
       });
-    await this.page.waitForTimeout(timeoutConfig);
+      await this.page.evaluate(() => {
+        const elements = document.querySelectorAll("span");
+        for (const element of elements) {
+          if (element.textContent.trim() === "Close") {
+            element.click();
+          }
+        }
+      });
+      await this.page.evaluate((newsletterTitle) => {
+        const elements = document.querySelectorAll("span");
+        for (const element of elements) {
+          if (element.textContent.includes(newsletterTitle.trim())) {
+            let ans = new TestResponse(true, "Create newsletter passed");
 
-    /*if (element) {
-        console.log("Newsletter created successfully");
-      } else {
-        throw "Create Newsletter fail";
-      }*/
+            return ans;
+          }
+        }
+      }, newsletterTitle);
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "createdNewsletterPage.png",
       });
 
-      await this.page.waitForTimeout(timeoutConfig);
-      return this.page;
+      return ans;
     } catch (error) {
-      error, console.error("Create Newsletter Page failed:", error);
-      throw error; // Rethrow the error to propagate it to the calling code
+        console.log(error)
+      let ans = new TestResponse(false, "Create newsletter failed");
+      return ans;
     }
   }
 }

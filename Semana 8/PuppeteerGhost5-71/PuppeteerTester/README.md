@@ -1,8 +1,22 @@
 # Puppeteer Tester
 
 Aplicativo para hacer pruebas a Ghost con Puppeteer
+## Consumo de Ghost
+Para tener Ghost en un host se opto por usar la plataforma Render, sin embargo al estar en un host gratuito se desactiva despues de 15 min (aprox) de inactividad, es por esto que para poder hacer consumo de este servicio se debe seguir estos pasos:
+- Acceder al host para que inicie la activación: https://ghost5-71-oxma.onrender.com/ghost/
+- Esperar 5 minutos a que la instacia inicie por completo y cree la base de datos
+- Crear un usuario administrador de la aplicación Ghost (recomendamos usar la información que esta en el archivo config.js para no tener que modificar la configuración)
 
-### Prerequisitos
+### Pasos de ejecución con Ghost remoto
+- Realizar los pasos previamente descritos para la preparación de Ghost en Render
+- Ubicarse en la raiz del proyecto (*\Semana 6\PuppeterGhost5-71\PuppeteerTester) 
+- Configurar el archivo config.json de acuerdo a los atributos propios configurados en Ghost
+- Instalar las dependencias del proyecto:
+`npm install`
+- ejecutarlo:
+`node index.js`
+
+### Prerequisitos-- ejecución ghot local
 - Descargar y crear un usuario administrador en ghost (v5.71.0) (Link de cómo instalar: https://ghost.org/docs/install/) o seguir los pasos descritos abajo para el uso de Ghost en Render
 - Clonar el repositorio de PuppeteerTester
 - Tener instalado un IDE para revisar y configurar el proyecto (se recomienda Visual studio code)
@@ -31,17 +45,3 @@ Aplicativo para hacer pruebas a Ghost con Puppeteer
 - En el momento en el que se ejecuten las pruebas se vera en el terminal el estado en el que termina cada una de ellas (las pruebas se ejecutan secuencial, una tras otra)
 - En la carpeta del proyecto se creara una carpeta screenshots en donde se encuentra una carpeta por fecha y por cada uno de los escenarios, alli se encontrara las imagenes de las principales pantallas recorridas
 
-## Consumo de Ghost (Bono)
-Para tener Ghost en un host se opto por usar la plataforma Render, sin embargo al estar en un host gratuito se desactiva despues de 15 min (aprox) de inactividad, es por esto que para poder hacer consumo de este servicio se debe seguir estos pasos:
-- Acceder al host para que inicie la activación: https://ghost5-71-oxma.onrender.com/ghost/
-- Esperar 5 minutos a que la instacia inicie por completo y cree la base de datos
-- Crear un usuario administrador de la aplicación Ghost (recomendamos usar la información que esta en el archivo config.js para no tener que modificar la configuración)
-
-### Pasos de ejecución con Ghost remoto
-- Realizar los pasos previamente descritos para la preparación de Ghost en Render
-- Ubicarse en la raiz del proyecto (*\Semana 6\PuppeterGhost5-71\PuppeteerTester) 
-- Configurar el archivo config.json de acuerdo a los atributos propios configurados en Ghost
-- Instalar las dependencias del proyecto:
-`npm install`
-- ejecutarlo:
-`node index.js`

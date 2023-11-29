@@ -1,4 +1,5 @@
 const { faker } = require("@faker-js/faker");
+const TestResponse = require("./testResponse.js");
 let config = require("./config.json");
 
 const timeoutConfig = config.timeout;
@@ -25,7 +26,6 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "postsPage.png",
       });
     } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
       throw error; // Rethrow the error to propagate it to the calling code
     }
   }
@@ -38,8 +38,9 @@ class PostsPage {
    * the post is created and confirmed.
    * @throws Will throw an error if the post creation process fails.
    */
-  async createPost(titlePost) {
+  async createPost(titlePost, descriptionPost) {
     try {
+      let ans = new TestResponse(false, "Post created failed");
       // Wait for an element that contains a span with the text "New post"
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -56,7 +57,7 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "titlePost.png",
       });
       // Type content
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPost);
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
@@ -107,9 +108,10 @@ class PostsPage {
       );
 
       if (element) {
-        console.log("Post created successfully");
+        ans = new TestResponse(true, "Post created successfully");
       } else {
-        throw "Post created failed";
+        // throw "Post created failed";
+        ans = new TestResponse(false, "Post created failed");
       }
 
       await this.page.screenshot({
@@ -142,10 +144,10 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backPostsList.png",
       });
-      return this.page;
+      return ans;
     } catch (error) {
-      console.error("Create Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      let ans = new TestResponse(false, "Post created failed");
+      return ans; // Rethrow the error to propagate it to the calling code
     }
   }
 
@@ -159,8 +161,11 @@ class PostsPage {
    * @throws Will throw an error if the draft post creation process fails or if the
    * created draft post is not found in the list of posts.
    */
-  async createDraft(titlePost) {
+  async createDraft(titlePost, descriptionPost) {
     try {
+      let ans = new TestResponse(false, "Create Draft Post failed");
+      await this.page.waitForTimeout(timeoutConfig);
+
       // Click on 'New Post'
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -177,24 +182,43 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "postTitleDraft.png",
       });
       // Type the content
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPost);
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "draftPage.png",
       });
-
-      // Go back to the list of posts
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
+      //check for saved tag
+      const saved = await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim() === "Draft";
+        },
         { timeout: timeoutConfig }
       );
+      if (saved) {
+        ans = new TestResponse(true, "Create Draft Post passed");
+
+        return ans;
+      }
+      try {
+        // Go back to the list of posts
+        await this.page.waitForSelector(
+          '.gh-btn-editor[data-test-link="posts"]',
+          { timeout: timeoutConfig }
+        );
+      } catch {
+        ans = new TestResponse(false, "Create Draft Post failed");
+        return ans;
+      }
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
       await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "darftList.png",
+        path: this.screenshotDirectoryEscenario + "draftList.png",
       });
       // Wait for the list of posts to be visible
       await this.page.waitForSelector("h3.gh-content-entry-title", {
@@ -211,16 +235,16 @@ class PostsPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(titlePost)) {
           titleFound = true;
-          return this.page;
+          ans = new TestResponse(true, "Create Draft Post passed");
+
+          return ans;
         }
       }
 
-      if (!titleFound) {
-        throw "The title of the draft was not found in the list of posts";
-      }
+      return ans;
     } catch (error) {
-      console.error("Create Draft Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      let ans = new TestResponse(false, "Create Draft Post failed");
+      return ans;
     }
   }
 
@@ -232,8 +256,9 @@ class PostsPage {
    * the scheduled post is created and confirmed.
    * @throws Will throw an error if the scheduled post creation process validation fails or if any step fails.
    */
-  async createPostScheduled() {
+  async createPostScheduled(titlePost, descriptionPost, scheduleDate) {
     try {
+      let ans = new TestResponse(false, "Create Scheduled Post failed");
       // Click on new post
       await this.page.waitForSelector(".view-actions-top-row", {
         timeout: timeoutConfig,
@@ -244,13 +269,13 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "scheduledForm.png",
       });
       // Type title
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(titlePost);
       await this.page.keyboard.press("Tab");
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "titleScheduled.png",
       });
       // Type description
-      await this.page.keyboard.type(faker.lorem.sentence(2));
+      await this.page.keyboard.type(descriptionPost);
       await this.page.waitForTimeout(timeoutConfig);
 
       await this.page.screenshot({
@@ -290,6 +315,27 @@ class PostsPage {
       });
 
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.evaluate((scheduleDate) => {
+        document.querySelector(
+          "[data-test-date-time-picker-date-input]"
+        ).value = scheduleDate;
+        document
+          .querySelector("[data-test-date-time-picker-date-input]")
+          .focus();
+      }, scheduleDate);
+      await this.page.keyboard.press("Tab");
+      const error = await this.page.evaluate(() => {
+        const errorDiv = document.querySelector(
+          "div.gh-date-time-picker-error[data-test-date-time-picker-error]"
+        );
+        return errorDiv ? errorDiv.textContent.trim() : null;
+      });
+      if (error) {
+        ans = new TestResponse(false, error);
+        return ans;
+      }
+
+      await this.page.waitForTimeout(timeoutConfig);
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "schedulePostsPage.png",
       });
@@ -313,9 +359,12 @@ class PostsPage {
       );
 
       if (element) {
-        console.log("Post created successfully");
+        ans = new TestResponse(true, "Post created successfully");
       } else {
-        throw "No se encontró el componente de creación exitosa";
+        ans = new TestResponse(
+          false,
+          await this.page.$("[data-test-confirm-error]").value
+        );
       }
 
       await this.page.screenshot({
@@ -349,193 +398,18 @@ class PostsPage {
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "backListScheduled.png",
       });
-      return this.page;
+      return ans;
     } catch (error) {
-      console.error("Create Scheduled Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
-    }
-  }
-  /* Add a created tag to a published post*/
-  async addTagPost(titlePost, nameTag) {
-    try {
-      //Select the post according to the title from parameters
-      await this.page.evaluate(async (titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            await element.click();
-          }
-        }
-        return null;
-      }, titlePost);
-      await this.page.waitForTimeout(timeoutConfig);
+      let ans = new TestResponse(false, "Create Scheduled Post failed");
 
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "selectPublishedPost.png",
-      });
-      //Add the tag to the post through settings
-      await Promise.resolve(this.page.click('button[title="Settings"]'));
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "settingsPost.png",
-      });
-      await Promise.resolve(this.page.click('div[id="tag-input"]'));
-      const inputTag = await this.page.$(
-        ".ember-power-select-trigger-multiple-input"
-      );
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "inputTagClick.png",
-      });
-      await inputTag.type(nameTag);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "fillTag.png",
-      });
-      await this.page.keyboard.press("Enter");
-
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "assignedTag.png",
-      });
-      //Save the update of the post
-      await Promise.resolve(this.page.click('button[title="Settings"]'));
-      this.page.waitForSelector('span[data-test-task-button-state="idle"]', {
-        timeout: timeoutConfig,
-      });
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "settingsPostTag.png",
-      });
-      await Promise.resolve(
-        this.page.click('span[data-test-task-button-state="idle"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "idlePostTag.png",
-      });
-      //Get back to posts
-      await this.page.waitForSelector(
-        '.gh-btn-editor[data-test-link="posts"]',
-        { timeout: timeoutConfig }
-      );
-
-      await Promise.resolve(
-        this.page.click('.gh-btn-editor[data-test-link="posts"]')
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      //Filter by the tag that was assigned
-      await this.page.waitForSelector('div[data-test-tag-select="true"]', {
-        timeout: timeoutConfig,
-      });
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "filterAssignedTag.png",
-      });
-      await Promise.resolve(
-        this.page.click('div[data-test-tag-select="true"]')
-      );
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "tagSelect.png",
-      });
-      await this.page.evaluate(async (nameTag) => {
-        const elements = document.querySelectorAll("li");
-        for (const element of elements) {
-          if (element.textContent.trim() === nameTag.trim()) {
-            await element.click();
-          }
-        }
-        return null;
-      }, nameTag);
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "listFilteredAssignedTag.png",
-      });
-      //Validate that when filtered by the tag the post appear
-      const element = await this.page.evaluate((titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            return element;
-          }
-        }
-        return null;
-      }, titlePost);
-
-      if (element) {
-        console.log("Add Tag successfully");
-      } else {
-        throw "Add Tag failed";
-      }
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "addTagPostsPage.png",
-      });
-      return this.page;
-    } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
-    }
-  }
-  /*Delete the post with the title from the parameter*/
-  async deletePost(titlePost) {
-    try {
-      await this.page.evaluate(async (titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            await element.click();
-          }
-        }
-        return null;
-      }, titlePost);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "selectPostToDelete.png",
-      });
-      await this.page.waitForTimeout(timeoutConfig);
-      await Promise.resolve(this.page.click('button[title="Settings"]'));
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "settingsDeletePost.png",
-      });
-      await Promise.resolve(
-        this.page.click(
-          "button.gh-btn.gh-btn-outline.gh-btn-icon.gh-btn-fullwidth"
-        )
-      );
-      await this.page.waitForTimeout(timeoutConfig);
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "clickDeletePost.png",
-      });
-      await Promise.resolve(this.page.click("button.gh-btn-red"));
-      await this.page.waitForTimeout(timeoutConfig);
-
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "deletePostsPage.png",
-      });
-
-      const element = await this.page.evaluate((titlePost) => {
-        const elements = document.querySelectorAll(".gh-content-entry-title");
-        for (const element of elements) {
-          if (element.textContent.trim() === titlePost.trim()) {
-            return false;
-          }
-        }
-        return true;
-      }, titlePost);
-      await this.page.waitForTimeout(timeoutConfig);
-
-      await this.page.screenshot({
-        path: this.screenshotDirectoryEscenario + "listPosts.png",
-      });
-      if (element) {
-        console.log("Delete Post successfully");
-      } else {
-        throw "Delete post fail";
-      }
-      return this.page;
-    } catch (error) {
-      console.error("Visit Post Page failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      return ans;
     }
   }
 
-  async editDraft(titlePost, newTitlePost) {
+  async editDraft(titlePost, newTitlePost, newDescriptionPost) {
     try {
+      let ans = new TestResponse(false, "Post created failed");
+
       await this.page.evaluate(async (titlePost) => {
         const elements = document.querySelectorAll(".gh-content-entry-title");
         for (const element of elements) {
@@ -549,11 +423,13 @@ class PostsPage {
         path: this.screenshotDirectoryEscenario + "selectPostToEdit.png",
       });
       await this.page.waitForSelector("textarea[data-test-editor-title-input]");
+
       await this.page.evaluate(() => {
         const element = document.querySelector(
           "textarea[data-test-editor-title-input]"
         );
         element.value = "";
+
         element.focus();
       });
       await this.page.screenshot({
@@ -561,14 +437,54 @@ class PostsPage {
       });
       await this.page.keyboard.type(newTitlePost);
       await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.press("Tab");
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.press('End');
+      for (let i = 0; i < 50; i++) {
+        await this.page.keyboard.press("Backspace"); // Simulate pressing the Backspace key
+      }
+
+      await this.page.keyboard.type(newDescriptionPost);
+      await this.page.waitForTimeout(timeoutConfig);
+
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "newInfoPost.png",
       });
+      
+      const saved = await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim().includes("Saved");
+        },
+        { timeout: timeoutConfig }
+      );
+      if (saved) {
+        ans = new TestResponse(true, "Create Draft Post passed");
+      } else {
+        ans = new TestResponse(false, "Create Draft Post failed");
+        return ans;
+      }
       await this.page.waitForSelector(
         '.gh-btn-editor[data-test-link="posts"]',
         { timeout: timeoutConfig }
       );
-
+      try {
+        // Go back to the list of posts
+        await this.page.waitForSelector(
+          '.gh-btn-editor[data-test-link="posts"]',
+          { timeout: timeoutConfig }
+        );
+      } catch {
+        ans = new TestResponse(false, "Create Draft Post failed");
+        return ans;
+      }
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.waitForSelector(
+        '.gh-btn-editor[data-test-link="posts"]',
+        { timeout: timeoutConfig }
+      );
       await Promise.resolve(
         this.page.click('.gh-btn-editor[data-test-link="posts"]')
       );
@@ -585,23 +501,220 @@ class PostsPage {
       for (let i = 0; i < h3Elements.length; i++) {
         if (h3Elements[i].includes(newTitlePost)) {
           tituloEncontrado = true;
-          return;
+          ans = new TestResponse(true, "Edit draft Post success");
         }
       }
       await this.page.screenshot({
         path: this.screenshotDirectoryEscenario + "lisPosts.png",
       });
-      if (!tituloEncontrado) {
-        throw "no se encontro el titulo del draft en el listado de posts";
-      }
-
+     
       await this.page.waitForTimeout(timeoutConfig);
-      return this.page;
+      return ans;
     } catch (error) {
-      console.error("Edit draft Post failed:", error.message);
-      throw error; // Rethrow the error to propagate it to the calling code
+      let ans = new TestResponse(
+        false,
+        "no se encontro el titulo del draft en el listado de posts"
+      );
+
+      return ans; // Rethrow the error to propagate it to the calling code
     }
   }
-}
 
+  async addYoutubeUrl(titlePost, url) {
+    try {
+      let ans = new TestResponse(false, "Add url failed");
+
+      await this.page.evaluate(async (titlePost) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePost.trim()) {
+            await element.click();
+          }
+        }
+        return null;
+      }, titlePost);
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "selectPostToAddUrl.png",
+      });
+      await this.page.evaluate(() => {
+        const element = document.querySelector(
+          "textarea[data-test-editor-title-input]"
+        );
+        element.focus();
+      });
+      await this.page.keyboard.press("Tab");
+      await this.page.click('button[aria-label="Add a card"]');
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.click('[data-kg-card-menu-item="YouTube"]');
+      await this.page.waitForTimeout(timeoutConfig);
+      await this.page.keyboard.type(url)
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await this.page.keyboard.press("Enter");
+      await this.page.waitForTimeout(timeoutConfig);
+
+      const errmsg=await this.page.$('[data-testid="embed-url-error-message"]');
+      if(errmsg)
+      {
+        ans = new TestResponse(false, errmsg.value);
+      }
+      else{
+        ans = new TestResponse(true, "Add url passed");
+      }
+   
+      await this.page.screenshot({
+        path: this.screenshotDirectoryEscenario + "newInfoPost.png",
+      });
+     
+      await this.page.waitForTimeout(timeoutConfig);
+      return ans;
+    } catch (error) {
+      let ans = new TestResponse(
+        false,
+        "Add Url Post failed"
+      );
+
+      return ans; 
+    }
+  }
+
+  async changeURL(titlePost, newURL) {
+    try {
+      let ans = new TestResponse(false, "Change URL Post failed");
+      //Select the post to chnge the url
+      await this.page.evaluate(async (titlePost) => {
+        const elements = document.querySelectorAll(".gh-content-entry-title");
+        for (const element of elements) {
+          if (element.textContent.trim() === titlePost.trim()) {
+            await element.click();
+            break; // Exit the loop once the element is clicked
+          }
+        }
+      }, titlePost);
+
+      await this.page.waitForTimeout(timeoutConfig);
+
+      // Enter Settings
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForSelector(".post-setting-slug");
+
+      // Clear the input field before typing the new URL
+      await this.page.evaluate(() => {
+        const slugInput = document.querySelector(".post-setting-slug");
+        slugInput.value = "";
+      });
+
+      await this.page.type(".post-setting-slug", newURL);
+      await this.page.keyboard.press("Tab");
+
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForTimeout(timeoutConfig);
+
+      const saved = await this.page.waitForFunction(
+        () => {
+          const element = document.querySelector(
+            "[data-test-editor-post-status]"
+          );
+          return element && element.textContent.trim().includes("Draft");
+        },
+        { timeout: timeoutConfig }
+      );
+
+      if (saved) {
+        ans = new TestResponse(true, "Change URL Post passed");
+      } else {
+        return new TestResponse(false, "Change URL Post failed");
+      }
+      await this.page.waitForTimeout(timeoutConfig);
+
+      await Promise.resolve(this.page.click('button[title="Settings"]'));
+      await this.page.waitForSelector(".post-setting-slug");
+      const updatedUrl = await this.page.evaluate(() => {
+        return document.querySelector(".post-setting-slug").value;
+      });
+      if (updatedUrl === newURL) {
+        ans = new TestResponse(true, "Change URL Post passed");
+      } else {
+        return new TestResponse(false, "Change URL Post failed");
+      }
+
+      await Promise.resolve(
+        this.page.click('.gh-btn-editor[data-test-link="posts"]')
+      );
+      return ans;
+    } catch (error) {
+     
+      return new TestResponse(false, "Change URL Post failed");
+    }
+  }
+
+
+
+async editDate(titlePost, newDate) {
+  try {
+    let ans = new TestResponse(false, "Post created failed");
+
+    await this.page.evaluate(async (titlePost) => {
+      const elements = document.querySelectorAll(".gh-content-entry-title");
+      for (const element of elements) {
+        if (element.textContent.trim() === titlePost.trim()) {
+          await element.click();
+        }
+      }
+      return null;
+    }, titlePost);
+    await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "selectPostToEdit.png",
+    });
+    
+    await this.page.waitForTimeout(timeoutConfig);
+
+    await Promise.resolve(this.page.click('button[title="Settings"]'));
+
+    await this.page.waitForTimeout(timeoutConfig);
+    await this.page.evaluate((newDate) => {
+      document.querySelector(
+        "[data-test-date-time-picker-date-input]"
+      ).value = newDate;
+      document
+        .querySelector("[data-test-date-time-picker-date-input]")
+        .focus();
+    }, newDate);
+    await this.page.keyboard.press("Enter");
+    await this.page.waitForTimeout(timeoutConfig);
+
+    const error = await this.page.evaluate(() => {
+      const errorDiv = document.querySelector(
+        ".gh-date-time-picker-error"
+      );
+      return errorDiv ? errorDiv.textContent.trim() : null;
+    });
+    if (error) {
+      ans = new TestResponse(false, error);
+     }
+     else{
+      ans = new TestResponse(true, "Change date Post passed");
+     }
+    await this.page.waitForTimeout(timeoutConfig);
+
+
+    await this.page.screenshot({
+      path: this.screenshotDirectoryEscenario + "newInfoPost.png",
+    });
+    
+    await this.page.waitForTimeout(timeoutConfig);
+    await Promise.resolve(this.page.click('button[title="Settings"]'));
+
+    return ans;
+  } catch (error) {
+    let ans = new TestResponse(
+      false,
+      "Edit draft Post failed"
+    );
+
+    return ans; // Rethrow the error to propagate it to the calling code
+  }
+}}
 module.exports = PostsPage;
