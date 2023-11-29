@@ -1,6 +1,6 @@
 const { faker } = require("@faker-js/faker");
 let config = require("./config.json");
-const TestResponse = require("./testResponse").default;
+const TestResponse = require("./testResponse");
 
 const timeoutConfig = config.timeout;
 

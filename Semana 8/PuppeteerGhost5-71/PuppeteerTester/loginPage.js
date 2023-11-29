@@ -72,8 +72,7 @@ class LoginPage {
         path: this.screenshotDirectoryEscenario + "afterSignIn.png",
       });
 
-      // You might want to add additional checks for successful login
-
+      
       return this.page;
     } catch (error) {
       console.error("Login failed:", error.message);

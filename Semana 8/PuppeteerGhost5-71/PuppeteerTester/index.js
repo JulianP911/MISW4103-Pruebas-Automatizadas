@@ -6,7 +6,7 @@ const PostsPage = require("./postsPage");
 const PagesPage = require("./pagesPage");
 let config = require("./config.json");
 const ValueGenerator = require("./valueGenerator");
-const SettingsPage =require("./settingsPage");
+const SettingsPage = require("./settingsPage");
 const ghostUrl = config.ghostUrl;
 const userEmail = config.userEmail;
 const userPassword = config.userPassword;
@@ -26,18 +26,22 @@ const ensureDirectoryExists = (directoryPath) => {
 ensureDirectoryExists(screenshotDirectory);
 const runScenarios = async () => {
   await runScenario7();
+  await runScenario8();
+  await runScenario9();
+  await runScenario10();
+  await runScenario11();
 };
 
 /**
  * Escenario 7: Como usuario administrador creo un Newsletter para el site en Ghost
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se ingresa a settings
- * And: Se da click en Newsletter
- * And: Se da click en add Newsletter
- * And: Se ingresa un titulo y descripción válidos
- * And: Se da click en crear
- * Then: Se verifica que se encuentre el Newsletter creado en la lista
+ * Given Se ingresa a la página correspondiente a login
+ * When Se ingresa a settings
+ * And Se da click en Newsletter
+ * And Se da click en add Newsletter
+ * And Se ingresa un titulo y descripción válidos
+ * And Se da click en crear
+ * Then Se verifica que se encuentre el Newsletter creado en la lista
  */
 const runScenario7 = async () => {
   try {
@@ -52,56 +56,296 @@ const runScenario7 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se ingresa a settings
-     * And: Se da click en Newsletter
-     * And: Se da click en add Newsletter
-     * And: Se ingresa un titulo y descripción válidos
-     * And: Se da click en crear */
+    /* When Se ingresa a settings
+     * And Se da click en Newsletter
+     * And Se da click en add Newsletter
+     * And Se ingresa un titulo y descripción válidos
+     * And Se da click en crear */
     const settingsPage = new SettingsPage(
       page,
       ghostUrl,
       screenshotDirectoryEscenario
     );
     await Promise.resolve(settingsPage.visit());
-    const responseCreateNewsletter=await Promise.resolve(settingsPage.createNewsletter());
-    
+    const nameNewsletter = valueGenerator.generateString();
+    const responseCreateNewsletter = await Promise.resolve(
+      settingsPage.createNewsletter(nameNewsletter)
+    );
+
     // Close the browser after completing the tests
-   // await browser.close();
-    // Then: Se verifica que se encuentre el Newsletter creado en la lista
+    await browser.close();
+    // Then Se verifica que se encuentre el Newsletter creado en la lista
     if (responseCreateNewsletter.status) {
       console.log("E7-Test Passed ");
     } else {
       console.log("E7-Test Failed ");
     }
   } catch (e) {
-    console.log(error)
+    console.log(e);
 
     console.log("E7-Test Failed ");
   }
 };
 
+/**
+ * Escenario 8: Como usuario administrador edito un Newsletter para el site en Ghost
+ *
+ * Given Se ingresa a la página correspondiente a login
+ * When Se ingresa a settings
+ * And Se crea un Newsletter
+ * And Se da click en el Newsletter creado
+ * And Se ingresa una descripción válida
+ * And Se da click en Save
+ * Then Se verifica que se encuentre el Newsletter editado en la lista
+ */
+const runScenario8 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario8/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    //Given Se ingresa a la página correspondiente a login
+    await loginPage.visit();
 
+    await loginPage.login(userEmail, userPassword);
+    /* When Se ingresa a settings
+     * And Se crea un Newsletter
+     * And Se da click en el Newsletter creado
+     * And Se ingresa una descripción válida
+     * And Se da click en Save */
+    const settingsPage = new SettingsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(settingsPage.visit());
+    const nameNewsletter = valueGenerator.generateWord();
+    const newDescriptionNewsletter = valueGenerator.generateWord();
+    await Promise.resolve(settingsPage.createNewsletter(nameNewsletter));
 
+    const responseEditNewsletter = await Promise.resolve(
+      settingsPage.editNewsletter(nameNewsletter, newDescriptionNewsletter)
+    );
 
+    // Close the browser after completing the tests
+    await browser.close();
+    // Then Se verifica que se encuentre el Newsletter editado en la lista
+    if (responseEditNewsletter.status) {
+      console.log("E8-Test Passed ");
+    } else {
+      console.log("E8-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e);
 
+    console.log("E8-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 9: Como usuario administrador agrego una integracion
+ *
+ * Given Se ingresa a la página correspondiente a login
+ * When Se ingresa a settings
+ * And Se da click en Add custom integration
+ * And Se ingresa un nombre válido
+ * And Se da click en Add
+ * And Se da click en save and close
+ * Then Se verifica que se encuentre la integracion creada en la lista
+ */
+const runScenario9 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario9/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    //Given Se ingresa a la página correspondiente a login
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    /*  When Se ingresa a settings
+     * And Se da click en Add custom integration
+     * And Se ingresa un nombre válido
+     * And Se da click en Add
+     * And Se da click en save and close */
+    const settingsPage = new SettingsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(settingsPage.visit());
+    const integrationName = valueGenerator.generateWord();
+    // await Promise.resolve(settingsPage.createNewsletter(nameNewsletter));
+
+    const responseAddIntegration = await Promise.resolve(
+      settingsPage.addIntegration(integrationName)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then Se verifica que se encuentre la integracion creada en la lista
+    if (responseAddIntegration.status) {
+      console.log("E9-Test Passed ");
+    } else {
+      console.log("E9-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e);
+
+    console.log("E9-Test Failed ");
+  }
+};
+/**
+ * Escenario 10: Como usuario administrador reviso la historia
+ * Given Se ingresa a la página correspondiente a login y se crea un post
+ * When Se ingresa a settings
+ * And Se da click en view history
+ * Then Se verifica que la primera en la lista sea la creación del post
+ */
+const runScenario10 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario10/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    //Given Se ingresa a la página correspondiente a login y se crea un post
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    //Generación de datos- dinámico
+    const data = await valueGenerator.getTitleDescription();
+    const titlePost = data.title;
+    const descriptionPost = data.description;
+
+    const postPage = new PostsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(postPage.visit());
+
+    await Promise.resolve(postPage.createPost(titlePost, descriptionPost));
+    const settingsPage = new SettingsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(settingsPage.visit());
+
+    const responseReviewHistory = await Promise.resolve(
+      settingsPage.reviewHistory()
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then Se verifica que la primera en la lista sea la creación del post
+    if (responseReviewHistory.status) {
+      console.log("E10-Test Passed ");
+    } else {
+      console.log("E10-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e);
+
+    console.log("E10-Test Failed ");
+  }
+};
+
+/**
+ * Escenario 11: Como usuario administrador administro la navegación
+ * Given Se ingresa a la página correspondiente a login
+ * When Se ingresa a settings
+ * And Se da click en el butón de Custom en la sección de navigation
+ * And Se ingresa un label al nuevo link de navegación
+ * And Se da click en +
+ * Then Se verifica que el label esté en la lista de links creados
+ */
+const runScenario11 = async () => {
+  try {
+    const screenshotDirectoryEscenario = `./screenshots/${timestamp}/Escenario11/`;
+    ensureDirectoryExists(screenshotDirectoryEscenario);
+    const browser = await puppeteer.launch({
+      headless: false,
+    });
+    /*When Se ingresa a settings
+    * And Se da click en el butón de Custom en la sección de navigation
+    * And Se ingresa un label al nuevo link de navegación
+    * And Se da click en +
+    * */
+    const page = await browser.newPage();
+    const loginPage = new LoginPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    //Given Se ingresa a la página correspondiente a login y se crea un post
+    await loginPage.visit();
+
+    await loginPage.login(userEmail, userPassword);
+    const settingsPage = new SettingsPage(
+      page,
+      ghostUrl,
+      screenshotDirectoryEscenario
+    );
+    await Promise.resolve(settingsPage.visit());
+    const newNav = valueGenerator.generateWord();
+    const responseCustomizeNavigation = await Promise.resolve(
+      settingsPage.customizeNavigation(newNav)
+    );
+
+    // Close the browser after completing the tests
+    await browser.close();
+    //Then Se verifica que el label esté en la lista de links creados
+    if (responseCustomizeNavigation.status) {
+      console.log("E11-Test Passed ");
+    } else {
+      console.log("E11-Test Failed ");
+    }
+  } catch (e) {
+    console.log(e);
+
+    console.log("E11-Test Failed ");
+  }
+};
 
 //-----------Viejos--------------
 
 /**
  * Escenario 1: Como usuario administrador creo un nuevo post para publicarlo en el sitio web con título y descripcion correctos
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa una cadena de texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
- * And: Se da click en Continue, final review
- * And: Se da click en Publish post, right now
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa una cadena de texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
+ * And Se da click en Continue, final review
+ * And Se da click en Publish post, right now
+ * And Se da click en posts
  * Then:Se valida que el post este creado
  */ const runScenariov1 = async () => {
   try {
@@ -115,7 +359,7 @@ const runScenario7 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -124,14 +368,14 @@ const runScenario7 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa una cadena de texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish post, right now
-     * And: Se da click en posts
+    /*When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa una cadena de texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
+     * And Se da click en Continue, final review
+     * And Se da click en Publish post, right now
+     * And Se da click en posts
      * */
     const postPage = new PostsPage(
       page,
@@ -159,15 +403,15 @@ const runScenario7 = async () => {
 };
 /**
  * Escenario 2: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y con descripción
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa un texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
- * And: Se da click en Continue, final review
- * And: Se da click en Publish post, right now
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa un texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
+ * And Se da click en Continue, final review
+ * And Se da click en Publish post, right now
+ * And Se da click en posts
  * Then:Se valida que el post se haya creado
  */ const runScenariov2 = async () => {
   try {
@@ -181,7 +425,7 @@ const runScenario7 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -190,14 +434,14 @@ const runScenario7 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa un texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish post, right now
-     * And: Se da click en posts
+    /*When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa un texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
+     * And Se da click en Continue, final review
+     * And Se da click en Publish post, right now
+     * And Se da click en posts
      * */
     const postPage = new PostsPage(
       page,
@@ -224,12 +468,12 @@ const runScenario7 = async () => {
 };
 /**
  * Escenario 3: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Sin titulo y sin descripción
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And: Se ingresa el título al post (Vacío)
- * And: Se ingresa el contenido al post (Vacío)
- * And: Se espera a que aparezca el botón de publish
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * And Se ingresa el título al post (Vacío)
+ * And Se ingresa el contenido al post (Vacío)
+ * And Se espera a que aparezca el botón de publish
  * Then:Se valida que el post no se haya podido crear
  */ const runScenariov3 = async () => {
   try {
@@ -238,7 +482,7 @@ const runScenario7 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -247,11 +491,11 @@ const runScenario7 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* * When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And: Se ingresa el título al post
-     * And: Se ingresa el contenido al post
-     * And: Se espera a que aparezca el botón de publish*/
+    /* * When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * And Se ingresa el título al post
+     * And Se ingresa el contenido al post
+     * And Se espera a que aparezca el botón de publish*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -280,12 +524,12 @@ const runScenario7 = async () => {
 };
 /**
  * Escenario 4: Como usuario administrador creo un nuevo post para publicarlo en el sitio web Campos muy largos (15000 caracteres)
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa un texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa un texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
  * Then:Se valida que el post no se haya podido crear
  */ const runScenariov4 = async () => {
   try {
@@ -294,7 +538,7 @@ const runScenario7 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -303,11 +547,11 @@ const runScenario7 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* * When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa un texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
+    /* * When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa un texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
      * */
     const postPage = new PostsPage(
       page,
@@ -337,15 +581,15 @@ const runScenario7 = async () => {
 };
 /**
  * Escenario 5: Como usuario administrador creo un nuevo post para publicarlo en el sitio web con Campos solo con caracteres especiales
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa un texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
- * And: Se da click en Continue, final review
- * And: Se da click en Publish post, right now
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa un texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
+ * And Se da click en Continue, final review
+ * And Se da click en Publish post, right now
+ * And Se da click en posts
  * Then:Se valida que el post se haya creado
  */ const runScenariov5 = async () => {
   try {
@@ -354,7 +598,7 @@ const runScenario7 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -363,14 +607,14 @@ const runScenario7 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /** When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa un texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish post, right now
-     * And: Se da click en posts
+    /** When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa un texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
+     * And Se da click en Continue, final review
+     * And Se da click en Publish post, right now
+     * And Se da click en posts
      * */
     const postPage = new PostsPage(
       page,
@@ -401,12 +645,12 @@ const runScenario7 = async () => {
 /**
  * Escenario 6: Como usuario administrador creo un nuevo borrador de post para el sitio web Título y descripcion correctos
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa una cadena de texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa una cadena de texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
  */
 const runScenariov6 = async () => {
@@ -420,7 +664,7 @@ const runScenariov6 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -429,11 +673,11 @@ const runScenariov6 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*  When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa una cadena de texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en posts*/
+    /*  When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa una cadena de texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -461,12 +705,12 @@ const runScenariov6 = async () => {
 /**
  * Escenario 7: Como usuario administrador creo un nuevo borrador de post para el sitio web Sin titulo y con descripción
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa el título del post (Vacío)
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa el título del post (Vacío)
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que aparezaca en el listado de posts el borrador que se acabo de crear
  */
 const runScenariov7 = async () => {
@@ -481,7 +725,7 @@ const runScenariov7 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -490,11 +734,11 @@ const runScenariov7 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa el título del post (Vacío)
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en posts*/
+    /* When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa el título del post (Vacío)
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -522,12 +766,12 @@ const runScenariov7 = async () => {
 /**
  * Escenario 8: Como usuario administrador creo un nuevo borrador de post para el sitio web Sin titulo y sin descripción
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And: Se agrega el título del post (Vacío)
- * And: Se agrega el contenido del post (Vacío)
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * And Se agrega el título del post (Vacío)
+ * And Se agrega el contenido del post (Vacío)
+ * And Se da click en posts
  * Then:Se valida que no se haya podido crear el borrador
  */
 const runScenariov8 = async () => {
@@ -537,7 +781,7 @@ const runScenariov8 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -546,11 +790,11 @@ const runScenariov8 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And: Se agrega el título del post (Vacío)
-     * And: Se agrega el contenido del post (Vacío)
-     * And: Se da click en posts*/
+    /* When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * And Se agrega el título del post (Vacío)
+     * And Se agrega el contenido del post (Vacío)
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -579,12 +823,12 @@ const runScenariov8 = async () => {
 /**
  * Escenario 9: Como usuario administrador creo un nuevo borrador de post para el sitio web Campos muy largos (15000 caracteres)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa un texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa un texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que no se haya podido crear el borrador
  */
 const runScenariov9 = async () => {
@@ -594,7 +838,7 @@ const runScenariov9 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -603,11 +847,11 @@ const runScenariov9 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa un texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en posts*/
+    /* When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa un texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -636,12 +880,12 @@ const runScenariov9 = async () => {
 /**
  * Escenario 10: Como usuario administrador creo un nuevo borrador de post para el sitio web Campos solo con caracteres especiales
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa un texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa un texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que no se haya podido crear el borrador
  */
 const runScenariov10 = async () => {
@@ -651,7 +895,7 @@ const runScenariov10 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -660,11 +904,11 @@ const runScenariov10 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa un texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en posts
+    /* When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa un texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en posts
      * */
     const postPage = new PostsPage(
       page,
@@ -694,18 +938,18 @@ const runScenariov10 = async () => {
 /**
  * Escenario 11: Como usuario administrador creo un nuevo post con publicación programada Con fecha futura
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa una cadena de texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación del post
- * And: Se da click en la opcion de publicar luego
- * And: Se asigna la fecha de publicación
- * And: Se da click en Continue, final review
- * And: Se da click en Publish post, right now
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa una cadena de texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación del post
+ * And Se da click en la opcion de publicar luego
+ * And Se asigna la fecha de publicación
+ * And Se da click en Continue, final review
+ * And Se da click en Publish post, right now
+ * And Se da click en posts
  * Then:Se valida que el post este creado
  */
 const runScenariov11 = async () => {
@@ -720,7 +964,7 @@ const runScenariov11 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
@@ -729,17 +973,17 @@ const runScenariov11 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa una cadena de texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación del post
-     * And: Se da click en la opcion de publicar luego
-     * And: Se asigna la fecha de publicación
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish post, right now
-     * And: Se da click en posts*/
+    /*When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa una cadena de texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación del post
+     * And Se da click en la opcion de publicar luego
+     * And Se asigna la fecha de publicación
+     * And Se da click en Continue, final review
+     * And Se da click en Publish post, right now
+     * And Se da click en posts*/
     const titlePost = valueGenerator.generateString();
     const descriptionPost = valueGenerator.generateString();
     const publishDate = valueGenerator.generateFutureDate();
@@ -763,18 +1007,18 @@ const runScenariov11 = async () => {
 /**
  * Escenario 12: Como usuario administrador creo un nuevo post con publicación programada Con fecha pasada
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa una cadena de texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación del post
- * And: Se da click en la opcion de publicar luego
- * And: Se asigna la fecha de publicación
- * And: Se da click en Continue, final review
- * And: Se da click en Publish post, right now
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa una cadena de texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación del post
+ * And Se da click en la opcion de publicar luego
+ * And Se asigna la fecha de publicación
+ * And Se da click en Continue, final review
+ * And Se da click en Publish post, right now
+ * And Se da click en posts
  * Then:Se valida que el post no este creado
  */
 const runScenariov12 = async () => {
@@ -784,7 +1028,7 @@ const runScenariov12 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -799,17 +1043,17 @@ const runScenariov12 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa una cadena de texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación del post
-     * And: Se da click en la opcion de publicar luego
-     * And: Se asigna la fecha de publicación
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish post, right now
-     * And: Se da click en posts*/
+    /*When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa una cadena de texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación del post
+     * And Se da click en la opcion de publicar luego
+     * And Se asigna la fecha de publicación
+     * And Se da click en Continue, final review
+     * And Se da click en Publish post, right now
+     * And Se da click en posts*/
     const titlePost = valueGenerator.generateString();
     const descriptionPost = valueGenerator.generateString();
     const publishDate = valueGenerator.generatePastDate();
@@ -833,18 +1077,18 @@ const runScenariov12 = async () => {
 /**
  * Escenario 13: Como usuario administrador creo un nuevo post con publicación programada Con formato incorrecto
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa una cadena de texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación del post
- * And: Se da click en la opcion de publicar luego
- * And: Se asigna la fecha de publicación
- * And: Se da click en Continue, final review
- * And: Se da click en Publish post, right now
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa una cadena de texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación del post
+ * And Se da click en la opcion de publicar luego
+ * And Se asigna la fecha de publicación
+ * And Se da click en Continue, final review
+ * And Se da click en Publish post, right now
+ * And Se da click en posts
  *  Then:Se valida que el post no se haya podido crear y el mensaje de error
  */
 const runScenariov13 = async () => {
@@ -854,7 +1098,7 @@ const runScenariov13 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -864,17 +1108,17 @@ const runScenariov13 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa una cadena de texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación del post
-     * And: Se da click en la opcion de publicar luego
-     * And: Se asigna la fecha de publicación
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish post, right now
-     * And: Se da click en posts*/
+    /* When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa una cadena de texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación del post
+     * And Se da click en la opcion de publicar luego
+     * And Se asigna la fecha de publicación
+     * And Se da click en Continue, final review
+     * And Se da click en Publish post, right now
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -907,18 +1151,18 @@ const runScenariov13 = async () => {
 /**
  * Escenario 14: Como usuario administrador creo un nuevo post con publicación programada Con fecha incorrecta (ej. mes >12)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se da clic en el botón de New Post
- * And:Se ingresa una cadena de texto al título del post
- * And:Se ingresa un texto al contenido del post
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación del post
- * And: Se da click en la opcion de publicar luego
- * And: Se asigna la fecha de publicación
- * And: Se da click en Continue, final review
- * And: Se da click en Publish post, right now
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se da clic en el botón de New Post
+ * AndSe ingresa una cadena de texto al título del post
+ * AndSe ingresa un texto al contenido del post
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación del post
+ * And Se da click en la opcion de publicar luego
+ * And Se asigna la fecha de publicación
+ * And Se da click en Continue, final review
+ * And Se da click en Publish post, right now
+ * And Se da click en posts
  *  Then:Se valida que el post no se haya podido crear y el mensaje de error
  */
 const runScenariov14 = async () => {
@@ -928,7 +1172,7 @@ const runScenariov14 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -944,17 +1188,17 @@ const runScenariov14 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /** When: Se da clic en el botón de Posts
-     * And: Se da clic en el botón de New Post
-     * And:Se ingresa una cadena de texto al título del post
-     * And:Se ingresa un texto al contenido del post
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación del post
-     * And: Se da click en la opcion de publicar luego
-     * And: Se asigna la fecha de publicación
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish post, right now
-     * And: Se da click en posts*/
+    /** When Se da clic en el botón de Posts
+     * And Se da clic en el botón de New Post
+     * AndSe ingresa una cadena de texto al título del post
+     * AndSe ingresa un texto al contenido del post
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación del post
+     * And Se da click en la opcion de publicar luego
+     * And Se asigna la fecha de publicación
+     * And Se da click en Continue, final review
+     * And Se da click en Publish post, right now
+     * And Se da click en posts*/
     const titlePost = valueGenerator.getRandomTitle();
     const descriptionPost = valueGenerator.getRandomDescription();
     const publishDate = valueGenerator.generateDateWrongMonth();
@@ -982,13 +1226,13 @@ const runScenariov14 = async () => {
 /**
  * Escenario 15: Como administrador le cambio la fecha a un post ya publicado Con fecha futura
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se crea un post y se pública
- * And: Se elige el post creado
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se crea un post y se pública
+ * And Se elige el post creado
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que no permite actualizar
  */
 const runScenariov15 = async () => {
@@ -998,7 +1242,7 @@ const runScenariov15 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1014,12 +1258,12 @@ const runScenariov15 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Posts
-     * And: Se crea un post y se pública
-     * And: Se elige el post creado
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar*/
+    /*When Se da clic en el botón de Posts
+     * And Se crea un post y se pública
+     * And Se elige el post creado
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar*/
     const titlePost = valueGenerator.generateString();
     const descriptionPost = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generateFutureDate();
@@ -1044,13 +1288,13 @@ const runScenariov15 = async () => {
 /**
  * Escenario 16: Como administrador le cambio la fecha a un post ya publicado Con fecha pasada
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se crea un post y se pública
- * And: Se elige el post creado
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se crea un post y se pública
+ * And Se elige el post creado
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que permite actualizar
  */
 const runScenariov16 = async () => {
@@ -1060,7 +1304,7 @@ const runScenariov16 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1076,12 +1320,12 @@ const runScenariov16 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /** When: Se da clic en el botón de Posts
-     * And: Se crea un post y se pública
-     * And: Se elige el post creado
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar*/
+    /** When Se da clic en el botón de Posts
+     * And Se crea un post y se pública
+     * And Se elige el post creado
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar*/
     const titlePost = valueGenerator.generateString();
     const descriptionPost = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generatePastDate();
@@ -1107,13 +1351,13 @@ const runScenariov16 = async () => {
 /**
  * Escenario 17: Como administrador le cambio la fecha a un post ya publicado con formato incorrecto
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se crea un post y se pública
- * And: Se elige el post creado
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se crea un post y se pública
+ * And Se elige el post creado
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que la fecha no se haya podido cambiar
  */
 const runScenariov17 = async () => {
@@ -1123,7 +1367,7 @@ const runScenariov17 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1138,12 +1382,12 @@ const runScenariov17 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /** When: Se da clic en el botón de Posts
-     * And: Se crea un post y se pública
-     * And: Se elige el post creado
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar*/
+    /** When Se da clic en el botón de Posts
+     * And Se crea un post y se pública
+     * And Se elige el post creado
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar*/
     const titlePost = valueGenerator.generateString();
     const descriptionPost = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generateStringDate();
@@ -1169,13 +1413,13 @@ const runScenariov17 = async () => {
 /**
  * Escenario 18: Como administrador le cambio la fecha a un post ya publicado con fecha incorrecta (ej. mes>12)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Posts
- * And: Se crea un post y se pública
- * And: Se elige el post creado
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Posts
+ * And Se crea un post y se pública
+ * And Se elige el post creado
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que la fecha no se haya podido cambiar
  */
 const runScenariov18 = async () => {
@@ -1185,7 +1429,7 @@ const runScenariov18 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -1200,12 +1444,12 @@ const runScenariov18 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /** When: Se da clic en el botón de Posts
-     * And: Se crea un post y se pública
-     * And: Se elige el post creado
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar*/
+    /** When Se da clic en el botón de Posts
+     * And Se crea un post y se pública
+     * And Se elige el post creado
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar*/
     const titlePost = valueGenerator.getRandomTitle();
     const descriptionPost = valueGenerator.getRandomDescription();
     const newPublishDate = valueGenerator.generateDateWrongMonth();
@@ -1231,12 +1475,12 @@ const runScenariov18 = async () => {
 /**
  * Escenario 19: Como usuario administrador edito un post creado previamente de mis borradores Título y descripcion correctos
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título del post
- * And:Se ingresa una nueva cadena de texto a la descripción del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título del post
+ * AndSe ingresa una nueva cadena de texto a la descripción del post
+ * And Se da click en posts
  * Then:Se valida que aparezca en el listado de posts el borrador con el nuevo titulo dado
  */
 const runScenariov19 = async () => {
@@ -1251,7 +1495,7 @@ const runScenariov19 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1262,11 +1506,11 @@ const runScenariov19 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And:Se ingresa una nueva cadena de texto a la descripción del post
-     * And: Se da click en posts*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * AndSe ingresa una nueva cadena de texto a la descripción del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1295,12 +1539,12 @@ const runScenariov19 = async () => {
 /**
  * Escenario 20: Como usuario administrador edito un post creado previamente de mis borradores Sin Título y con descripcion
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título del post
- * And:Se ingresa una nueva cadena de texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título del post
+ * AndSe ingresa una nueva cadena de texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que el borrador se haya guardado
  */
 const runScenariov20 = async () => {
@@ -1316,7 +1560,7 @@ const runScenariov20 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1327,11 +1571,11 @@ const runScenariov20 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /*  When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And:Se ingresa una nueva cadena de texto al contenido del post
-     * And: Se da click en posts*/
+    /*  When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * AndSe ingresa una nueva cadena de texto al contenido del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1361,12 +1605,12 @@ const runScenariov20 = async () => {
 /**
  * Escenario 21: Como usuario administrador edito un post creado previamente de mis borradores Campos vacíos
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título del post
- * And:Se ingresa una nueva cadena de texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título del post
+ * AndSe ingresa una nueva cadena de texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que el borrador se haya guardado
  */
 const runScenariov21 = async () => {
@@ -1375,7 +1619,7 @@ const runScenariov21 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1386,11 +1630,11 @@ const runScenariov21 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And:Se ingresa una nueva cadena de texto al contenido del post
-     * And: Se da click en posts*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * AndSe ingresa una nueva cadena de texto al contenido del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1424,12 +1668,12 @@ const runScenariov21 = async () => {
 /**
  * Escenario 22: Como usuario administrador edito un post creado previamente de mis borradores Campos muy largos (15000 caracteres)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título del post
- * And:Se ingresa una nueva cadena de texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título del post
+ * AndSe ingresa una nueva cadena de texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que no se haya podido actualizar el post
  */
 const runScenariov22 = async () => {
@@ -1438,7 +1682,7 @@ const runScenariov22 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1449,10 +1693,10 @@ const runScenariov22 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And: Se da click en posts*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1487,12 +1731,12 @@ const runScenariov22 = async () => {
 /**
  * Escenario 23: Como usuario administrador edito un post creado previamente de mis borradores Campos solo con caracteres especiales
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título del post
- * And:Se ingresa una nueva cadena de texto al contenido del post
- * And: Se da click en posts
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título del post
+ * AndSe ingresa una nueva cadena de texto al contenido del post
+ * And Se da click en posts
  * Then:Se valida que aparezca en el listado de posts el borrador con el nuevo titulo dado
  */
 const runScenariov23 = async () => {
@@ -1501,7 +1745,7 @@ const runScenariov23 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1512,11 +1756,11 @@ const runScenariov23 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /*  When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And:Se ingresa una nueva cadena de texto al contenido del post
-     * And: Se da click en posts*/
+    /*  When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * AndSe ingresa una nueva cadena de texto al contenido del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1550,14 +1794,14 @@ const runScenariov23 = async () => {
 /**
  * Escenario 24: Como administrador le cambio la url a un post Campo vacio
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle del post
+ * And Se da click en settings de nuevo
  * Then:Se valida que la url no sea la que se ingresó como nueva
  */
 const runScenariov24 = async () => {
@@ -1566,7 +1810,7 @@ const runScenariov24 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1577,13 +1821,13 @@ const runScenariov24 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle del post
-     * And: Se da click en settings de nuevo*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle del post
+     * And Se da click en settings de nuevo*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1616,14 +1860,14 @@ const runScenariov24 = async () => {
 /**
  * Escenario 25: Como administrador le cambio la url a un post Caracteres especiales
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle del post
+ * And Se da click en settings de nuevo
  * Then:Se valida que la url sea la que se ingresó como nueva
  */
 const runScenariov25 = async () => {
@@ -1632,7 +1876,7 @@ const runScenariov25 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1643,13 +1887,13 @@ const runScenariov25 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /*  When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle del post
-     * And: Se da click en settings de nuevo*/
+    /*  When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle del post
+     * And Se da click en settings de nuevo*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1681,14 +1925,14 @@ const runScenariov25 = async () => {
 /**
  * Escenario 26: Como administrador le cambio la url a un post Campos muy largos (15000 caracteres)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle del post
+ * And Se da click en settings de nuevo
  * Then:Se valida que la url no sea la que se ingresó como nueva
  */
 const runScenariov26 = async () => {
@@ -1697,7 +1941,7 @@ const runScenariov26 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1708,13 +1952,13 @@ const runScenariov26 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle del post
-     * And: Se da click en settings de nuevo
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle del post
+     * And Se da click en settings de nuevo
      */
     const postPage = new PostsPage(
       page,
@@ -1747,14 +1991,14 @@ const runScenariov26 = async () => {
 /**
  * Escenario 27: Como administrador le cambio la url a un post Campo correcto
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle del post
+ * And Se da click en settings de nuevo
  * Then:Se valida que la url sea la que se ingresó como nueva
  */
 const runScenariov27 = async () => {
@@ -1763,7 +2007,7 @@ const runScenariov27 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1774,13 +2018,13 @@ const runScenariov27 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle del post
-     * And: Se da click en settings de nuevo*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle del post
+     * And Se da click en settings de nuevo*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1812,21 +2056,21 @@ const runScenariov27 = async () => {
 /**
  * Escenario 28: Como administrador le asigno a dos post la misma url
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
- * And: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle del post
+ * And Se da click en settings de nuevo
+ * And Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle del post
+ * And Se da click en settings de nuevo
  * Then:Se valida que en el segundo post no se cambia exitosamente por la url ingresada y el primero si
  */
 const runScenariov28 = async () => {
@@ -1835,7 +2079,7 @@ const runScenariov28 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1846,20 +2090,20 @@ const runScenariov28 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle del post
-     * And: Se da click en settings de nuevo
-     * And: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle del post
-     * And: Se da click en settings de nuevo*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle del post
+     * And Se da click en settings de nuevo
+     * And Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle del post
+     * And Se da click en settings de nuevo*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1898,14 +2142,14 @@ const runScenariov28 = async () => {
 /**
  * Escenario 29: Como administrador le cambio la url a un post por Ghost (Palabra protegida)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle del post
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle del post
+ * And Se da click en settings de nuevo
  *Then:Se valida que la url no sea Ghost es decir no se haya hecho la edición correctamente
  */
 const runScenariov29 = async () => {
@@ -1914,7 +2158,7 @@ const runScenariov29 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1925,10 +2169,10 @@ const runScenariov29 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And: Se da click en posts*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -1960,11 +2204,11 @@ const runScenariov29 = async () => {
 /**
  * Escenario 30: Como administrador le agrego una url de youtube a un post aleatorio iniciando por 'www.youtube.com/'
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa adiciona campo de url youtube
- * And: Se escribe la url ingresada por parámetro
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa adiciona campo de url youtube
+ * And Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
 const runScenariov30 = async () => {
@@ -1973,7 +2217,7 @@ const runScenariov30 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -1984,10 +2228,10 @@ const runScenariov30 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And: Se da click en posts*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -2018,11 +2262,11 @@ const runScenariov30 = async () => {
 /**
  * Escenario 31: Como administrador le agrego una cadena aleatoria a un post en el campo url
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa adiciona campo de url youtube
- * And: Se escribe la url ingresada por parámetro
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa adiciona campo de url youtube
+ * And Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
 const runScenariov31 = async () => {
@@ -2031,7 +2275,7 @@ const runScenariov31 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -2042,10 +2286,10 @@ const runScenariov31 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del post
-     * And: Se da click en posts*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del post
+     * And Se da click en posts*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -2076,11 +2320,11 @@ const runScenariov31 = async () => {
 /**
  * Escenario 32: Como administrador le agrego una url de youtube a un post url real
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un post
- * And:Se selecciona el post que ha sido creado
- * And:Se ingresa adiciona campo de url youtube
- * And: Se escribe la url ingresada por parámetro
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un post
+ * AndSe selecciona el post que ha sido creado
+ * AndSe ingresa adiciona campo de url youtube
+ * And Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
 const runScenariov32 = async () => {
@@ -2089,7 +2333,7 @@ const runScenariov32 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -2100,10 +2344,10 @@ const runScenariov32 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un post
-     * And:Se selecciona el post que ha sido creado
-     * And:Se ingresa adiciona campo de url youtube
-     * And: Se escribe la url ingresada por parámetro*/
+    /* When Se realiza la creación de un post
+     * AndSe selecciona el post que ha sido creado
+     * AndSe ingresa adiciona campo de url youtube
+     * And Se escribe la url ingresada por parámetro*/
     const postPage = new PostsPage(
       page,
       ghostUrl,
@@ -2134,15 +2378,15 @@ const runScenariov32 = async () => {
 
 /**
  * Escenario 33: Como usuario administrador creo una nueva page para publicarla en el sitio web con título y descripcion correctos
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título
- * And:Se ingresa un texto al contenido
- * And: Se da click en el publish
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa una cadena de texto al título
+ * AndSe ingresa un texto al contenido
+ * And Se da click en el publish
+ * And Se da click en Continue, final review
+ * And Se da click en Publish page, right now
+ * And Se da click en pages
  * Then:Se valida que la page este creada
  */
 const runScenariov33 = async () => {
@@ -2156,7 +2400,7 @@ const runScenariov33 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2165,14 +2409,14 @@ const runScenariov33 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa una cadena de texto al título
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en el publish
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish page, right now
-     * And: Se da click en pages
+    /*When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa una cadena de texto al título
+     * AndSe ingresa un texto al contenido
+     * And Se da click en el publish
+     * And Se da click en Continue, final review
+     * And Se da click en Publish page, right now
+     * And Se da click en pages
      * */
     const pagePage = new PagesPage(
       page,
@@ -2199,15 +2443,15 @@ const runScenariov33 = async () => {
 };
 /**
  * Escenario 34: Como usuario administrador creo una nueva page para publicarla en el sitio web Sin titulo y con descripción
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa el título del page
- * And:Se ingresa un texto al contenido del page
- * And: Se da click en el publish
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa el título del page
+ * AndSe ingresa un texto al contenido del page
+ * And Se da click en el publish
+ * And Se da click en Continue, final review
+ * And Se da click en Publish page, right now
+ * And Se da click en pages
  * Then:Se valida que la page se haya creado
  */
 const runScenariov34 = async () => {
@@ -2221,7 +2465,7 @@ const runScenariov34 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2230,13 +2474,13 @@ const runScenariov34 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en el publish
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish page, right now
-     * And: Se da click en pages
+    /*When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa un texto al contenido
+     * And Se da click en el publish
+     * And Se da click en Continue, final review
+     * And Se da click en Publish page, right now
+     * And Se da click en pages
      * */
     const pagePage = new PagesPage(
       page,
@@ -2263,12 +2507,12 @@ const runScenariov34 = async () => {
 };
 /**
  * Escenario 35: Como usuario administrador creo una nueva page para publicarla en el sitio web Sin titulo y sin descripción
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa un título al page
- * And:Se ingresa un texto al contenido
- * And: Se espera a que aparezca el botón de publish
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa un título al page
+ * AndSe ingresa un texto al contenido
+ * And Se espera a que aparezca el botón de publish
  * Then:Se valida que el page no se haya podido crear
  */
 const runScenariov35 = async () => {
@@ -2278,7 +2522,7 @@ const runScenariov35 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2287,11 +2531,11 @@ const runScenariov35 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa un título al page
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en el publish
+    /*When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa un título al page
+     * AndSe ingresa un texto al contenido
+     * And Se da click en el publish
      * */
     const pagePage = new PagesPage(
       page,
@@ -2321,11 +2565,11 @@ const runScenariov35 = async () => {
 };
 /**
  * Escenario 36: Como usuario administrador creo una nueva page para publicarla en el sitio web con campos muy largos (15000 caracteres)
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa un texto al titulo
- * And:Se ingresa un texto al contenido
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa un texto al titulo
+ * AndSe ingresa un texto al contenido
  * Then:Se valida que el page no se haya podido crear
  */
 const runScenariov36 = async () => {
@@ -2335,7 +2579,7 @@ const runScenariov36 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2344,10 +2588,10 @@ const runScenariov36 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa un texto al titulo
-     * And:Se ingresa un texto al contenido
+    /*When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa un texto al titulo
+     * AndSe ingresa un texto al contenido
      * */
     const pagePage = new PagesPage(
       page,
@@ -2377,15 +2621,15 @@ const runScenariov36 = async () => {
 };
 /**
  * Escenario 37: Como usuario administrador creo una nueva page para publicarlo en el sitio web llenando sus campos con caracteres especiales
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Pages
- * And:Se ingresa un texto en el titulo de la page
- * And:Se ingresa un texto al contenido de la page
- * And: Se da click en el publish
- * And: Se da click en Continue, final review
- * And: Se da click en Publish pages, right now
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Pages
+ * AndSe ingresa un texto en el titulo de la page
+ * AndSe ingresa un texto al contenido de la page
+ * And Se da click en el publish
+ * And Se da click en Continue, final review
+ * And Se da click en Publish pages, right now
+ * And Se da click en pages
  * Then:Se valida que la page se haya creado
  */ const runScenariov37 = async () => {
   try {
@@ -2394,7 +2638,7 @@ const runScenariov36 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2403,14 +2647,14 @@ const runScenariov36 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /*When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Pages
-     * And:Se ingresa un texto al titulo
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en el publish
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish page, right now
-     * And: Se da click en pages
+    /*When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Pages
+     * AndSe ingresa un texto al titulo
+     * AndSe ingresa un texto al contenido
+     * And Se da click en el publish
+     * And Se da click en Continue, final review
+     * And Se da click en Publish page, right now
+     * And Se da click en pages
      * */
     const pagePage = new PagesPage(
       page,
@@ -2442,12 +2686,12 @@ const runScenariov36 = async () => {
 /**
  * Escenario 38: Como usuario administrador creo un nuevo borrador de page para el sitio web con título y descripcion correctos
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título
- * And:Se ingresa un texto al contenido
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa una cadena de texto al título
+ * AndSe ingresa un texto al contenido
+ * And Se da click en pages
  * Then:Se valida que aparezca en el listado de pages el borrador que se acabo de crear
  */
 const runScenariov38 = async () => {
@@ -2461,7 +2705,7 @@ const runScenariov38 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2470,11 +2714,11 @@ const runScenariov38 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa una cadena de texto al título
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en pages*/
+    /* When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa una cadena de texto al título
+     * AndSe ingresa un texto al contenido
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -2502,11 +2746,11 @@ const runScenariov38 = async () => {
 /**
  * Escenario 39: Como usuario administrador creo un nuevo borrador de page para el sitio web Sin titulo y con descripción
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa un texto al contenido
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa un texto al contenido
+ * And Se da click en pages
  * Then:Se valida que aparezca en el listado de pages el borrador que se acabo de crear
  */
 const runScenariov39 = async () => {
@@ -2520,7 +2764,7 @@ const runScenariov39 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2529,10 +2773,10 @@ const runScenariov39 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en pages*/
+    /* When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa un texto al contenido
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -2560,10 +2804,10 @@ const runScenariov39 = async () => {
 /**
  * Escenario 40: Como usuario administrador creo un nuevo borrador de page para el sitio web sin titulo y sin descripción
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de pages
- * And: Se da clic en el botón de New Page
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de pages
+ * And Se da clic en el botón de New Page
+ * And Se da click en pages
  * Then:Se valida que no se haya podido crear el borrador
  */
 const runScenariov40 = async () => {
@@ -2573,7 +2817,7 @@ const runScenariov40 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2582,9 +2826,9 @@ const runScenariov40 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And: Se da click en pages*/
+    /* When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -2613,12 +2857,12 @@ const runScenariov40 = async () => {
 /**
  * Escenario 41: Como usuario administrador creo un nuevo borrador de page para el sitio web Campos muy largos (15000 caracteres)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa un texto al título
- * And:Se ingresa un texto al contenido
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa un texto al título
+ * AndSe ingresa un texto al contenido
+ * And Se da click en pages
  * Then:Se valida que no se haya podido crear el borrador
  */
 const runScenariov41 = async () => {
@@ -2628,7 +2872,7 @@ const runScenariov41 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2637,11 +2881,11 @@ const runScenariov41 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa un texto al título
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en pages*/
+    /* When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa un texto al título
+     * AndSe ingresa un texto al contenido
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -2670,12 +2914,12 @@ const runScenariov41 = async () => {
 /**
  * Escenario 42: Como usuario administrador creo un nuevo borrador de page para el sitio web llenando los campos con caracteres especiales
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa un texto al título
- * And:Se ingresa un texto al contenido
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa un texto al título
+ * AndSe ingresa un texto al contenido
+ * And Se da click en pages
  * Then:Se valida que se haya podido crear el borrador
  */
 const runScenariov42 = async () => {
@@ -2685,7 +2929,7 @@ const runScenariov42 = async () => {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2694,11 +2938,11 @@ const runScenariov42 = async () => {
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
 
-    /* When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa un texto al título
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en pages
+    /* When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa un texto al título
+     * AndSe ingresa un texto al contenido
+     * And Se da click en pages
      */
     const pagePage = new PagesPage(
       page,
@@ -2729,17 +2973,17 @@ const runScenariov42 = async () => {
 /**
  * Escenario 43: Como usuario administrador creo una nueva page con publicación programada Con fecha futura
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título
- * And:Se ingresa un texto al contenido
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación de la page
- * And: Se da click en la opcion de publicar luego
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa una cadena de texto al título
+ * AndSe ingresa un texto al contenido
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación de la page
+ * And Se da click en la opcion de publicar luego
+ * And Se da click en Continue, final review
+ * And Se da click en Publish page, right now
+ * And Se da click en pages
  * Then:Se valida que el page este creado
  */
 const runScenariov43 = async () => {
@@ -2754,7 +2998,7 @@ const runScenariov43 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
@@ -2763,16 +3007,16 @@ const runScenariov43 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /* When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa una cadena de texto al título
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación de la page
-     * And: Se da click en la opcion de publicar luego
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish page, right now
-     * And: Se da click en pages*/
+    /* When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa una cadena de texto al título
+     * AndSe ingresa un texto al contenido
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación de la page
+     * And Se da click en la opcion de publicar luego
+     * And Se da click en Continue, final review
+     * And Se da click en Publish page, right now
+     * And Se da click en pages*/
     const titlePage = valueGenerator.generateString();
     const descriptionPage = valueGenerator.generateString();
     const publishDate = valueGenerator.generateFutureDate();
@@ -2796,17 +3040,17 @@ const runScenariov43 = async () => {
 /**
  * Escenario 44: Como usuario administrador creo una nueva page con publicación programada Con fecha pasada
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título
- * And:Se ingresa un texto al contenido
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación de la page
- * And: Se da click en la opcion de publicar luego
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa una cadena de texto al título
+ * AndSe ingresa un texto al contenido
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación de la page
+ * And Se da click en la opcion de publicar luego
+ * And Se da click en Continue, final review
+ * And Se da click en Publish page, right now
+ * And Se da click en pages
  * Then:Se valida que la page no permita elegir fechas pasada
  */
 const runScenariov44 = async () => {
@@ -2821,7 +3065,7 @@ const runScenariov44 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
@@ -2830,16 +3074,16 @@ const runScenariov44 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa una cadena de texto al título
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación de la page
-     * And: Se da click en la opcion de publicar luego
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish page, right now
-     * And: Se da click en pages*/
+    /*When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa una cadena de texto al título
+     * AndSe ingresa un texto al contenido
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación de la page
+     * And Se da click en la opcion de publicar luego
+     * And Se da click en Continue, final review
+     * And Se da click en Publish page, right now
+     * And Se da click en pages*/
     const titlePage = valueGenerator.generateString();
     const descriptionPage = valueGenerator.generateString();
     const publishDate = valueGenerator.generatePastDate();
@@ -2863,17 +3107,17 @@ const runScenariov44 = async () => {
 /**
  * Escenario 45: Como usuario administrador creo una nueva page con publicación programada Con formato incorrecto
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título
- * And:Se ingresa un texto al contenido
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación del page
- * And: Se da click en la opcion de publicar luego
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa una cadena de texto al título
+ * AndSe ingresa un texto al contenido
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación del page
+ * And Se da click en la opcion de publicar luego
+ * And Se da click en Continue, final review
+ * And Se da click en Publish page, right now
+ * And Se da click en pages
  * Then:Se valida que la page este creada
  */
 const runScenariov45 = async () => {
@@ -2883,7 +3127,7 @@ const runScenariov45 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2898,16 +3142,16 @@ const runScenariov45 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa una cadena de texto al título
-     * And:Se ingresa un texto al contenido
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación del page
-     * And: Se da click en la opcion de publicar luego
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish page, right now
-     * And: Se da click en pages*/
+    /*When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa una cadena de texto al título
+     * AndSe ingresa un texto al contenido
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación del page
+     * And Se da click en la opcion de publicar luego
+     * And Se da click en Continue, final review
+     * And Se da click en Publish page, right now
+     * And Se da click en pages*/
     const titlePage = valueGenerator.generateString();
     const descriptionPage = valueGenerator.generateString();
     const publishDate = valueGenerator.generateStringDate();
@@ -2935,17 +3179,17 @@ const runScenariov45 = async () => {
 /**
  * Escenario 46: Como usuario administrador creo una nueva page con publicación programada Con fecha incorrecta (ej. mes >12)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se da clic en el botón de New Page
- * And:Se ingresa una cadena de texto al título del page
- * And:Se ingresa un texto al contenido del page
- * And: Se da click en el publish
- * And: Se da click en el dropdown de configuración de publicación del page
- * And: Se da click en la opcion de publicar luego
- * And: Se da click en Continue, final review
- * And: Se da click en Publish page, right now
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se da clic en el botón de New Page
+ * AndSe ingresa una cadena de texto al título del page
+ * AndSe ingresa un texto al contenido del page
+ * And Se da click en el publish
+ * And Se da click en el dropdown de configuración de publicación del page
+ * And Se da click en la opcion de publicar luego
+ * And Se da click en Continue, final review
+ * And Se da click en Publish page, right now
+ * And Se da click en pages
  * Then:Se valida que la page no se haya podido crear y el mensaje de error
  */
 const runScenariov46 = async () => {
@@ -2955,7 +3199,7 @@ const runScenariov46 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -2970,16 +3214,16 @@ const runScenariov46 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /* When: Se da clic en el botón de Pages
-     * And: Se da clic en el botón de New Page
-     * And:Se ingresa una cadena de texto al título del page
-     * And:Se ingresa un texto al contenido del page
-     * And: Se da click en el publish
-     * And: Se da click en el dropdown de configuración de publicación del page
-     * And: Se da click en la opcion de publicar luego
-     * And: Se da click en Continue, final review
-     * And: Se da click en Publish page, right now
-     * And: Se da click en pages*/
+    /* When Se da clic en el botón de Pages
+     * And Se da clic en el botón de New Page
+     * AndSe ingresa una cadena de texto al título del page
+     * AndSe ingresa un texto al contenido del page
+     * And Se da click en el publish
+     * And Se da click en el dropdown de configuración de publicación del page
+     * And Se da click en la opcion de publicar luego
+     * And Se da click en Continue, final review
+     * And Se da click en Publish page, right now
+     * And Se da click en pages*/
     const titlePage = valueGenerator.getRandomTitle();
     const descriptionPage = valueGenerator.getRandomDescription();
     const publishDate = valueGenerator.generateDateWrongMonth();
@@ -3007,12 +3251,12 @@ const runScenariov46 = async () => {
 /**
  * Escenario 47: Como usuario administrador edito un page creado previamente de mis borradores Título y descripcion correctos
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona el page que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título del page
- * And:Se ingresa una nueva cadena de texto en el contenido de la page
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona el page que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título del page
+ * AndSe ingresa una nueva cadena de texto en el contenido de la page
+ * And Se da click en pages
  * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
  */
 const runScenariov47 = async () => {
@@ -3027,7 +3271,7 @@ const runScenariov47 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3038,11 +3282,11 @@ const runScenariov47 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del page
-     * And:Se ingresa una nueva cadena de texto en el contenido de la page
-     * And: Se da click en pages*/
+    /* When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del page
+     * AndSe ingresa una nueva cadena de texto en el contenido de la page
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -3071,12 +3315,12 @@ const runScenariov47 = async () => {
 /**
  * Escenario 48: Como usuario administrador edito un page creado previamente de mis borradores sin título y con descripcion
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona el page que ha sido creado
- * And:Elimino el título de la page
- * And:Se ingresa una nueva cadena de texto el contenido de la page
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona el page que ha sido creado
+ * AndElimino el título de la page
+ * AndSe ingresa una nueva cadena de texto el contenido de la page
+ * And Se da click en pages
  * Then:Se valida que el borrador se haya guardado
  */
 const runScenariov48 = async () => {
@@ -3091,7 +3335,7 @@ const runScenariov48 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3102,11 +3346,11 @@ const runScenariov48 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Elimino el título de la page
-     * And:Se ingresa una nueva cadena de texto el contenido de la page
-     * And: Se da click en pages*/
+    /* When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndElimino el título de la page
+     * AndSe ingresa una nueva cadena de texto el contenido de la page
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -3135,12 +3379,12 @@ const runScenariov48 = async () => {
 /**
  * Escenario 49: Como usuario administrador edito una page creada previamente de mis borradores con campos vacíos
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona el page que ha sido creado
- * And:Elimino el título de la page
- * And:Elimino el contenido de la page
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona el page que ha sido creado
+ * AndElimino el título de la page
+ * AndElimino el contenido de la page
+ * And Se da click en pages
  * Then:Se valida que permita guardar
  */
 const runScenariov49 = async () => {
@@ -3149,7 +3393,7 @@ const runScenariov49 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3160,11 +3404,11 @@ const runScenariov49 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Elimino el título de la page
-     * And:Elimino el contenido de la page
-     * And: Se da click en pages*/
+    /* When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndElimino el título de la page
+     * AndElimino el contenido de la page
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -3197,11 +3441,11 @@ const runScenariov49 = async () => {
 /**
  * Escenario 50: Como usuario administrador edito una page creada previamente de mis borradores con campos muy largos (15000 caracteres)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona el page que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título del page
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona el page que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título del page
+ * And Se da click en pages
  * Then:Se valida que no permita guardar
  */
 const runScenariov50 = async () => {
@@ -3210,7 +3454,7 @@ const runScenariov50 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3221,10 +3465,10 @@ const runScenariov50 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título del page
-     * And: Se da click en pages*/
+    /* When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título del page
+     * And Se da click en pages*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -3257,12 +3501,12 @@ const runScenariov50 = async () => {
 /**
  * Escenario 51: Como usuario administrador edito una page creada previamente de mis borradores con campos con caracteres especiales
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona el page que ha sido creado
- * And:Se ingresa una nueva cadena de texto al título de la page
- * And:Se ingresa una nueva cadena de texto en el contenido de la page
- * And: Se da click en pages
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona el page que ha sido creado
+ * AndSe ingresa una nueva cadena de texto al título de la page
+ * AndSe ingresa una nueva cadena de texto en el contenido de la page
+ * And Se da click en pages
  * Then:Se valida que aparezaca en el listado de pages el borrador con el nuevo titulo dado
  */
 const runScenariov51 = async () => {
@@ -3271,7 +3515,7 @@ const runScenariov51 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3282,11 +3526,11 @@ const runScenariov51 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Se ingresa una nueva cadena de texto al título de la page
-     * And:Se ingresa una nueva cadena de texto en el contenido de la page
-     * And: Se da click en pages
+    /* When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndSe ingresa una nueva cadena de texto al título de la page
+     * AndSe ingresa una nueva cadena de texto en el contenido de la page
+     * And Se da click en pages
      */
     const pagePage = new PagesPage(
       page,
@@ -3320,14 +3564,14 @@ const runScenariov51 = async () => {
 /**
  * Escenario 52: Como administrador le cambio la url a una page Campo vacio
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de una page
- * And:Se selecciona la page que ha sido creada
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle de la page
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de una page
+ * AndSe selecciona la page que ha sido creada
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle de la page
+ * And Se da click en settings de nuevo
  * Then:Se valida que no permita guardar
  */
 const runScenariov52 = async () => {
@@ -3336,7 +3580,7 @@ const runScenariov52 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3347,13 +3591,13 @@ const runScenariov52 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de una page
-     * And:Se selecciona la page que ha sido creada
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle de la page
-     * And: Se da click en settings de nuevo
+    /* When Se realiza la creación de una page
+     * AndSe selecciona la page que ha sido creada
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle de la page
+     * And Se da click en settings de nuevo
      */
     const pagePage = new PagesPage(
       page,
@@ -3386,14 +3630,14 @@ const runScenariov52 = async () => {
 /**
  * Escenario 53: Como administrador le cambio la url a un page Caracteres especiales
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona la page que ha sido creada
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle de la page
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona la page que ha sido creada
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle de la page
+ * And Se da click en settings de nuevo
  * Then:Se valida que la url no sea la que se ingresó como nueva
  */
 const runScenariov53 = async () => {
@@ -3402,7 +3646,7 @@ const runScenariov53 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3413,13 +3657,13 @@ const runScenariov53 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona la page que ha sido creada
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle de la page
-     * And: Se da click en settings de nuevo
+    /* When Se realiza la creación de un page
+     * AndSe selecciona la page que ha sido creada
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle de la page
+     * And Se da click en settings de nuevo
      */
     const pagePage = new PagesPage(
       page,
@@ -3452,14 +3696,14 @@ const runScenariov53 = async () => {
 /**
  * Escenario 54: Como administrador le cambio la url a una page Campos muy largos (15000 caracteres)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona la page que ha sido creado
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle de la page
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona la page que ha sido creado
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle de la page
+ * And Se da click en settings de nuevo
  * Then:Se valida que la no url sea la que se ingresó como nueva
  */
 const runScenariov54 = async () => {
@@ -3468,7 +3712,7 @@ const runScenariov54 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3477,13 +3721,13 @@ const runScenariov54 = async () => {
     );
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona la page que ha sido creada
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle de la page
-     * And: Se da click en settings de nuevo
+    /* When Se realiza la creación de un page
+     * AndSe selecciona la page que ha sido creada
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle de la page
+     * And Se da click en settings de nuevo
      */
     const pagePage = new PagesPage(
       page,
@@ -3516,14 +3760,14 @@ const runScenariov54 = async () => {
 /**
  * Escenario 55: Como administrador le cambio la url a un page Campo correcto
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de una page
- * And:Se selecciona la page que ha sido creada
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle de la page
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de una page
+ * AndSe selecciona la page que ha sido creada
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle de la page
+ * And Se da click en settings de nuevo
  * Then:Se valida que la url sea la que se ingresó como nueva
  */
 const runScenariov55 = async () => {
@@ -3532,7 +3776,7 @@ const runScenariov55 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3541,13 +3785,13 @@ const runScenariov55 = async () => {
     );
     await loginPage.visit();
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de una page
-     * And:Se selecciona la page que ha sido creada
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle de la page
-     * And: Se da click en settings de nuevo
+    /* When Se realiza la creación de una page
+     * AndSe selecciona la page que ha sido creada
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle de la page
+     * And Se da click en settings de nuevo
      */
     const pagePage = new PagesPage(
       page,
@@ -3580,21 +3824,21 @@ const runScenariov55 = async () => {
 /**
  * Escenario 56: Como administrador le asigno a dos pages la misma url
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de una page
- * And:Se selecciona la page que ha sido creada
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle de la page
- * And: Se da click en settings de nuevo
- * And: Se realiza la creación de una page
- * And:Se selecciona la page que ha sido creada
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle de la page
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de una page
+ * AndSe selecciona la page que ha sido creada
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle de la page
+ * And Se da click en settings de nuevo
+ * And Se realiza la creación de una page
+ * AndSe selecciona la page que ha sido creada
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle de la page
+ * And Se da click en settings de nuevo
  * Then:Se valida que en el segundo page no se cambia exitosamente por la url ingresada y el primero si
  */
 const runScenariov56 = async () => {
@@ -3603,7 +3847,7 @@ const runScenariov56 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3614,20 +3858,20 @@ const runScenariov56 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de una page
-     * And:Se selecciona la page que ha sido creada
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle de la page
-     * And: Se da click en settings de nuevo
-     * And: Se realiza la creación de una page
-     * And:Se selecciona la page que ha sido creada
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle de la page
-     * And: Se da click en settings de nuevo*/
+    /* When Se realiza la creación de una page
+     * AndSe selecciona la page que ha sido creada
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle de la page
+     * And Se da click en settings de nuevo
+     * And Se realiza la creación de una page
+     * AndSe selecciona la page que ha sido creada
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle de la page
+     * And Se da click en settings de nuevo*/
     const pagePage = new PagesPage(
       page,
       ghostUrl,
@@ -3666,14 +3910,14 @@ const runScenariov56 = async () => {
 /**
  * Escenario 57: Como administrador le cambio la url a un page por Ghost (Palabra protegida)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de una page
- * And:Se selecciona la page que ha sido creada
- * And:Se ingresa a settings
- * And: Se borra la url por defecto
- * And: Se ingresa una nueva url
- * And: Se devuelve al detalle de la page
- * And: Se da click en settings de nuevo
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de una page
+ * AndSe selecciona la page que ha sido creada
+ * AndSe ingresa a settings
+ * And Se borra la url por defecto
+ * And Se ingresa una nueva url
+ * And Se devuelve al detalle de la page
+ * And Se da click en settings de nuevo
  *Then:Se valida que la url no sea Ghost es decir no se haya hecho la edición correctamente
  */
 const runScenariov57 = async () => {
@@ -3682,7 +3926,7 @@ const runScenariov57 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -3693,13 +3937,13 @@ const runScenariov57 = async () => {
     await loginPage.visit();
 
     await loginPage.login(userEmail, userPassword);
-    /* When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Se ingresa a settings
-     * And: Se borra la url por defecto
-     * And: Se ingresa una nueva url
-     * And: Se devuelve al detalle del page
-     * And: Se da click en settings de nuevo
+    /* When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndSe ingresa a settings
+     * And Se borra la url por defecto
+     * And Se ingresa una nueva url
+     * And Se devuelve al detalle del page
+     * And Se da click en settings de nuevo
      */
     const pagePage = new PagesPage(
       page,
@@ -3732,13 +3976,13 @@ const runScenariov57 = async () => {
 /**
  * Escenario 58: Como administrador le cambio la fecha a una page ya publicado Con fecha futura
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se crea un page y se pública
- * And: Se elige la page creada
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se crea un page y se pública
+ * And Se elige la page creada
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que no permite actualizar
  */
 const runScenariov58 = async () => {
@@ -3748,7 +3992,7 @@ const runScenariov58 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -3763,12 +4007,12 @@ const runScenariov58 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Pages
-     * And: Se crea un page y se pública
-     * And: Se elige la page creada
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar^*/
+    /*When Se da clic en el botón de Pages
+     * And Se crea un page y se pública
+     * And Se elige la page creada
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar^*/
     const titlePage = valueGenerator.generateString();
     const descriptionPage = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generateFutureDate();
@@ -3794,13 +4038,13 @@ const runScenariov58 = async () => {
 /**
  * Escenario 59: Como administrador le cambio la fecha a una page ya publicado Con fecha pasada
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se crea un page y se pública
- * And: Se elige el page creado
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se crea un page y se pública
+ * And Se elige el page creado
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que la fecha se haya podido cambiar
  */
 const runScenariov59 = async () => {
@@ -3810,7 +4054,7 @@ const runScenariov59 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -3825,12 +4069,12 @@ const runScenariov59 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Pages
-     * And: Se crea un page y se pública
-     * And: Se elige el page creado
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar*/
+    /*When Se da clic en el botón de Pages
+     * And Se crea un page y se pública
+     * And Se elige el page creado
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar*/
     const titlePage = valueGenerator.generateString();
     const descriptionPage = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generatePastDate();
@@ -3856,13 +4100,13 @@ const runScenariov59 = async () => {
 /**
  * Escenario 60: Como administrador le cambio la fecha a una page ya publicado con formato incorrecto
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se crea un page y se pública
- * And: Se elige el page creado
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se crea un page y se pública
+ * And Se elige el page creado
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que la fecha no se haya podido cambiar
  */
 const runScenariov60 = async () => {
@@ -3872,7 +4116,7 @@ const runScenariov60 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -3887,12 +4131,12 @@ const runScenariov60 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /* When: Se da clic en el botón de Pages
-     * And: Se crea un page y se pública
-     * And: Se elige el page creado
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar^*/
+    /* When Se da clic en el botón de Pages
+     * And Se crea un page y se pública
+     * And Se elige el page creado
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar^*/
     const titlePage = valueGenerator.generateString();
     const descriptionPage = valueGenerator.generateString();
     const newPublishDate = valueGenerator.generateStringDate();
@@ -3918,13 +4162,13 @@ const runScenariov60 = async () => {
 /**
  * Escenario 61: Como administrador le cambio la fecha a un page ya publicada con fecha incorrecta (ej. mes>12)
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se da clic en el botón de Pages
- * And: Se crea un page y se pública
- * And: Se elige el page creado
- * And: Se hace click en settings
- * And: Se cambia la fecha de publicación
- * And: Se da click en actualizar
+ * Given Se ingresa a la página correspondiente a login
+ * When Se da clic en el botón de Pages
+ * And Se crea un page y se pública
+ * And Se elige el page creado
+ * And Se hace click en settings
+ * And Se cambia la fecha de publicación
+ * And Se da click en actualizar
  * Then:Se valida que la fecha no se haya podido cambiar
  */
 const runScenariov61 = async () => {
@@ -3934,7 +4178,7 @@ const runScenariov61 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    //Given: Se ingresa a la página correspondiente a login
+    //Given Se ingresa a la página correspondiente a login
     const loginPage = new LoginPage(
       page,
       ghostUrl,
@@ -3949,12 +4193,12 @@ const runScenariov61 = async () => {
       ghostUrl,
       screenshotDirectoryEscenario
     );
-    /*When: Se da clic en el botón de Pages
-     * And: Se crea un page y se pública
-     * And: Se elige el page creado
-     * And: Se hace click en settings
-     * And: Se cambia la fecha de publicación
-     * And: Se da click en actualizar*/
+    /*When Se da clic en el botón de Pages
+     * And Se crea un page y se pública
+     * And Se elige el page creado
+     * And Se hace click en settings
+     * And Se cambia la fecha de publicación
+     * And Se da click en actualizar*/
     const titlePage = valueGenerator.getRandomTitle();
     const descriptionPage = valueGenerator.getRandomDescription();
     const newPublishDate = valueGenerator.generateDateWrongMonth();
@@ -3980,11 +4224,11 @@ const runScenariov61 = async () => {
 /**
  * Escenario 62: Como administrador le agrego una url de youtube a una page aleatorio iniciando por 'www.youtube.com/'
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de una page
- * And:Se selecciona la page que ha sido creado
- * And:Se ingresa adiciona campo de url youtube
- * And: Se escribe la url ingresada por parámetro
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de una page
+ * AndSe selecciona la page que ha sido creado
+ * AndSe ingresa adiciona campo de url youtube
+ * And Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
 const runScenariov62 = async () => {
@@ -3993,7 +4237,7 @@ const runScenariov62 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -4005,10 +4249,10 @@ const runScenariov62 = async () => {
 
     await loginPage.login(userEmail, userPassword);
     /*
-     * When: Se realiza la creación de una page
-     * And:Se selecciona la page que ha sido creado
-     * And:Se ingresa adiciona campo de url youtube
-     * And: Se escribe la url ingresada por parámetro
+     * When Se realiza la creación de una page
+     * AndSe selecciona la page que ha sido creado
+     * AndSe ingresa adiciona campo de url youtube
+     * And Se escribe la url ingresada por parámetro
      * */
     const pagePage = new PagesPage(
       page,
@@ -4040,11 +4284,11 @@ const runScenariov62 = async () => {
 /**
  * Escenario 63: Como administrador le agrego una url de youtube a una page aleatorio iniciando
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona el page que ha sido creado
- * And:Se ingresa adiciona campo de url youtube
- * And: Se escribe la url ingresada por parámetro
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona el page que ha sido creado
+ * AndSe ingresa adiciona campo de url youtube
+ * And Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
 const runScenariov63 = async () => {
@@ -4053,7 +4297,7 @@ const runScenariov63 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -4066,10 +4310,10 @@ const runScenariov63 = async () => {
     await loginPage.login(userEmail, userPassword);
 
     /*
-     * When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Se ingresa adiciona campo de url youtube
-     * And: Se escribe la url ingresada por parámetro
+     * When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndSe ingresa adiciona campo de url youtube
+     * And Se escribe la url ingresada por parámetro
      */
     const pagePage = new PagesPage(
       page,
@@ -4101,11 +4345,11 @@ const runScenariov63 = async () => {
 /**
  * Escenario 64: Como administrador le agrego una url de youtube a un page url real
  *
- * Given: Se ingresa a la página correspondiente a login
- * When: Se realiza la creación de un page
- * And:Se selecciona el page que ha sido creado
- * And:Se ingresa adiciona campo de url youtube
- * And: Se escribe la url ingresada por parámetro
+ * Given Se ingresa a la página correspondiente a login
+ * When Se realiza la creación de un page
+ * AndSe selecciona el page que ha sido creado
+ * AndSe ingresa adiciona campo de url youtube
+ * And Se escribe la url ingresada por parámetro
  *Then:Se valida que la url no sea aceptada
  */
 const runScenariov64 = async () => {
@@ -4114,7 +4358,7 @@ const runScenariov64 = async () => {
     ensureDirectoryExists(screenshotDirectoryEscenario);
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    // Given: Se ingresa a la página correspondiente a login
+    // Given Se ingresa a la página correspondiente a login
 
     const loginPage = new LoginPage(
       page,
@@ -4126,10 +4370,10 @@ const runScenariov64 = async () => {
 
     await loginPage.login(userEmail, userPassword);
     /*
-     * When: Se realiza la creación de un page
-     * And:Se selecciona el page que ha sido creado
-     * And:Se ingresa adiciona campo de url youtube
-     * And: Se escribe la url ingresada por parámetro
+     * When Se realiza la creación de un page
+     * AndSe selecciona el page que ha sido creado
+     * AndSe ingresa adiciona campo de url youtube
+     * And Se escribe la url ingresada por parámetro
      */
     const pagePage = new PagesPage(
       page,
