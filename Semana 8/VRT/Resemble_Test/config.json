@@ -1,0 +1,263 @@
+{
+  "scenarios": [
+    {
+      "number": "1",
+      "numberVRT": "1",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "beforeTagsPage",
+        "afterTagsPage",
+        "createNewTag",
+        "inputNameNewTagsPage",
+        "inputDescriptionNewTagsPage",
+        "clickSaveButtonNewTagsPage",
+        "listAfterNewTagsPage",
+        "listTagsAfterCreation",
+        "createdTagPage"
+      ]
+    },
+    {
+      "number": "2",
+      "numberVRT": "2",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "visitPage",
+        "moreNavBar",
+        "PagesPage",
+        "newPageDraft",
+        "titleDraft",
+        "completeDraftForm",
+        "listPages"
+      ]
+    },
+    {
+      "number": "3",
+      "numberVRT": "3",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "visitPage",
+        "moreNavBar",
+        "PagesPage",
+        "newPageScheduled",
+        "titleScheduled",
+        "completeScehduledForm",
+        "publishScheduled",
+        "settingScheduled",
+        "scheduleNewPage",
+        "confirmNewSceduled",
+        "createPageScheduled",
+        "backScheduled",
+        "backlistScheduled"
+      ]
+    },
+    {
+      "number": "4",
+      "numberVRT": "4",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "beforeTagsPage",
+        "afterTagsPage",
+        "createNewTag",
+        "inputNameNewTagsPage",
+        "inputDescriptionNewTagsPage",
+        "clickSaveButtonNewTagsPage",
+        "listAfterNewTagsPage",
+        "listTagsAfterCreation",
+        "createdTagPage",
+        "firstViewEditTag",
+        "selectTagToEdit",
+        "typeTagNameToEdit",
+        "editedTag",
+        "savedEditedTag",
+"backToTagList",
+"listTagsAfterEdit",
+"finalEditTags"
+      ]
+    },
+    {
+      "number": "5",
+      "numberVRT": "5",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "beforeVisitMembersPage",
+        "membersPage",
+        "beforeNewMembersPage",
+        "newMemberPage",
+        "typeInputNameNewMember",
+        "clickSaveButtonNewMember",
+        "backMembersListAfterNewMember",
+        "beforeEditMembersPage",
+        "selectMemberToEdit",
+        "cleanEmailMemberToEdit",
+        "typeNewInputEmailEditMember",
+        "clickSaveButtonEditMember",
+        "backMembersListAfterEditMember"
+      ]
+    },
+    {
+      "number": "6",
+      "numberVRT": "6",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "visitPage",
+        "moreNavBar",
+        "PagesPage",
+        "newPageDraft",
+        "titleDraft",
+        "completeDraftForm",
+        "listPages",
+        "editPage",
+        "emptyTitle",
+        "editedPage",
+        "finalEditPage"
+      ]
+    },
+    {
+      "number": "7",
+      "numberVRT": "7",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "beforeTagsPage",
+        "afterTagsPage",
+        "createNewTag",
+        "inputNameNewTagsPage",
+        "inputDescriptionNewTagsPage",
+        "clickSaveButtonNewTagsPage",
+        "listAfterNewTagsPage",
+        "listTagsAfterCreation",
+        "startVisitPosts",
+        "postsPage",
+        "postForm",
+        "titlePost",
+        "postCreationPage",
+        "publishPost",
+        "continuePostCreationPage",
+        "createPostsPage",
+        "closePublishPost",
+        "backPostsList",
+        "selectPublishedPost",
+        "settingsPost",
+        "inputTagClick",
+        "fillTag",
+        "assignedTag",
+        "settingsPostTag",
+        "idlePostTag",
+        "filterAssignedTag",
+        "tagSelect",
+        "listFilteredAssignedTag",
+        "addTagPostsPage"
+      ]
+    },
+    {
+      "number": "8",
+      "numberVRT": "8",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "visitPage",
+        "moreNavBar",
+        "PagesPage",
+        "newPage",
+        "fillTitle",
+        "completePage",
+        "publishClick",
+        "continuePublish",
+        "confirmNewPage",
+        "createPagesPage",
+        "backPageForm",
+        "backPages",
+        "selectPageToDelete",
+        "settingsDeletePage",
+        "clickDeletePage",
+        "deletePagesPage",
+        "listPages"
+      ]
+    },
+    {
+      "number": "9",
+      "numberVRT": "9",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "beforeTagsPage",
+        "afterTagsPage",
+        "createNewTag",
+        "inputNameNewTagsPage",
+        "inputDescriptionNewTagsPage",
+        "clickSaveButtonNewTagsPage",
+        "listAfterNewTagsPage",
+        "listTagsAfterCreation",
+        "createdTagPage",
+        "firstViewDeleteTag",
+        "selectTagToDelete",
+        "deleteConfirmationTag",
+        "listTags"
+      ]
+    },
+    {
+      "number": "10",
+      "numberVRT": "10",
+      "steps": [
+        "signInPage",
+        "emailInput",
+        "passwordInput",
+        "afterSignIn",
+        "beforeVisitMembersPage",
+        "membersPage",
+        "beforeNewMembersPage",
+        "newMemberPage",
+        "typeInputNameNewMember",
+        "typeInputDescriptionNewMember",
+        "clickSaveButtonNewMember",
+        "backMembersListAfterNewMember",
+        "selectMemberToDelete",
+        "settingsDeleteMember",
+        "clickDeleteMember",
+        "deleteMember",
+        "listMembers"
+      ]
+    }
+  ],
+  "options": {
+    "output": {
+      "errorColor": {
+        "red": 255,
+        "green": 0,
+        "blue": 255
+      },
+      "errorType": "movement",
+      "largeImageThreshold": 1200,
+      "useCrossOrigin": false,
+      "outputDiff": true
+    },
+    "scaleToSameSize": true,
+    "ignore": "antialiasing"
+  },
+  "viewportHeight": 600,
+  "viewportWidth": 800
+}
