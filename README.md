@@ -17,7 +17,7 @@ El documento de las pruebas exploratorias se encuentra en: [Reporte pruebas manu
 
 El video de resultados y análisis se encuentra en: [Video análisis](https://uniandes-my.sharepoint.com/personal/j_padilla_uniandes_edu_co/_layouts/15/stream.aspx?id=%2Fpersonal%2Fj%5Fpadilla%5Funiandes%5Fedu%5Fco%2FDocuments%2FMISO%2FPruebas%20automatizadas%2FEntrega%208%2FVideo%20%2D%20Versi%C3%B3n%20final%20estrategia%20de%20pruebas%2Emp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview)
 
-Issues reportados son los correspondientes del 42 al 61 completando 20 en total.
+Los issues reportados corresponden del #42 al #61 completando 20 en total.
 
 ** En el documento de estrategía de pruebas se encuentran los modelos y links correspondientes para su correcta visualización.
 
