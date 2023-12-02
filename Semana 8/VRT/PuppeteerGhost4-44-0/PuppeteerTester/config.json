@@ -1,0 +1,6 @@
+{
+    "ghostUrl": "https://docker4-44-0.onrender.com/ghost/",
+    "userEmail" :"prueba@prueba.com",
+    "userPassword" : "prueba12345",
+    "timeout" : 7000
+}
