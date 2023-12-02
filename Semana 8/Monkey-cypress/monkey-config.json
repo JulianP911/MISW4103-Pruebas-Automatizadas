@@ -2,10 +2,10 @@
     "projectId":"TSDL-Monkey-with-cypress",
     "baseUrl":"https://ghost5-71-oxma.onrender.com/ghost/",
     "env":{
-        "appName":"Ghost - Iteración 1",
-        "events":50,
+        "appName":"Ghost - Estrategia final",
+        "events":500,
         "delay":300,
-        "seed":1234,
+        "seed":8723,
         "pctClicks":19,
         "pctScroll":17,
         "pctSelectors":16,
