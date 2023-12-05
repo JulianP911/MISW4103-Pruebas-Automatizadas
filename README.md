@@ -15,7 +15,7 @@ El documento de la estrategia de pruebas se encuentra en: [Documento estrategia 
 
 El documento de las pruebas exploratorias se encuentra en: [Reporte pruebas manuales](https://github.com/JulianP911/Pruebas-Automatizadas/blob/main/Semana%208/Pruebas%20manuales/Inventario%20-%20Pruebas%20exploratorias.xlsx)
 
-El video de resultados y análisis se encuentra en: [Video análisis]([https://uniandes-my.sharepoint.com/personal/j_padilla_uniandes_edu_co/_layouts/15/stream.aspx?id=%2Fpersonal%2Fj%5Fpadilla%5Funiandes%5Fedu%5Fco%2FDocuments%2FMISO%2FPruebas%20automatizadas%2FEntrega%208%2FVideo%20%2D%20Versi%C3%B3n%20final%20estrategia%20de%20pruebas%2Emp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview](https://uniandes-my.sharepoint.com/:v:/g/personal/j_padilla_uniandes_edu_co/EYK-1AHKtKFAoHv717VcZUABPh0ljodllGJ-fubRK4FeWw?e=UsCQqB&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+El video de resultados y análisis se encuentra en: [Video análisis](https://uniandes-my.sharepoint.com/:v:/g/personal/j_padilla_uniandes_edu_co/EYK-1AHKtKFAoHv717VcZUABPh0ljodllGJ-fubRK4FeWw?e=UsCQqB&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
 
 Los issues reportados corresponden del #42 al #61 completando 20 en total.
 
